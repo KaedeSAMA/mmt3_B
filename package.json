@@ -11,12 +11,6 @@
     "lint": "prettier -c .",
     "prepare": "npx husky install"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo \"[Husky] pre-commit\"",
-      "pre-push": "echo \"[Husky] pre-push\""
-    }
-  },
   "dependencies": {
     "vue": "^3.2.47"
   },
