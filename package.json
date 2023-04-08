@@ -13,7 +13,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "prettier --write . && git add -A ."
+      "pre-commit": "echo \"[Husky] pre-commit\"",
+      "pre-push": "echo \"[Husky] pre-push\""
     }
   },
   "dependencies": {
