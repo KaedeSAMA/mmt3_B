@@ -7,13 +7,17 @@ import { _axios } from './server/http';
 const hello = () => {
   // 这里是进行get测试
   _axios
-    .get('https://v.api.aa1.cn/api/api-tplist/go.php/api/News/local_news', {
+    .post('/local/', {
       name: '北京市',
       page: 0
     })
-    .then((res) => {
-      console.log(res);
-    });
+    .then((res) => {});
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+html,
+body,
+#app {
+  height: 100%;
+}
+</style>
