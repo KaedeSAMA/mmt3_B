@@ -8,9 +8,9 @@ export default defineConfig({
     open: true,
     proxy: {
       '/local': {
-        target: "http://localhost:8000",
+        target: 'http://localhost:8000',
         rewrite: (path) => {
-          return path.replace(/^\/local/, '')
+          return path.replace(/^\/local/, '');
         }
       }
     }
