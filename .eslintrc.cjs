@@ -9,10 +9,14 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   overrides: [],
+  parser: 'vue-eslint-parser',
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
+    parser: '@typescript-eslint/parser'
   },
   plugins: ['vue'],
-  rules: {}
+  rules: {
+    'vue/multi-word-component-names': 'off'
+  }
 };
