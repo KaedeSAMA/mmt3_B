@@ -26,7 +26,6 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
 import { UserFilled, Lock } from '@element-plus/icons-vue';
 import type { FormInstance, FormRules } from 'element-plus';
 const formRef = ref<FormInstance>();

@@ -1,7 +1,5 @@
 <template>
   <div>home</div>
 </template>
-<script lang="ts" setup>
-import {} from 'vue';
-</script>
+<script lang="ts" setup></script>
 <style scoped lang="less"></style>
