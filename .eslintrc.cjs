@@ -6,7 +6,8 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-essential',
     'standard-with-typescript',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
+    './.eslintrc-auto-import.json'
   ],
   overrides: [],
   parser: 'vue-eslint-parser',

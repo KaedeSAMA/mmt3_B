@@ -29,7 +29,6 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { Lock, Cellphone } from '@element-plus/icons-vue';
 // import { _axios } from '@/server/http';

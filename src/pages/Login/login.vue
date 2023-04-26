@@ -15,7 +15,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
 import Verification from './components/Verification.vue';
 import PasswordLogin from './components/PasswordLogin.vue';
 const components = {
