@@ -10,7 +10,7 @@
     </el-form-item>
     <el-form-item prop="verification" class="verification">
       <el-input
-        v-model="loginForm.password"
+        v-model="loginForm.verification"
         :prefix-icon="Lock"
         placeholder="请填写验证码"
       >
