@@ -5,7 +5,7 @@
         v-model="loginForm.phone"
         :prefix-icon="UserFilled"
         clearable
-        placeholder="请填写你的手机号"
+        placeholder="请填写你的账号(手机号/学号)"
       />
     </el-form-item>
     <el-form-item prop="password">
@@ -18,7 +18,7 @@
     </el-form-item>
     <div class="alert-text">
       <span>没有账号?</span>
-      <a href="">注册</a>
+      <span @click="toRegister">注册</span>
     </div>
     <div class="login">
       <el-button type="primary">登录</el-button>
@@ -28,6 +28,7 @@
 <script lang="ts" setup>
 import { UserFilled, Lock } from '@element-plus/icons-vue';
 import type { FormInstance, FormRules } from 'element-plus';
+const router = useRouter();
 const formRef = ref<FormInstance>();
 const loginForm = reactive({
   phone: '',
@@ -54,6 +55,12 @@ const loginRules = reactive<FormRules>({
     }
   ]
 });
+// 方法
+const toRegister = () => {
+  router.push({
+    path: 'register'
+  });
+};
 </script>
 <style scoped lang="scss">
 .alert-text {
@@ -62,9 +69,10 @@ const loginRules = reactive<FormRules>({
   span {
     color: #aaa;
     margin-right: 10px;
-  }
-  a {
-    color: #02a7f0;
+    &:last-child {
+      color: #02a7f0;
+      cursor: pointer;
+    }
   }
 }
 .login {

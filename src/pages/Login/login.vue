@@ -17,7 +17,9 @@
 <script lang="ts" setup>
 import Verification from './components/Verification.vue';
 import PasswordLogin from './components/PasswordLogin.vue';
-const components = {
+const components: {
+  [propName: string]: any;
+} = {
   Verification,
   PasswordLogin
 };
