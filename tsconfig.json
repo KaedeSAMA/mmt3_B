@@ -23,11 +23,10 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "types/*.d.ts",
-    "vite/**/*.ts"
+    "vite/**/*.ts",
+    "src/mockProdServer.ts"
   ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "references": [{
+    "path": "./tsconfig.node.json"
+  }]
 }
