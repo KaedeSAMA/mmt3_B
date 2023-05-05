@@ -58,7 +58,7 @@ const changeComponent = () => {
     margin-left: 40px;
     margin-right: 200px;
     .el-card {
-      width: 290px;
+      width: 350px;
       padding: 30px 20px 30px 20px;
       border-radius: 10px;
       .form-title {

@@ -16,30 +16,52 @@
               v-model="registerForm.name"
               clearable
               placeholder="真实姓名"
-            />
+            >
+              <template v-slot:prefix>
+                <svg-icon iconName="icon-jurassic_user" />
+              </template>
+            </el-input>
           </el-form-item>
           <el-form-item prop="studentId">
             <el-input v-model="registerForm.studentId" placeholder="学号">
+              <template v-slot:prefix>
+                <svg-icon iconName="icon-idcard" />
+              </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="phone">
             <el-input v-model="registerForm.studentId" placeholder="手机号">
+              <template v-slot:prefix>
+                <svg-icon iconName="icon-shouji" />
+              </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="verificationCode">
             <el-input v-model="registerForm.studentId" placeholder="短信验证码">
+              <template v-slot:prefix>
+                <svg-icon iconName="icon-dunpai" />
+              </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input v-model="registerForm.studentId" placeholder="密码">
+              <template v-slot:prefix>
+                <svg-icon iconName="icon-suoding" />
+              </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="passwordAgain">
             <el-input v-model="registerForm.studentId" placeholder="确认密码">
+              <template v-slot:prefix>
+                <svg-icon iconName="icon-suoding" />
+              </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="invitationCode">
             <el-input v-model="registerForm.studentId" placeholder="组织邀请码">
+              <template v-slot:prefix>
+                <svg-icon iconName="icon-zuzhiqunzu" />
+              </template>
             </el-input>
           </el-form-item>
           <div class="submit">
@@ -56,7 +78,10 @@
 </template>
 <script lang="ts" setup>
 import { FormRules } from 'element-plus';
-
+import {
+  phoneVerification,
+  userNameVerification
+} from '@/utils/formVerification.ts';
 const title = ref('后台管理系统');
 const registerForm = reactive({
   name: '',
@@ -75,8 +100,7 @@ const registerRules = reactive<FormRules>({
       trigger: 'blur'
     },
     {
-      required: true,
-      message: '请填写正确的姓名',
+      validator: userNameVerification,
       trigger: 'blur'
     }
   ],
@@ -91,6 +115,10 @@ const registerRules = reactive<FormRules>({
     {
       required: true,
       message: '手机号不能为空',
+      trigger: 'blur'
+    },
+    {
+      validator: phoneVerification,
       trigger: 'blur'
     }
   ],
@@ -153,7 +181,7 @@ const toLogin = () => {
     margin-left: 40px;
     margin-right: 200px;
     .el-card {
-      width: 290px;
+      width: 350px;
       padding: 30px 20px 30px 20px;
       border-radius: 10px;
       .form-title {

@@ -9,13 +9,12 @@
       />
     </el-form-item>
     <el-form-item prop="verification" class="verification">
-      <el-input
-        v-model="loginForm.verification"
-        :prefix-icon="Lock"
-        placeholder="请填写验证码"
-      >
+      <el-input v-model="loginForm.verification" placeholder="请填写验证码">
         <template v-slot:append>
           <button>获取验证码</button>
+        </template>
+        <template v-slot:prefix>
+          <svg-icon iconName="icon-dunpai"></svg-icon>
         </template>
       </el-input>
     </el-form-item>
@@ -24,13 +23,14 @@
       <span @click="toRegister">注册</span>
     </div>
     <div class="login">
-      <el-button type="primary">登录</el-button>
+      <el-button type="primary" @click="login(formRef)">登录</el-button>
     </div>
   </el-form>
 </template>
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus';
-import { Lock, Cellphone } from '@element-plus/icons-vue';
+import { Cellphone } from '@element-plus/icons-vue';
+import { phoneVerification } from '@/utils/formVerification.ts';
 // import { _axios } from '@/server/http';
 // 传参
 const router = useRouter();
@@ -47,8 +47,7 @@ const loginRules = reactive<FormRules>({
       trigger: 'blur'
     },
     {
-      required: true,
-      message: '请填写正确的手机号',
+      validator: phoneVerification,
       trigger: 'blur'
     }
   ],
@@ -64,6 +63,18 @@ const loginRules = reactive<FormRules>({
 const toRegister = () => {
   router.push({
     path: 'register'
+  });
+};
+
+const login = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      console.log('submit!');
+    } else {
+      console.log('error submit!');
+      return false;
+    }
   });
 };
 </script>
