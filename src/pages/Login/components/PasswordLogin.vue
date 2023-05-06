@@ -29,8 +29,8 @@
 </template>
 <script lang="ts" setup>
 import { UserFilled, Lock } from '@element-plus/icons-vue';
-import type { FormInstance, FormRules } from 'element-plus';
-import { phoneVerification } from '@/utils/formVerification.ts';
+import { ElMessage, FormInstance, FormRules } from 'element-plus';
+import { phoneVerification } from '@/utils/formVerification';
 const router = useRouter();
 const formRef = ref<FormInstance>();
 const loginForm = reactive({
@@ -69,7 +69,12 @@ const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      console.log('submit!');
+      ElMessage.success('登录成功');
+      setTimeout(() => {
+        router.push({
+          path: 'home'
+        });
+      }, 1000);
     } else {
       console.log('error submit!');
       return false;

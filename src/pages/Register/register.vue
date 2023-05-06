@@ -30,42 +30,57 @@
             </el-input>
           </el-form-item>
           <el-form-item prop="phone">
-            <el-input v-model="registerForm.studentId" placeholder="手机号">
+            <el-input v-model="registerForm.phone" placeholder="手机号">
               <template v-slot:prefix>
                 <svg-icon iconName="icon-shouji" />
               </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="verificationCode">
-            <el-input v-model="registerForm.studentId" placeholder="短信验证码">
+            <el-input
+              v-model="registerForm.verificationCode"
+              placeholder="短信验证码"
+              class="verification"
+            >
               <template v-slot:prefix>
                 <svg-icon iconName="icon-dunpai" />
+              </template>
+              <template #append>
+                <button @click.prevent="getVerificationCode">获取验证码</button>
               </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="registerForm.studentId" placeholder="密码">
+            <el-input v-model="registerForm.password" placeholder="密码">
               <template v-slot:prefix>
                 <svg-icon iconName="icon-suoding" />
               </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="passwordAgain">
-            <el-input v-model="registerForm.studentId" placeholder="确认密码">
+            <el-input
+              v-model="registerForm.passwordAgain"
+              placeholder="确认密码"
+            >
               <template v-slot:prefix>
                 <svg-icon iconName="icon-suoding" />
               </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="invitationCode">
-            <el-input v-model="registerForm.studentId" placeholder="组织邀请码">
+            <el-input
+              v-model="registerForm.invitationCode"
+              placeholder="组织邀请码"
+            >
               <template v-slot:prefix>
                 <svg-icon iconName="icon-zuzhiqunzu" />
               </template>
             </el-input>
           </el-form-item>
           <div class="submit">
-            <el-button type="primary">注册</el-button>
+            <el-button type="primary" @click="toRegister(registerFormRef)"
+              >注册</el-button
+            >
           </div>
         </el-form>
         <div class="alert-text">
@@ -77,12 +92,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { FormRules } from 'element-plus';
+import { FormRules, FormInstance } from 'element-plus';
 import {
   phoneVerification,
   userNameVerification
-} from '@/utils/formVerification.ts';
+} from '@/utils/formVerification';
 const title = ref('后台管理系统');
+const registerFormRef = ref<FormInstance>();
 const registerForm = reactive({
   name: '',
   studentId: '',
@@ -155,6 +171,27 @@ const router = useRouter();
 const toLogin = () => {
   router.push({
     path: 'login'
+  });
+};
+const getVerificationCode = () => {
+  console.log('获取验证码。');
+};
+const toRegister = (formEl: FormInstance | undefined) => {
+  console.log(formEl);
+
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      ElMessage.success('注册成功');
+      setTimeout(() => {
+        router.push({
+          path: 'login'
+        });
+      }, 1000);
+    } else {
+      console.log('error submit!');
+      return false;
+    }
   });
 };
 </script>
@@ -244,6 +281,43 @@ const toLogin = () => {
   .el-button {
     width: 150px;
     letter-spacing: 0.5rem;
+  }
+}
+.verification {
+  :deep(.el-input__wrapper) {
+    border: 1px solid #dcdfe6;
+    border-right: transparent;
+    box-shadow: none;
+  }
+  :deep(.el-input-group__append) {
+    background-color: white;
+    box-shadow: none;
+    border: 1px solid #dcdfe6;
+    border-left: transparent;
+    box-sizing: border-box;
+    padding-right: 10px;
+    button {
+      border: none;
+      font-size: 12px;
+      background: white;
+      color: #02a7f0;
+      cursor: pointer;
+    }
+  }
+}
+:deep(.is-error) {
+  .verification {
+    .el-input-group__append {
+      border: 1px solid #f56c6c;
+      border-left: transparent;
+      transition: border 0.2s;
+    }
+    .el-input__wrapper {
+      border: 1px solid #f56c6c;
+      border-right: transparent;
+      box-shadow: none;
+      transition: border 0.2s;
+    }
   }
 }
 </style>
