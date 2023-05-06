@@ -17,7 +17,9 @@
 <script lang="ts" setup>
 import Verification from './components/Verification.vue';
 import PasswordLogin from './components/PasswordLogin.vue';
-const components = {
+const components: {
+  [propName: string]: any;
+} = {
   Verification,
   PasswordLogin
 };
@@ -56,7 +58,7 @@ const changeComponent = () => {
     margin-left: 40px;
     margin-right: 200px;
     .el-card {
-      width: 290px;
+      width: 350px;
       padding: 30px 20px 30px 20px;
       border-radius: 10px;
       .form-title {
