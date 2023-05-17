@@ -18,9 +18,19 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/Register/register.vue')
   },
   {
+    // 后台管理主页面的路由
     path: '/home',
     name: 'Home',
-    component: () => import('@/pages/Home/home.vue')
+    redirect: '/home/personalPage',
+    component: () => import('@/pages/Home/home.vue'),
+    children: [
+      {
+        //！ 子路由：个人首页
+        path: '/home/personalPage',
+        name: 'PersonalPage',
+        component: () => import('@/pages/Home/personalPage/personalPage.vue')
+      }
+    ]
   }
 ];
 
