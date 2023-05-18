@@ -1,5 +1,5 @@
 <template lang="">
-  <div></div>
+  <div>qwq</div>
 </template>
 <script lang="ts" setup></script>
 <style lang=""></style>
