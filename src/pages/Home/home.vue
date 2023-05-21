@@ -20,10 +20,8 @@ import Head from './components/head/index.vue';
   .el-container {
     height: 100%;
     .el-main {
-      border: 1px solid blue;
     }
     .el-footer {
-      border: 1px solid #333;
     }
   }
 }

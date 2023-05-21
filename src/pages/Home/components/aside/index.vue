@@ -1,51 +1,56 @@
 <template>
   <div class="aside">
+    <h3>天理闪报</h3>
     <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo"
+      default-active="0"
       :collapse="isCollapse"
+      text-color="white"
+      background-color="#001428"
+      :unique-opened="true"
     >
+      <el-menu-item index="0">
+        <el-icon><HomeFilled /></el-icon>
+        <span>首页</span>
+      </el-menu-item>
       <el-sub-menu index="1">
         <template #title>
           <el-icon><location /></el-icon>
-          <span>Navigator One</span>
+          <span>面试总看板</span>
         </template>
-        <el-menu-item-group>
-          <template #title><span>Group One</span></template>
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group Two">
-          <el-menu-item index="1-3">item three</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="1-4">
-          <template #title><span>item four</span></template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
-        </el-sub-menu>
+        <el-menu-item index="1-1">
+          <template #title><span>报名阶段</span></template>
+        </el-menu-item>
+        <el-menu-item index="1-2">
+          <template #title><span>面试阶段</span></template>
+        </el-menu-item>
+        <el-menu-item index="1-3">
+          <template #title><span>复盘阶段</span></template>
+        </el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <template #title>Navigator Two</template>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <el-icon><document /></el-icon>
-        <template #title>Navigator Three</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
+      <el-sub-menu index="2">
+        <template #title>
+          <el-icon><icon-menu /></el-icon>
+          <span>超级管理</span>
+        </template>
+        <el-menu-item index="2-1">
+          <template #title><span>宣传信息设置</span></template>
+        </el-menu-item>
+        <el-menu-item index="2-2">
+          <template #title><span>组织管理</span></template>
+        </el-menu-item>
+        <el-menu-item index="2-3">
+          <template #title><span>面试流程设置</span></template>
+        </el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import {
-  Document,
   Menu as IconMenu,
   Location,
-  Setting
+  HomeFilled
 } from '@element-plus/icons-vue';
 
 const isCollapse = ref(false);
@@ -59,8 +64,40 @@ const isCollapse = ref(false);
 <style scoped lang="scss">
 .aside {
   height: 100%;
+  h3 {
+    text-align: center;
+    background-color: #001428;
+    color: white;
+    height: 60px;
+    line-height: 60px;
+    font-family: '楷体';
+  }
   .el-menu {
-    height: 100%;
+    height: calc(100vh - 60px);
+    background-color: #001428;
+    border-right: none;
+    .el-menu-item {
+      &:hover {
+        background-color: #0186fc;
+        color: #fff;
+      }
+    }
+
+    :deep(.el-menu-item) {
+      &.is-active {
+        background-color: #102335;
+        color: #fff;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          height: 100%;
+          width: 2px;
+          background-color: #0186fc;
+        }
+      }
+    }
   }
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {

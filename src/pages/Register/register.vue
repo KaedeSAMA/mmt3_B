@@ -78,7 +78,9 @@
             </el-input>
           </el-form-item>
           <div class="submit">
-            <el-button type="primary" @click="toRegister(registerFormRef)"
+            <el-button
+              type="primary"
+              @click.prevent="toRegister(registerFormRef)"
               >注册</el-button
             >
           </div>
@@ -92,7 +94,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { FormRules, FormInstance } from 'element-plus';
+import { FormRules, FormInstance, ElMessage } from 'element-plus';
 import {
   phoneVerification,
   userNameVerification
