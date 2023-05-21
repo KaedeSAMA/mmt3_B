@@ -27,7 +27,7 @@
       <span @click="toRegister">注册</span>
     </div>
     <div class="login">
-      <el-button type="primary" @click="login(formRef)">登录</el-button>
+      <el-button type="primary" @click.prevent="login(formRef)">登录</el-button>
     </div>
   </el-form>
 </template>
