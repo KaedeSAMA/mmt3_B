@@ -19,6 +19,7 @@ import Head from './components/head/index.vue';
   height: 100%;
   .el-container {
     height: 100%;
+
     .el-main {
     }
     .el-footer {
