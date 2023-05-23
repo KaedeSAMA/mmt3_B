@@ -30,6 +30,8 @@ const title = ref('个人主页');
 <style scoped lang="scss">
 .home {
   height: 100%;
+  min-width: 1250px;
+  min-height: 760px;
   .el-container {
     height: 100%;
     .el-aside {
@@ -53,12 +55,15 @@ const title = ref('个人主页');
         justify-content: space-between;
         .title {
           .font {
-            font-size: 24px;
+            font-size: 18px;
           }
         }
       }
     }
     .el-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: rgb(247, 248, 249);
     }
   }
