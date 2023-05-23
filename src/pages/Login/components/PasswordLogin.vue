@@ -1,12 +1,26 @@
 <template>
   <el-form ref="formRef" :model="loginForm" :rules="loginRules" size="default">
-    <el-form-item prop="phone">
+    <el-form-item prop="studentId">
       <el-input
-        v-model="loginForm.phone"
+        v-model="loginForm.studentId"
         :prefix-icon="UserFilled"
         clearable
-        placeholder="请填写你的账号(手机号/学号)"
+        placeholder="请填写你的学号"
       />
+    </el-form-item>
+    <el-form-item prop="">
+      <el-select
+        v-model="loginForm.organizationId"
+        placeholder="请输入学号后进行搜索"
+        size="large"
+      >
+        <el-option
+          v-for="item in origanizationOptions"
+          :key="item.organizationId"
+          :label="item.organizationName"
+          :value="item.organizationId"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item prop="password">
       <el-input
@@ -30,22 +44,46 @@
 <script lang="ts" setup>
 import { UserFilled, Lock } from '@element-plus/icons-vue';
 import { ElMessage, FormInstance, FormRules } from 'element-plus';
-import { phoneVerification } from '@/utils/formVerification';
+import { getOrganization, userLogin } from '@/api/login/index';
 const router = useRouter();
 const formRef = ref<FormInstance>();
-const loginForm = reactive({
-  phone: '',
+const loginForm = reactive<{
+  studentId: string;
+  organizationId: number | string;
+  password: string;
+}>({
+  studentId: '',
+  organizationId: '',
   password: ''
 });
+type origanizationOptionsType = {
+  organizationId: number;
+  organizationName: string;
+};
+const origanizationOptions = ref<Array<origanizationOptionsType>>([]);
+// 获取当前学生所在的组织
+const getUserOrganization = async (studentId: string) => {
+  const { data } = await getOrganization(studentId);
+  data?.organizations && (origanizationOptions.value = data?.organizations);
+};
+const studentIdVerification = (rule: any, value: string, callback: any) => {
+  const length = value.length;
+  if (length === 8) {
+    getUserOrganization(value);
+    return callback();
+  } else {
+    callback(new Error('请输入合法的学号'));
+  }
+};
 const loginRules = reactive<FormRules>({
-  phone: [
+  studentId: [
     {
       required: true,
-      message: '手机号不能为空',
+      message: '学号不能为空',
       trigger: 'blur'
     },
     {
-      validator: phoneVerification,
+      validator: studentIdVerification,
       trigger: 'blur'
     }
   ],
@@ -69,6 +107,12 @@ const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
+      const data = userLogin(loginForm);
+      console.log(data);
+      console.log(
+        '🚀 ~ file: PasswordLogin.vue:107 ~ formEl.validate ~ data:',
+        data
+      );
       ElMessage.success('登录成功');
       setTimeout(() => {
         router.push({
@@ -102,6 +146,9 @@ const login = (formEl: FormInstance | undefined) => {
   .el-button {
     width: 150px;
     letter-spacing: 0.5rem;
+  }
+  .el-select {
+    width: 100%;
   }
 }
 </style>

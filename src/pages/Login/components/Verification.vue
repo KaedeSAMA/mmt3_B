@@ -1,3 +1,4 @@
+<!-- 组件废除 -->
 <template>
   <el-form ref="formRef" :model="loginForm" :rules="loginRules" size="default">
     <el-form-item prop="phone">

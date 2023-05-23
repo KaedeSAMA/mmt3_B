@@ -36,7 +36,8 @@
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="verificationCode">
+          <!-- 闲置代码, 不删除 -->
+          <!-- <el-form-item prop="verificationCode">
             <el-input
               v-model="registerForm.verificationCode"
               placeholder="短信验证码"
@@ -49,7 +50,7 @@
                 <button @click.prevent="getVerificationCode">获取验证码</button>
               </template>
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="password">
             <el-input v-model="registerForm.password" placeholder="密码">
               <template v-slot:prefix>
@@ -103,7 +104,7 @@ const registerForm = reactive({
   name: '',
   studentId: '',
   phone: '',
-  verificationCode: '',
+  // verificationCode: '',
   password: '',
   passwordAgain: '',
   invitationCode: ''
@@ -138,13 +139,13 @@ const registerRules = reactive<FormRules>({
       trigger: 'blur'
     }
   ],
-  verificationCode: [
-    {
-      required: true,
-      message: '短信邀请码不能为空',
-      trigger: 'blur'
-    }
-  ],
+  // verificationCode: [
+  //   {
+  //     required: true,
+  //     message: '短信邀请码不能为空',
+  //     trigger: 'blur'
+  //   }
+  // ],
   password: [
     {
       required: true,
@@ -173,12 +174,10 @@ const toLogin = () => {
     path: 'login'
   });
 };
-const getVerificationCode = () => {
-  console.log('获取验证码。');
-};
+// const getVerificationCode = () => {
+//   console.log('获取验证码。');
+// };
 const toRegister = (formEl: FormInstance | undefined) => {
-  console.log(formEl);
-
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
@@ -189,7 +188,6 @@ const toRegister = (formEl: FormInstance | undefined) => {
         });
       }, 1000);
     } else {
-      console.log('error submit!');
       return false;
     }
   });

@@ -7,9 +7,9 @@
       <el-card>
         <div class="form-title">{{ title }}</div>
         <component :is="components[activeComponent]"> </component>
-        <div class="change-component" @click="changeComponent">
+        <!-- <div class="change-component" @click="changeComponent">
           <span>{{ changeText }}</span>
-        </div>
+        </div> -->
       </el-card>
     </div>
   </div>
@@ -24,16 +24,16 @@ const components: {
   PasswordLogin
 };
 const title = ref('后台管理系统');
-const changeText = ref('用账号密码登录');
-const activeComponent = ref('Verification');
-const changeComponent = () => {
-  activeComponent.value =
-    activeComponent.value === 'Verification' ? 'PasswordLogin' : 'Verification';
-  changeText.value =
-    activeComponent.value === 'Verification'
-      ? '用账号密码登录'
-      : '用手机验证码登录';
-};
+// const changeText = ref('用账号密码登录');
+const activeComponent = ref('PasswordLogin');
+// const changeComponent = () => {
+//   activeComponent.value =
+//     activeComponent.value === 'Verification' ? 'PasswordLogin' : 'Verification';
+//   changeText.value =
+//     activeComponent.value === 'Verification'
+//       ? '用账号密码登录'
+//       : '用手机验证码登录';
+// };
 </script>
 <style scoped lang="scss">
 .login {
