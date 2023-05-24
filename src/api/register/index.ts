@@ -6,11 +6,12 @@ const userRegister = async (userRegisterData: TRegister) => {
     '/local/b/user/reg',
     userRegisterData
   );
-  if (data.code === '00000') {
-    return data;
-  } else {
+  if (data.code !== '00000') {
     ElMessage.error(data.message);
+    return;
   }
+  ElMessage.success('注册成功');
+  return data.data;
 };
 
 export { userRegister };

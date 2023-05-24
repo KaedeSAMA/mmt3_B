@@ -83,7 +83,9 @@
             </el-input>
           </el-form-item>
           <div class="submit">
-            <el-button type="primary" @click="toRegister(registerFormRef)"
+            <el-button
+              type="primary"
+              @click.prevent="toRegister(registerFormRef)"
               >注册</el-button
             >
           </div>
@@ -187,9 +189,7 @@ const toRegister = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       const data = userRegister(registerForm);
-      console.log(data);
-
-      ElMessage.success('注册成功');
+      if (!data) return;
       setTimeout(() => {
         router.push({
           path: 'login'

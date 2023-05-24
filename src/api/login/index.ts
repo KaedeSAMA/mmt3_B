@@ -23,7 +23,8 @@ const getOrganization = async (studentId: string) => {
   );
   if (data.code !== '00000') {
     ElMessage.error(data.message);
+    return;
   }
-  return data;
+  return data.data;
 };
 export { getOrganization, userLogin };

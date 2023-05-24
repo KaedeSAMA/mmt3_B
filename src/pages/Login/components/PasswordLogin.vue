@@ -37,7 +37,7 @@
       <span @click="toRegister">注册</span>
     </div>
     <div class="login">
-      <el-button type="primary" @click="login(formRef)">登录</el-button>
+      <el-button type="primary" @click.prevent="login(formRef)">登录</el-button>
     </div>
   </el-form>
 </template>
@@ -63,7 +63,8 @@ type origanizationOptionsType = {
 const origanizationOptions = ref<Array<origanizationOptionsType>>([]);
 // 获取当前学生所在的组织
 const getUserOrganization = async (studentId: string) => {
-  const { data } = await getOrganization(studentId);
+  const data = await getOrganization(studentId);
+  if (!data) return;
   data?.organizations && (origanizationOptions.value = data?.organizations);
 };
 const studentIdVerification = (rule: any, value: string, callback: any) => {
@@ -100,6 +101,7 @@ const login = (formEl: FormInstance | undefined) => {
   formEl.validate(async (valid) => {
     if (valid) {
       const data = await userLogin(loginForm);
+      if (!data) return;
       data?.token && localStorage.setItem('token', data?.token);
       setTimeout(() => {
         router.push({
