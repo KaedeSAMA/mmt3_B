@@ -4,15 +4,38 @@ import { MockMethod } from 'vite-plugin-mock';
 import Mock, { Random } from 'mockjs';
 export default [
   {
-    url: '/mock/login',
+    url: '/mock/b/user/loginp',
     method: 'post',
     response: () => {
       return {
-        code: 200,
+        code: '00000',
         message: 'ok',
         data: Mock.mock({
-          token: Random.string(10)
+          'userId|1-100': 100,
+          username: Random.cname(),
+          token: Random.string(50),
+          'permissionId|1-100': 100,
+          permissionName: Random.ctitle(4, 7)
         })
+      };
+    }
+  },
+  {
+    url: '/mock/b/user/orgs',
+    method: 'get',
+    response: () => {
+      return {
+        code: '00000',
+        data: {
+          num: 1,
+          organizations: [
+            {
+              organizationId: 0,
+              organizationName: '科技协会'
+            }
+          ]
+        },
+        message: '请求成功'
       };
     }
   }

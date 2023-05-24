@@ -44,9 +44,8 @@ class Request {
     this.instance.interceptors.response.use(
       (res) => {
         this.loading?.close();
-        const { data = {} } = res || {};
-        const { code } = data;
-        if (code === 200) {
+        const { data = {}, status } = res || {};
+        if (status === 200) {
           return data;
         }
         showErrorInfo(res);

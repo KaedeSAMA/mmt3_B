@@ -11,9 +11,9 @@
           :model="registerForm"
           :rules="registerRules"
         >
-          <el-form-item prop="name">
+          <el-form-item prop="username">
             <el-input
-              v-model="registerForm.name"
+              v-model="registerForm.username"
               clearable
               placeholder="真实姓名"
             >
@@ -29,14 +29,15 @@
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="phone">
-            <el-input v-model="registerForm.phone" placeholder="手机号">
+          <el-form-item prop="phoneNum">
+            <el-input v-model="registerForm.phoneNum" placeholder="手机号">
               <template v-slot:prefix>
                 <svg-icon iconName="icon-shouji" />
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="verificationCode">
+          <!-- 闲置代码, 不删除 -->
+          <!-- <el-form-item prop="verificationCode">
             <el-input
               v-model="registerForm.verificationCode"
               placeholder="短信验证码"
@@ -49,9 +50,14 @@
                 <button @click.prevent="getVerificationCode">获取验证码</button>
               </template>
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="password">
-            <el-input v-model="registerForm.password" placeholder="密码">
+            <el-input
+              v-model="registerForm.password"
+              placeholder="密码"
+              type="password"
+              show-password
+            >
               <template v-slot:prefix>
                 <svg-icon iconName="icon-suoding" />
               </template>
@@ -61,17 +67,16 @@
             <el-input
               v-model="registerForm.passwordAgain"
               placeholder="确认密码"
+              type="password"
+              show-password
             >
               <template v-slot:prefix>
                 <svg-icon iconName="icon-suoding" />
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="invitationCode">
-            <el-input
-              v-model="registerForm.invitationCode"
-              placeholder="组织邀请码"
-            >
+          <el-form-item prop="key">
+            <el-input v-model="registerForm.key" placeholder="组织邀请码">
               <template v-slot:prefix>
                 <svg-icon iconName="icon-zuzhiqunzu" />
               </template>
@@ -94,24 +99,25 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { FormRules, FormInstance, ElMessage } from 'element-plus';
+import { FormRules, FormInstance } from 'element-plus';
 import {
   phoneVerification,
   userNameVerification
 } from '@/utils/formVerification';
+import { userRegister } from '@/api/register/index';
 const title = ref('后台管理系统');
 const registerFormRef = ref<FormInstance>();
 const registerForm = reactive({
-  name: '',
+  username: '',
   studentId: '',
-  phone: '',
-  verificationCode: '',
+  phoneNum: '',
+  // verificationCode: '',
   password: '',
   passwordAgain: '',
-  invitationCode: ''
+  key: ''
 });
 const registerRules = reactive<FormRules>({
-  name: [
+  username: [
     {
       required: true,
       message: '姓名不能为空',
@@ -129,7 +135,7 @@ const registerRules = reactive<FormRules>({
       trigger: 'blur'
     }
   ],
-  phone: [
+  phoneNum: [
     {
       required: true,
       message: '手机号不能为空',
@@ -140,13 +146,13 @@ const registerRules = reactive<FormRules>({
       trigger: 'blur'
     }
   ],
-  verificationCode: [
-    {
-      required: true,
-      message: '短信邀请码不能为空',
-      trigger: 'blur'
-    }
-  ],
+  // verificationCode: [
+  //   {
+  //     required: true,
+  //     message: '短信邀请码不能为空',
+  //     trigger: 'blur'
+  //   }
+  // ],
   password: [
     {
       required: true,
@@ -161,7 +167,7 @@ const registerRules = reactive<FormRules>({
       trigger: 'blur'
     }
   ],
-  invitationCode: [
+  key: [
     {
       required: true,
       message: '组织邀请码不能为空',
@@ -175,23 +181,21 @@ const toLogin = () => {
     path: 'login'
   });
 };
-const getVerificationCode = () => {
-  console.log('获取验证码。');
-};
+// const getVerificationCode = () => {
+//   console.log('获取验证码。');
+// };
 const toRegister = (formEl: FormInstance | undefined) => {
-  console.log(formEl);
-
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      ElMessage.success('注册成功');
+      const data = userRegister(registerForm);
+      if (!data) return;
       setTimeout(() => {
         router.push({
           path: 'login'
         });
       }, 1000);
     } else {
-      console.log('error submit!');
       return false;
     }
   });
