@@ -45,7 +45,6 @@ class Request {
       (res) => {
         this.loading?.close();
         const { data = {}, status } = res || {};
-        // const { code } = data;
         if (status === 200) {
           return data;
         }

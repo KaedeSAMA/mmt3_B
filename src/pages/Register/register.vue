@@ -11,9 +11,9 @@
           :model="registerForm"
           :rules="registerRules"
         >
-          <el-form-item prop="name">
+          <el-form-item prop="username">
             <el-input
-              v-model="registerForm.name"
+              v-model="registerForm.username"
               clearable
               placeholder="真实姓名"
             >
@@ -29,8 +29,8 @@
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="phone">
-            <el-input v-model="registerForm.phone" placeholder="手机号">
+          <el-form-item prop="phoneNum">
+            <el-input v-model="registerForm.phoneNum" placeholder="手机号">
               <template v-slot:prefix>
                 <svg-icon iconName="icon-shouji" />
               </template>
@@ -52,7 +52,12 @@
             </el-input>
           </el-form-item> -->
           <el-form-item prop="password">
-            <el-input v-model="registerForm.password" placeholder="密码">
+            <el-input
+              v-model="registerForm.password"
+              placeholder="密码"
+              type="password"
+              show-password
+            >
               <template v-slot:prefix>
                 <svg-icon iconName="icon-suoding" />
               </template>
@@ -62,17 +67,16 @@
             <el-input
               v-model="registerForm.passwordAgain"
               placeholder="确认密码"
+              type="password"
+              show-password
             >
               <template v-slot:prefix>
                 <svg-icon iconName="icon-suoding" />
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="invitationCode">
-            <el-input
-              v-model="registerForm.invitationCode"
-              placeholder="组织邀请码"
-            >
+          <el-form-item prop="key">
+            <el-input v-model="registerForm.key" placeholder="组织邀请码">
               <template v-slot:prefix>
                 <svg-icon iconName="icon-zuzhiqunzu" />
               </template>
@@ -98,19 +102,20 @@ import {
   phoneVerification,
   userNameVerification
 } from '@/utils/formVerification';
+import { userRegister } from '@/api/register/index';
 const title = ref('后台管理系统');
 const registerFormRef = ref<FormInstance>();
 const registerForm = reactive({
-  name: '',
+  username: '',
   studentId: '',
-  phone: '',
+  phoneNum: '',
   // verificationCode: '',
   password: '',
   passwordAgain: '',
-  invitationCode: ''
+  key: ''
 });
 const registerRules = reactive<FormRules>({
-  name: [
+  username: [
     {
       required: true,
       message: '姓名不能为空',
@@ -128,7 +133,7 @@ const registerRules = reactive<FormRules>({
       trigger: 'blur'
     }
   ],
-  phone: [
+  phoneNum: [
     {
       required: true,
       message: '手机号不能为空',
@@ -160,7 +165,7 @@ const registerRules = reactive<FormRules>({
       trigger: 'blur'
     }
   ],
-  invitationCode: [
+  key: [
     {
       required: true,
       message: '组织邀请码不能为空',
@@ -181,6 +186,9 @@ const toRegister = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
+      const data = userRegister(registerForm);
+      console.log(data);
+
       ElMessage.success('注册成功');
       setTimeout(() => {
         router.push({

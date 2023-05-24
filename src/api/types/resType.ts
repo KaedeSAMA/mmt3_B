@@ -23,5 +23,11 @@ type TUserLoginData = {
 };
 
 type TUserLoginRes = IBaseResponce<TUserLoginData>;
+type TUserRegisterRes = IBaseResponce<null>;
 
-export type { IBaseResponce, TGetOrganizationRes, TUserLoginRes };
+export type {
+  IBaseResponce,
+  TGetOrganizationRes,
+  TUserLoginRes,
+  TUserRegisterRes
+};

@@ -43,13 +43,13 @@
 </template>
 <script lang="ts" setup>
 import { UserFilled, Lock } from '@element-plus/icons-vue';
-import { ElMessage, FormInstance, FormRules } from 'element-plus';
+import { FormInstance, FormRules } from 'element-plus';
 import { getOrganization, userLogin } from '@/api/login/index';
 const router = useRouter();
 const formRef = ref<FormInstance>();
 const loginForm = reactive<{
   studentId: string;
-  organizationId: number | string;
+  organizationId: any;
   password: string;
 }>({
   studentId: '',
@@ -95,34 +95,26 @@ const loginRules = reactive<FormRules>({
     }
   ]
 });
-
-// 方法
-const toRegister = () => {
-  router.push({
-    path: 'register'
-  });
-};
-
 const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  formEl.validate((valid) => {
+  formEl.validate(async (valid) => {
     if (valid) {
-      const data = userLogin(loginForm);
-      console.log(data);
-      console.log(
-        '🚀 ~ file: PasswordLogin.vue:107 ~ formEl.validate ~ data:',
-        data
-      );
-      ElMessage.success('登录成功');
+      const data = await userLogin(loginForm);
+      data?.token && localStorage.setItem('token', data?.token);
       setTimeout(() => {
         router.push({
           path: 'home'
         });
       }, 1000);
     } else {
-      console.log('error submit!');
       return false;
     }
+  });
+};
+
+const toRegister = () => {
+  router.push({
+    path: 'register'
   });
 };
 </script>

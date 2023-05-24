@@ -4,4 +4,12 @@ type TUserLogin = {
   organizationId: number;
 };
 
-export type { TUserLogin };
+type TRegister = {
+  username: string;
+  studentId: string;
+  phoneNum: string;
+  password: string;
+  key: string;
+};
+
+export type { TUserLogin, TRegister };

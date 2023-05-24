@@ -1,5 +1,4 @@
 import { ElMessage } from 'element-plus';
-import { useRouter } from 'vue-router';
 const router = useRouter();
 function showErrorInfo(res: any): void {
   console.log(res);
