@@ -17,11 +17,18 @@
     </el-card>
     <el-card class="community-manage-card" :body-style="rightCardStyle">
       <template #header> 所在组织/社团 </template>
-      <div class="button-group flex a-center j-around">
+      <div class="upper flex">
         <div>当前组织/社团：</div>
-        <el-button type="primary" size="large" plain>Primary</el-button>
-        <el-button type="primary" size="large" plain>Primary</el-button>
-        <el-button type="primary" size="large" plain>Primary</el-button>
+        <div class="button-group flex">
+          <el-button
+            type="primary"
+            size="large"
+            plain
+            v-for="item in organizationTabs"
+            :key="item.organizationId"
+            >{{ item.organizationName }}</el-button
+          >
+        </div>
       </div>
       <el-divider />
       <div></div>
@@ -42,6 +49,45 @@ const rightCardStyle = {
   height: '80%',
   margin: '0 auto'
 };
+
+// ### 创建变量用来存储此人加入组织的tabs
+type organizationTab = {
+  organizationId: number;
+  organizationName: string;
+  active: boolean;
+};
+const organizationTabs: Array<organizationTab> = [
+  {
+    organizationId: 1,
+    organizationName: '科技协会',
+    active: false
+  },
+  {
+    organizationId: 2,
+    organizationName: '团委',
+    active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '心协',
+    active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '心协',
+    active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '心协',
+    active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '心协',
+    active: false
+  }
+];
 </script>
 <style lang="scss" scoped>
 .flex {
@@ -112,14 +158,23 @@ const rightCardStyle = {
     height: 60%;
     min-width: 700px;
     min-height: 600px;
-    .button-group {
-      width: 90%;
+    .upper {
+      width: 100%;
       div {
-        width: 160px;
+        min-width: 120px;
         // background-color: black;
       }
-      .el-button {
-        width: 150px;
+
+      .button-group {
+        margin-left: 50px;
+        min-width: 500px;
+        flex-wrap: wrap;
+        .el-button {
+          min-width: 150px;
+          flex-basis: 170px;
+          margin-left: 20px;
+          margin-bottom: 20px;
+        }
       }
     }
   }
