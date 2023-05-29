@@ -50,7 +50,8 @@ const rightCardStyle = {
   margin: '0 auto'
 };
 
-// ### 创建变量用来存储此人加入组织的tabs
+// ### 功能：获取用户当前加入的所有组织并展示切换
+// ### 1.创建变量用来存储此人加入组织的tabs
 type organizationTab = {
   organizationId: number;
   organizationName: string;
