@@ -1,10 +1,11 @@
 import { ElMessage } from 'element-plus';
-import { useRouter } from 'vue-router';
 const router = useRouter();
-function showErrorInfo(response: any): void {
-  const { data = {} } = response;
-  const { code, message, msg } = data;
-  switch (code) {
+function showErrorInfo(res: any): void {
+  console.log(res);
+
+  const { data = {}, response } = res;
+  const { status } = response;
+  switch (status) {
     case 302: {
       ElMessage.warning('登录信息过期, 请重新登录。');
       setTimeout(() => {
