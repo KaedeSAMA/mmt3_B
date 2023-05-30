@@ -31,7 +31,7 @@
             :plain="!item.active"
             v-for="item in organizationTabs"
             :key="item.organizationId"
-            @click="switchOrganization(item)"
+            @click="openSwitchDialog(item)"
             >{{ item.organizationName }}</el-button
           >
         </div>
@@ -78,16 +78,41 @@
         </span>
       </template>
     </el-dialog>
+    <el-dialog
+      v-model="switchDialogVisible"
+      @close="closeSwitchDialog"
+      class="dialog"
+      width="500px"
+    >
+      <template #header> 切换组织 </template>
+      <el-form class="dialog-form">
+        <el-form-item label="密码" label-width="120px">
+          <el-input
+            v-model="switchPassword"
+            placeholder="请输入密码"
+            type="password"
+            :center="true"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span>
+          <el-button @click="closeSwitchDialog()">Cancel</el-button>
+          <el-button type="primary" @click="switchOrg()"> 提交 </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import avatar from '@/assets/img/avatar.jpg';
 import { Plus } from '@element-plus/icons-vue';
-import { TJoinOrganization } from '@/api/types/dataType';
+import { TJoinOrganization, TSwitchOrganization } from '@/api/types/dataType';
 import {
   getUserBasicInfo,
   getUserOrganizations,
-  joinOrganization
+  joinOrganization,
+  switchOrganization
 } from '@/api/personalPage/index';
 
 // ### 定义右侧卡片的bodyCSS样式
@@ -151,31 +176,45 @@ onMounted(() => {
   getOrgList();
 });
 // ### 3.点击按钮改变状态并切换组织
-function switchOrganization(item: organizationTab) {
-  let lastId = 0;
-  console.log(item.organizationId);
-  // ### 获取上一次的ID用于请求失败时加载上一次的状态
-  organizationTabs.value.map((tab) => {
-    if (tab.active) {
-      lastId = tab.organizationId;
-    }
-    return null;
-  });
-  organizationTabs.value.map((tab) => {
-    if (tab.organizationId !== item.organizationId) {
-      tab.active = false;
-    } else {
-      // ### 通过第一层校验，开始请求，通过则设置为true,未通过则设置为上一次的组织
 
-      tab.active = true;
+// ### 用于存储输入的密码
+const switchPassword = ref('');
+// ### 用于存储当前点击的部门ID
+const clickOrganizationId = ref(0);
+
+// ### 定义dialog
+const switchDialogVisible = ref(false);
+const openSwitchDialog = (item: organizationTab) => {
+  if (!item.active) {
+    clickOrganizationId.value = item.organizationId;
+    switchDialogVisible.value = true;
+  }
+};
+const closeSwitchDialog = () => {
+  switchDialogVisible.value = false;
+};
+
+async function switchOrg() {
+  // ### 定义发送请求的数据
+  const switchDataConfig: TSwitchOrganization = {
+    organizationId: clickOrganizationId.value,
+    password: switchPassword.value
+  };
+  // ###发送请求
+  const res = await switchOrganization(switchDataConfig);
+  // ### 根据请求结果做出响应
+  //    ### 获取上一次的ID用于请求失败时加载上一次的状态
+  if (res) {
+    if (res.code === '00000') {
+      getOrgList();
+      switchDialogVisible.value = false;
     }
-    return null;
-  });
+  }
 }
 
 // ### 功能：加入新的组织
 
-// ### 1.定义请求函数
+// ### 1.定义请求函数：joinOrg
 const joinOrg = async (config: TJoinOrganization) => {
   const data = await joinOrganization(config);
   // ### 成功后关闭窗体,并且重新获取组织
