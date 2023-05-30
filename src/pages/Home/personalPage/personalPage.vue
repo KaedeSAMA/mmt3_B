@@ -23,12 +23,18 @@
           <el-button
             type="primary"
             size="large"
-            plain
+            :plain="!item.active"
             v-for="item in organizationTabs"
             :key="item.organizationId"
+            @click="switchOrganization(item)"
             >{{ item.organizationName }}</el-button
           >
         </div>
+      </div>
+      <div class="joinBox">
+        <el-button type="primary">
+          Upload<el-icon class="el-icon--right"><Upload /></el-icon>
+        </el-button>
       </div>
       <el-divider />
       <div></div>
@@ -37,10 +43,10 @@
 </template>
 <script lang="ts" setup>
 import avatar from '@/assets/img/avatar.jpg';
-// ### 定义数据展示的变量
-const studentName = ref('王菲');
-const phoneNum = ref('136 **** 8899');
-const studentCode = ref('20210001');
+import {
+  getUserBasicInfo,
+  getUserOrganizations
+} from '@/api/personalPage/index';
 
 // ### 定义右侧卡片的bodyCSS样式
 const rightCardStyle = {
@@ -50,6 +56,24 @@ const rightCardStyle = {
   margin: '0 auto'
 };
 
+// ### 功能：获取用户信息并展示
+
+// ### 1.定义数据展示的变量
+const studentName = ref('加载中');
+const phoneNum = ref('加载中');
+const studentCode = ref('加载中');
+
+// ### 2.挂载时向后端发起请求获取用户数据
+onMounted(async () => {
+  const data = await getUserBasicInfo();
+  console.log(data);
+  if (data) {
+    studentName.value = data.username;
+    phoneNum.value = data.phone;
+    studentCode.value = data.studentId;
+  }
+});
+
 // ### 功能：获取用户当前加入的所有组织并展示切换
 // ### 1.创建变量用来存储此人加入组织的tabs
 type organizationTab = {
@@ -57,38 +81,54 @@ type organizationTab = {
   organizationName: string;
   active: boolean;
 };
-const organizationTabs: Array<organizationTab> = [
+const organizationTabs = ref<Array<organizationTab>>([
   {
     organizationId: 1,
-    organizationName: '科技协会',
-    active: false
+    organizationName: '加载中',
+    active: true
   },
   {
     organizationId: 2,
-    organizationName: '团委',
+    organizationName: '加载中',
     active: false
   },
   {
     organizationId: 3,
-    organizationName: '心协',
-    active: false
-  },
-  {
-    organizationId: 3,
-    organizationName: '心协',
-    active: false
-  },
-  {
-    organizationId: 3,
-    organizationName: '心协',
-    active: false
-  },
-  {
-    organizationId: 3,
-    organizationName: '心协',
+    organizationName: '加载中',
     active: false
   }
-];
+]);
+// ### 2.从后端获取信息
+onMounted(async () => {
+  const data = await getUserOrganizations();
+  if (data) {
+    organizationTabs.value = data.organizations;
+  }
+});
+// ### 3.点击按钮改变状态并切换组织
+function switchOrganization(item: organizationTab) {
+  let lastId = 0;
+  console.log(item.organizationId);
+  // ### 获取上一次的ID用于请求失败时加载上一次的状态
+  organizationTabs.value.map((tab) => {
+    if (tab.active) {
+      lastId = tab.organizationId;
+    }
+    return null;
+  });
+  organizationTabs.value.map((tab) => {
+    if (tab.organizationId !== item.organizationId) {
+      tab.active = false;
+    } else {
+      // ### 通过第一层校验，开始请求，通过则设置为true,未通过则设置为上一次的组织
+
+      tab.active = true;
+    }
+    return null;
+  });
+}
+
+// ### 功能：加入新的组织
 </script>
 <style lang="scss" scoped>
 .flex {
@@ -167,6 +207,7 @@ const organizationTabs: Array<organizationTab> = [
       }
 
       .button-group {
+        width: 90%;
         margin-left: 50px;
         min-width: 500px;
         flex-wrap: wrap;
@@ -176,6 +217,14 @@ const organizationTabs: Array<organizationTab> = [
           margin-left: 20px;
           margin-bottom: 20px;
         }
+      }
+    }
+    .joinBox {
+      overflow: hidden;
+      .el-button {
+        float: right;
+        width: 200px;
+        height: 50px;
       }
     }
   }
