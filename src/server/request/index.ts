@@ -11,6 +11,9 @@ class Request {
   loading?: any;
   constructor(config: RequestConfig) {
     this.instance = axios.create(config);
+    // 添加请求头
+    this.instance.defaults.headers.common['Authorization'] =
+      window.localStorage.getItem('token');
     this.interceptors = config.interceptors;
     this.showLoading = config.showLoading ?? DEFAULT_LOADING;
     // 将传入的属性进行实例化 -> 请求拦截器
