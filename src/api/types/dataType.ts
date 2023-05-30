@@ -18,6 +18,7 @@ type TRegister = {
 // ？ 第一位（I/T）表示定义时使用Interface还是Type
 // ？ 第二位（XxXxxxxXxxx）使用大驼峰表示类型命名
 
+// ### 加入社团的传参类型
 type TJoinOrganization = {
   key: string;
   password: string;

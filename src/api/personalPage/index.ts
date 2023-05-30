@@ -46,8 +46,8 @@ const joinOrganization = async (dataConfig: TJoinOrganization) => {
     return;
   }
   ElMessage.success('加入组织成功');
-  console.log(data.data);
-  return data.data;
+  console.log(data);
+  return data;
 };
 
 // ### 导出方法

@@ -1,3 +1,8 @@
+<!-- 
+  // ？ 本组件是个人主页总页面
+  // ？ 1. 切换组织最后的信息存放在pinia中
+  // ？ 2. 
+ -->
 <template>
   <div class="personal-page-root">
     <el-card class="self-info-card flex a-center">
@@ -32,20 +37,57 @@
         </div>
       </div>
       <div class="joinBox">
-        <el-button type="primary">
-          Upload<el-icon class="el-icon--right"><Upload /></el-icon>
+        <el-button type="primary" @click="openDialog">
+          <el-icon><Plus /></el-icon>
+          添加组织
         </el-button>
       </div>
+      <div class="join-hint">选中组织/社团以切换当前社团</div>
       <el-divider />
-      <div></div>
+      <!-- <div></div> -->
     </el-card>
+    <el-dialog
+      v-model="dialogVisible"
+      @close="closeDialog"
+      class="dialog"
+      width="500px"
+    >
+      <template #header> 加入组织 </template>
+      <el-form class="dialog-form">
+        <el-form-item label="邀请码" label-width="120px">
+          <el-input
+            v-model="dialogData.key"
+            placeholder="请输入邀请码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="密码" label-width="120px">
+          <el-input
+            v-model="dialogData.password"
+            placeholder="请输入密码"
+            type="password"
+            :center="true"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span>
+          <el-button @click="closeDialog()">Cancel</el-button>
+          <el-button type="primary" @click="joinOrg(dialogData)">
+            提交
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import avatar from '@/assets/img/avatar.jpg';
+import { Plus } from '@element-plus/icons-vue';
+import { TJoinOrganization } from '@/api/types/dataType';
 import {
   getUserBasicInfo,
-  getUserOrganizations
+  getUserOrganizations,
+  joinOrganization
 } from '@/api/personalPage/index';
 
 // ### 定义右侧卡片的bodyCSS样式
@@ -99,11 +141,14 @@ const organizationTabs = ref<Array<organizationTab>>([
   }
 ]);
 // ### 2.从后端获取信息
-onMounted(async () => {
+const getOrgList = async () => {
   const data = await getUserOrganizations();
   if (data) {
     organizationTabs.value = data.organizations;
   }
+};
+onMounted(() => {
+  getOrgList();
 });
 // ### 3.点击按钮改变状态并切换组织
 function switchOrganization(item: organizationTab) {
@@ -129,6 +174,30 @@ function switchOrganization(item: organizationTab) {
 }
 
 // ### 功能：加入新的组织
+
+// ### 1.定义请求函数
+const joinOrg = async (config: TJoinOrganization) => {
+  const data = await joinOrganization(config);
+  // ### 成功后关闭窗体,并且重新获取组织
+  console.log(data);
+  if (data) {
+    dialogVisible.value = false;
+    getOrgList();
+  }
+};
+// ### 2.定义dialog弹出层
+const dialogVisible = ref(false);
+const dialogData = ref({
+  key: '',
+  password: ''
+});
+const openDialog = () => {
+  dialogVisible.value = true;
+  console.log(dialogVisible.value);
+};
+const closeDialog = () => {
+  dialogVisible.value = false;
+};
 </script>
 <style lang="scss" scoped>
 .flex {
@@ -209,6 +278,7 @@ function switchOrganization(item: organizationTab) {
       .button-group {
         width: 90%;
         margin-left: 50px;
+        margin-bottom: 50px;
         min-width: 500px;
         flex-wrap: wrap;
         .el-button {
@@ -226,6 +296,16 @@ function switchOrganization(item: organizationTab) {
         width: 200px;
         height: 50px;
       }
+    }
+    .join-hint {
+      margin-top: 25px;
+      color: rgb(164, 164, 164);
+      text-align: center;
+    }
+  }
+  .dialog {
+    .dialog-form {
+      width: 80%;
     }
   }
 }
