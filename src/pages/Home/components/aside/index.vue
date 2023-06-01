@@ -7,38 +7,39 @@
       text-color="white"
       background-color="#001428"
       :unique-opened="true"
+      @select="pushRoute($event)"
     >
-      <el-menu-item index="0">
+      <el-menu-item index="/home/personalPage">
         <el-icon><HomeFilled /></el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu index="1">
+      <el-sub-menu index="/home">
         <template #title>
           <el-icon><location /></el-icon>
           <span>面试总看板</span>
         </template>
-        <el-menu-item index="1-1">
+        <el-menu-item index="/home">
           <template #title><span>报名阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="1-2">
+        <el-menu-item index="/home">
           <template #title><span>面试阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="1-3">
+        <el-menu-item index="/home">
           <template #title><span>复盘阶段</span></template>
         </el-menu-item>
       </el-sub-menu>
-      <el-sub-menu index="2">
+      <el-sub-menu index="/home">
         <template #title>
           <el-icon><icon-menu /></el-icon>
           <span>超级管理</span>
         </template>
-        <el-menu-item index="2-1">
+        <el-menu-item index="/home">
           <template #title><span>宣传信息设置</span></template>
         </el-menu-item>
-        <el-menu-item index="2-2">
+        <el-menu-item index="/home">
           <template #title><span>组织管理</span></template>
         </el-menu-item>
-        <el-menu-item index="2-3">
+        <el-menu-item index="/home/interviewProcessSetting">
           <template #title><span>面试流程设置</span></template>
         </el-menu-item>
       </el-sub-menu>
@@ -52,6 +53,8 @@ import {
   Location,
   HomeFilled
 } from '@element-plus/icons-vue';
+const route = useRoute();
+const router = useRouter();
 
 const isCollapse = ref(false);
 // const handleOpen = (key: string, keyPath: string[]) => {
@@ -60,6 +63,12 @@ const isCollapse = ref(false);
 // const handleClose = (key: string, keyPath: string[]) => {
 //   console.log(key, keyPath);
 // };
+// ### 用于push路由的函数
+function pushRoute(newRoute: any) {
+  if (route.path !== newRoute) {
+    router.push(newRoute);
+  }
+}
 </script>
 <style scoped lang="scss">
 .aside {

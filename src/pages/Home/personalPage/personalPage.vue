@@ -172,7 +172,6 @@ const studentCode = ref('加载中');
 // ### 2.挂载时向后端发起请求获取用户数据
 onMounted(async () => {
   const data = await getUserBasicInfo();
-  console.log(data);
   if (data) {
     studentName.value = data.username;
     phoneNum.value = data.phone;
@@ -262,7 +261,6 @@ async function switchOrg() {
 const joinOrg = async (config: TJoinOrganization) => {
   const data = await joinOrganization(config);
   // ### 成功后关闭窗体,并且重新获取组织
-  console.log(data);
   if (data) {
     dialogVisible.value = false;
     getOrgList();

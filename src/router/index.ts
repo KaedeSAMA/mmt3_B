@@ -25,10 +25,18 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/Home/home.vue'),
     children: [
       {
-        //！ 子路由：个人首页
+        // ### 个人首页
         path: '/home/personalPage',
         name: 'PersonalPage',
         component: () => import('@/pages/Home/personalPage/personalPage.vue')
+      },
+      {
+        path: '/home/interviewProcessSetting',
+        name: 'interviewProcessSetting',
+        component: () =>
+          import(
+            '@/pages/Home/interviewProcessSetting/interviewProcessSetting.vue'
+          )
       }
     ]
   }

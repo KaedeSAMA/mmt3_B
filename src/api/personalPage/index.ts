@@ -41,7 +41,6 @@ const getUserOrganizations = async () => {
     return;
   }
   // ElMessage.success('获取用户部门');
-  console.log(data.data);
   return data.data;
 };
 // ### 获取当前用户加入的所有组织⬆️
