@@ -13,34 +13,34 @@
         <el-icon><HomeFilled /></el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu index="/home">
+      <el-sub-menu index="/home/a">
         <template #title>
           <el-icon><location /></el-icon>
           <span>面试总看板</span>
         </template>
-        <el-menu-item index="/home">
+        <el-menu-item index="/home/b">
           <template #title><span>报名阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="/home">
+        <el-menu-item index="/home/c">
           <template #title><span>面试阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="/home">
+        <el-menu-item index="/home/d">
           <template #title><span>复盘阶段</span></template>
         </el-menu-item>
       </el-sub-menu>
-      <el-sub-menu index="/home">
+      <el-sub-menu index="/home/e">
         <template #title>
           <el-icon><icon-menu /></el-icon>
           <span>超级管理</span>
         </template>
-        <el-menu-item index="/home">
+        <el-menu-item index="/home/f">
           <template #title><span>宣传信息设置</span></template>
         </el-menu-item>
-        <el-menu-item index="/home">
+        <el-menu-item index="/home/g">
           <template #title><span>组织管理</span></template>
         </el-menu-item>
-        <el-menu-item index="/home/interviewProcessSetting">
-          <template #title><span>面试流程设置</span></template>
+        <el-menu-item index="/home/regFormSetting">
+          <template #title><span>报名表设置</span></template>
         </el-menu-item>
       </el-sub-menu>
     </el-menu>

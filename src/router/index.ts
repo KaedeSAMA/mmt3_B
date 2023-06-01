@@ -31,12 +31,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/Home/personalPage/personalPage.vue')
       },
       {
-        path: '/home/interviewProcessSetting',
-        name: 'interviewProcessSetting',
+        path: '/home/regFormSetting',
+        name: 'regFormSetting',
         component: () =>
-          import(
-            '@/pages/Home/interviewProcessSetting/interviewProcessSetting.vue'
-          )
+          import('@/pages/Home/regFormSetting/regFormSetting.vue')
       }
     ]
   }
