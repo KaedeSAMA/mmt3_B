@@ -44,7 +44,12 @@
       </div>
       <div class="join-hint">选中组织/社团以切换当前社团</div>
       <el-divider />
-      <!-- <div></div> -->
+      <div class="joinBox">
+        <el-button type="primary" @click="openUpdatePasswordDialog">
+          <el-icon><Edit /></el-icon>
+          更改当前组织密码
+        </el-button>
+      </div>
     </el-card>
     <el-dialog
       v-model="dialogVisible"
@@ -102,17 +107,50 @@
         </span>
       </template>
     </el-dialog>
+    <el-dialog
+      v-model="updatePasswordDialogVisible"
+      @close="closeSwitchDialog"
+      class="dialog"
+      width="500px"
+    >
+      <template #header> 更改密码 </template>
+      <el-form class="dialog-form">
+        <el-form-item label="旧密码" label-width="120px">
+          <el-input
+            v-model="updatePasswordData.oldPassword"
+            placeholder="请输入旧密码"
+            type="password"
+            :center="true"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" label-width="120px">
+          <el-input
+            v-model="updatePasswordData.newPassword"
+            placeholder="请输入新密码"
+            type="password"
+            :center="true"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span>
+          <el-button @click="closeUpdatePasswordDialog()">Cancel</el-button>
+          <el-button type="primary" @click="updatePas()"> 提交 </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import avatar from '@/assets/img/avatar.jpg';
-import { Plus } from '@element-plus/icons-vue';
+import { Plus, Edit } from '@element-plus/icons-vue';
 import { TJoinOrganization, TSwitchOrganization } from '@/api/types/dataType';
 import {
   getUserBasicInfo,
   getUserOrganizations,
   joinOrganization,
-  switchOrganization
+  switchOrganization,
+  updatePassword
 } from '@/api/personalPage/index';
 
 // ### 定义右侧卡片的bodyCSS样式
@@ -123,7 +161,8 @@ const rightCardStyle = {
   margin: '0 auto'
 };
 
-// ### 功能：获取用户信息并展示
+// ###############
+// ### 功能：获取用户信息并展示⬇️
 
 // ### 1.定义数据展示的变量
 const studentName = ref('加载中');
@@ -140,8 +179,11 @@ onMounted(async () => {
     studentCode.value = data.studentId;
   }
 });
+// ###获取用户信息并展示⬆️
+// ###############
 
-// ### 功能：获取用户当前加入的所有组织并展示切换
+// ### 功能：获取用户当前加入的所有组织并展示切换⬇️
+
 // ### 1.创建变量用来存储此人加入组织的tabs
 type organizationTab = {
   organizationId: number;
@@ -211,8 +253,10 @@ async function switchOrg() {
     }
   }
 }
+// ### 功能：获取用户当前加入的所有组织并展示切换⬆️
 
-// ### 功能：加入新的组织
+// #########################
+// ### 功能：加入新的组织⬇️
 
 // ### 1.定义请求函数：joinOrg
 const joinOrg = async (config: TJoinOrganization) => {
@@ -232,11 +276,34 @@ const dialogData = ref({
 });
 const openDialog = () => {
   dialogVisible.value = true;
-  console.log(dialogVisible.value);
 };
 const closeDialog = () => {
   dialogVisible.value = false;
 };
+
+// ### 功能：加入新的组织⬆️
+// #########################
+
+// ### 功能：更改当前社团密码⬇️
+
+// ### 1.dialog窗体
+const updatePasswordDialogVisible = ref(false);
+const updatePasswordData = ref({
+  oldPassword: '',
+  newPassword: ''
+});
+const openUpdatePasswordDialog = () => {
+  updatePasswordDialogVisible.value = true;
+};
+const closeUpdatePasswordDialog = () => {
+  updatePasswordDialogVisible.value = false;
+};
+
+// ### 2.提交处理函数
+async function updatePas() {
+  // ###发送请求
+  updatePassword(updatePasswordData.value);
+}
 </script>
 <style lang="scss" scoped>
 .flex {

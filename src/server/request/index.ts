@@ -100,6 +100,16 @@ class Request {
       data
     });
   }
+
+  // ### put请求封装
+  put<T, D>(url: string, data?: D, config = {}): Promise<T> {
+    return this.request<T>({
+      ...config,
+      method: 'PUT',
+      url,
+      data
+    });
+  }
 }
 
 export default Request;

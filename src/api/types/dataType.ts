@@ -29,6 +29,18 @@ type TSwitchOrganization = {
   organizationId: number;
   password: string;
 };
+
+// ### 更改密码类型
+type TUpdatePassword = {
+  oldPassword: string;
+  newPassword: string;
+};
 // ！个人信息页面类型结束⬆️
 
-export type { TUserLogin, TRegister, TJoinOrganization, TSwitchOrganization };
+export type {
+  TUserLogin,
+  TRegister,
+  TJoinOrganization,
+  TSwitchOrganization,
+  TUpdatePassword
+};
