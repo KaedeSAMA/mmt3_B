@@ -7,16 +7,21 @@
   <div class="personal-page-root">
     <el-card class="self-info-card flex a-center">
       <el-avatar :size="180" :src="avatar" />
-      <div class="self-info-main flex a-center j-around">
-        <div class="key flex flex-d-co a-end j-around">
-          <div>真实姓名：</div>
-          <div>手机号码：</div>
-          <div>学号 ：</div>
+      <div class="self-info-main flex flex-d-col a-center j-around">
+        <div class="self-info-main-item">
+          <span class="key">姓名</span>
+          <span>:</span>
+          <span class="value">{{ studentName }}</span>
         </div>
-        <div class="value flex flex-d-co a-center j-around">
-          <div>{{ studentName }}</div>
-          <div>{{ phoneNum }}</div>
-          <div>{{ studentCode }}</div>
+        <div class="self-info-main-item">
+          <span class="key">姓名</span>
+          <span>:</span>
+          <span class="value">{{ studentName }}</span>
+        </div>
+        <div class="self-info-main-item">
+          <span class="key">姓名</span>
+          <span>:</span>
+          <span class="value">{{ studentName }}</span>
         </div>
       </div>
     </el-card>
@@ -26,6 +31,7 @@
         <div>当前组织/社团：</div>
         <div class="button-group flex">
           <el-button
+            class="orgnization-button"
             type="primary"
             size="large"
             :plain="!item.active"
@@ -143,6 +149,7 @@
 </template>
 <script lang="ts" setup>
 import avatar from '@/assets/img/avatar.jpg';
+import '@/style/flex.scss';
 import { Plus, Edit } from '@element-plus/icons-vue';
 import { TJoinOrganization, TSwitchOrganization } from '@/api/types/dataType';
 import {
@@ -204,6 +211,26 @@ const organizationTabs = ref<Array<organizationTab>>([
     organizationId: 3,
     organizationName: '加载中',
     active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '加载中',
+    active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '加载中',
+    active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '加载中',
+    active: false
+  },
+  {
+    organizationId: 3,
+    organizationName: '加载中',
+    active: false
   }
 ]);
 // ### 2.从后端获取信息
@@ -214,7 +241,7 @@ const getOrgList = async () => {
   }
 };
 onMounted(() => {
-  getOrgList();
+  // getOrgList();
 });
 // ### 3.点击按钮改变状态并切换组织
 
@@ -304,34 +331,8 @@ async function updatePas() {
 }
 </script>
 <style lang="scss" scoped>
-.flex {
-  display: flex;
-}
-.a-center {
-  align-items: center;
-}
-.a-end {
-  align-items: flex-end;
-}
-.a-start {
-  align-items: flex-start;
-}
-.flex-d-co {
-  flex-direction: column;
-}
-.j-center {
-  justify-content: center;
-}
-.j-between {
-  justify-content: space-between;
-}
-.j-around {
-  justify-content: space-around;
-}
 .personal-page-root {
-  width: 90%;
-  min-width: 1000px;
-  height: 96%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -354,12 +355,6 @@ async function updatePas() {
     .self-info-main {
       width: 80%;
       height: 50%;
-      .key {
-        height: 80%;
-      }
-      .value {
-        height: 80%;
-      }
     }
   }
   // .self-info-card ::v-deep .el-card__body {
@@ -370,7 +365,7 @@ async function updatePas() {
     margin-left: 15px;
     width: 70%;
     height: 60%;
-    min-width: 700px;
+    min-width: 400px;
     min-height: 600px;
     .upper {
       width: 100%;
@@ -380,16 +375,19 @@ async function updatePas() {
       }
 
       .button-group {
-        width: 90%;
-        margin-left: 50px;
-        margin-bottom: 50px;
-        min-width: 500px;
+        width: 100%;
+        // justify-content: space-around;
         flex-wrap: wrap;
         .el-button {
-          min-width: 150px;
-          flex-basis: 170px;
-          margin-left: 20px;
-          margin-bottom: 20px;
+          // flex-grow: 1;
+          width: 150px;
+          margin: 0px 10px 10px 10px;
+          @media (max-width: 1800px) {
+            width: 180px;
+          }
+          @media (max-width: 1300px) {
+            width: 100px;
+          }
         }
       }
     }

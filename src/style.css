@@ -10,5 +10,5 @@ body,
 }
 
 body {
-  min-width: 600px;
+  overflow-x: hidden;
 }

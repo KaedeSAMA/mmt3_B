@@ -1,6 +1,5 @@
 <template>
   <div class="aside">
-    <h3>天理闪报</h3>
     <el-menu
       default-active="0"
       :collapse="isCollapse"
@@ -9,6 +8,7 @@
       :unique-opened="true"
       @select="pushRoute($event)"
     >
+      <h3>{{ title }}</h3>
       <el-menu-item index="/home/personalPage">
         <el-icon><HomeFilled /></el-icon>
         <span>首页</span>
@@ -53,10 +53,31 @@ import {
   Location,
   HomeFilled
 } from '@element-plus/icons-vue';
+import { useResizeHook } from '@/utils/hooks/useResizeHook';
 const route = useRoute();
 const router = useRouter();
 
+const title = ref('天理闪报');
 const isCollapse = ref(false);
+// ### 挂载时查看视口
+onBeforeMount(() => {
+  if (document.documentElement.clientWidth <= 1000) {
+    title.value = '闪报';
+    isCollapse.value = true;
+  }
+});
+// ### 监听窗口变化更改菜单栏状态
+useResizeHook((wid, hei) => {
+  if (wid <= 1000) {
+    title.value = '闪报';
+    isCollapse.value = true;
+  }
+  if (wid > 1000) {
+    title.value = '天理闪报';
+    isCollapse.value = false;
+  }
+});
+
 // const handleOpen = (key: string, keyPath: string[]) => {
 //   console.log(key, keyPath);
 // };
@@ -82,7 +103,7 @@ function pushRoute(newRoute: any) {
     font-family: '楷体';
   }
   .el-menu {
-    height: calc(100vh - 60px);
+    height: 100vh;
     background-color: #001428;
     border-right: none;
     .el-menu-item {
@@ -112,5 +133,8 @@ function pushRoute(newRoute: any) {
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+.change-width {
+  width: auto;
 }
 </style>
