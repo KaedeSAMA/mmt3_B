@@ -28,9 +28,14 @@ useResizeHook((wid, hei) => {
 .home {
   height: 100%;
   overflow-x: hidden;
+  min-width: 460px;
+  @media (max-width: 820px) {
+    padding: 0;
+  }
   .el-container {
     height: 100%;
     .el-main {
+      padding: 0;
       //   display: flex;
       //   align-items: center;
       //   justify-content: center;

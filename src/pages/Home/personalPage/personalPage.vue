@@ -6,30 +6,28 @@
 <template>
   <div class="personal-page-root">
     <el-card class="self-info-card flex a-center">
-      <el-avatar :size="180" :src="avatar" />
+      <el-avatar :size="160" :src="avatar" />
       <div class="self-info-main flex flex-d-col a-center j-around">
         <div class="self-info-main-item">
-          <span class="key">姓名</span>
-          <span>:</span>
+          <span class="key">姓名&nbsp;&nbsp;&nbsp;:</span>
+
           <span class="value">{{ studentName }}</span>
         </div>
         <div class="self-info-main-item">
-          <span class="key">姓名</span>
-          <span>:</span>
-          <span class="value">{{ studentName }}</span>
+          <span class="key">电话号&nbsp;&nbsp;&nbsp;:</span>
+          <span class="value">{{ phoneNum }}</span>
         </div>
         <div class="self-info-main-item">
-          <span class="key">姓名</span>
-          <span>:</span>
-          <span class="value">{{ studentName }}</span>
+          <span class="key">学号&nbsp;&nbsp;&nbsp;:</span>
+          <span class="value">{{ studentCode }}</span>
         </div>
       </div>
     </el-card>
     <el-card class="community-manage-card" :body-style="rightCardStyle">
       <template #header> 所在组织/社团 </template>
       <div class="upper flex">
-        <div>当前组织/社团：</div>
-        <div class="button-group flex">
+        <div class="upper-font">当前组织/社团：</div>
+        <div class="button-group">
           <el-button
             class="orgnization-button"
             type="primary"
@@ -241,7 +239,7 @@ const getOrgList = async () => {
   }
 };
 onMounted(() => {
-  // getOrgList();
+  getOrgList();
 });
 // ### 3.点击按钮改变状态并切换组织
 
@@ -332,6 +330,15 @@ async function updatePas() {
 </script>
 <style lang="scss" scoped>
 .personal-page-root {
+  @media (max-width: 820px) {
+    flex-direction: column;
+    min-height: 100%;
+    justify-content: start;
+    align-items: center;
+    overflow-y: auto;
+  }
+  box-sizing: border-box;
+  padding: 20px;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -343,6 +350,7 @@ async function updatePas() {
     height: 80%;
     min-height: 600px;
     margin-right: 15px;
+
     :deep(.el-card__body) {
       padding: 0;
       width: 100%;
@@ -352,9 +360,46 @@ async function updatePas() {
       align-items: center;
       justify-content: space-around;
     }
+    @media (max-width: 820px) {
+      width: 100%;
+      height: 350px;
+      min-height: 350px;
+      min-width: 0;
+      margin-right: 0;
+      margin-bottom: 20px;
+      :deep(.el-card__body) {
+        padding: 0;
+        width: 100%;
+        height: 80%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+      }
+    }
     .self-info-main {
       width: 80%;
       height: 50%;
+      @media (max-width: 820px) {
+        width: 50%;
+      }
+    }
+    .self-info-main-item {
+      width: 100%;
+      display: flex;
+      justify-content: space-evenly;
+      .key {
+        text-align: right;
+        display: inline-block;
+        width: 140px;
+        margin-right: 10px;
+      }
+
+      .value {
+        display: inline-block;
+        width: 140px;
+        margin-left: 10px;
+      }
     }
   }
   // .self-info-card ::v-deep .el-card__body {
@@ -367,6 +412,17 @@ async function updatePas() {
     height: 60%;
     min-width: 400px;
     min-height: 600px;
+    @media (max-width: 820px) {
+      width: 100%;
+      min-height: 700px;
+      margin: 0;
+      min-width: 0;
+    }
+    .upper-font {
+      @media (max-width: 1200px) {
+        display: none;
+      }
+    }
     .upper {
       width: 100%;
       div {
@@ -376,17 +432,25 @@ async function updatePas() {
 
       .button-group {
         width: 100%;
-        // justify-content: space-around;
-        flex-wrap: wrap;
+        // min-height: 200px;
+        // flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 150px);
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+        @media (max-width: 1200px) {
+          padding-left: 20px;
+          padding-right: 20px;
+          grid-template-columns: repeat(auto-fill, 120px);
+        }
         .el-button {
           // flex-grow: 1;
           width: 150px;
-          margin: 0px 10px 10px 10px;
-          @media (max-width: 1800px) {
-            width: 180px;
-          }
-          @media (max-width: 1300px) {
-            width: 100px;
+          margin: 0px;
+
+          @media (max-width: 1200px) {
+            width: 120px;
           }
         }
       }
