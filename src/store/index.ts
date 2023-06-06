@@ -5,6 +5,7 @@ import { defineStore } from 'pinia';
 const useUserInfoStore = defineStore('userInfoStore', () => {
   const permissionId = ref(0);
   const permissionName = ref('');
+  const nowOrgnazitionId = ref(0);
 
   function setPermissionId(val: number) {
     permissionId.value = val;
@@ -12,11 +13,16 @@ const useUserInfoStore = defineStore('userInfoStore', () => {
   function setPermissionName(val: string) {
     permissionName.value = val;
   }
+  function setNowOrganizationId(val: number) {
+    nowOrgnazitionId.value = val;
+  }
   return {
     permissionId,
     permissionName,
+    nowOrgnazitionId,
     setPermissionId,
-    setPermissionName
+    setPermissionName,
+    setNowOrganizationId
   };
 });
 

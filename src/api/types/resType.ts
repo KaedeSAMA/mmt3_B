@@ -56,7 +56,12 @@ type TGetOrganizationData = {
 
 type TGetOrganizationRes = IBaseResponce<TGetOrganizationData>;
 
-// ### 用户加入组织
+// ### 修改密码
+type TUpdatePasswordDataRes = IBaseResponce<{
+  code: string;
+  message: string;
+}>;
+
 // ！个人信息页面类型结束⬆️
 export type {
   IBaseResponce,
@@ -64,5 +69,6 @@ export type {
   TUserLoginRes,
   TUserRegisterRes,
   TUserBasicInfoRes,
-  TSwitchOrganizationRes
+  TSwitchOrganizationRes,
+  TUpdatePasswordDataRes
 };

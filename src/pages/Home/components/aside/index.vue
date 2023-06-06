@@ -1,45 +1,46 @@
 <template>
   <div class="aside">
-    <h3>天理闪报</h3>
     <el-menu
       default-active="0"
       :collapse="isCollapse"
       text-color="white"
       background-color="#001428"
       :unique-opened="true"
+      @select="pushRoute($event)"
     >
-      <el-menu-item index="0">
+      <h3>{{ title }}</h3>
+      <el-menu-item index="/home/personalPage">
         <el-icon><HomeFilled /></el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu index="1">
+      <el-sub-menu index="/home/a">
         <template #title>
           <el-icon><location /></el-icon>
           <span>面试总看板</span>
         </template>
-        <el-menu-item index="1-1">
+        <el-menu-item index="/home/b">
           <template #title><span>报名阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="1-2">
+        <el-menu-item index="/home/c">
           <template #title><span>面试阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="1-3">
+        <el-menu-item index="/home/d">
           <template #title><span>复盘阶段</span></template>
         </el-menu-item>
       </el-sub-menu>
-      <el-sub-menu index="2">
+      <el-sub-menu index="/home/e">
         <template #title>
           <el-icon><icon-menu /></el-icon>
           <span>超级管理</span>
         </template>
-        <el-menu-item index="2-1">
+        <el-menu-item index="/home/f">
           <template #title><span>宣传信息设置</span></template>
         </el-menu-item>
-        <el-menu-item index="2-2">
+        <el-menu-item index="/home/g">
           <template #title><span>组织管理</span></template>
         </el-menu-item>
-        <el-menu-item index="2-3">
-          <template #title><span>面试流程设置</span></template>
+        <el-menu-item index="/home/regFormSetting">
+          <template #title><span>报名表设置</span></template>
         </el-menu-item>
       </el-sub-menu>
     </el-menu>
@@ -52,14 +53,43 @@ import {
   Location,
   HomeFilled
 } from '@element-plus/icons-vue';
+import { useResizeHook } from '@/utils/hooks/useResizeHook';
+const route = useRoute();
+const router = useRouter();
 
+const title = ref('天理闪报');
 const isCollapse = ref(false);
+// ### 挂载时查看视口
+onBeforeMount(() => {
+  if (document.documentElement.clientWidth <= 1000) {
+    title.value = '闪报';
+    isCollapse.value = true;
+  }
+});
+// ### 监听窗口变化更改菜单栏状态
+useResizeHook((wid, hei) => {
+  if (wid <= 1000) {
+    title.value = '闪报';
+    isCollapse.value = true;
+  }
+  if (wid > 1000) {
+    title.value = '天理闪报';
+    isCollapse.value = false;
+  }
+});
+
 // const handleOpen = (key: string, keyPath: string[]) => {
 //   console.log(key, keyPath);
 // };
 // const handleClose = (key: string, keyPath: string[]) => {
 //   console.log(key, keyPath);
 // };
+// ### 用于push路由的函数
+function pushRoute(newRoute: any) {
+  if (route.path !== newRoute) {
+    router.push(newRoute);
+  }
+}
 </script>
 <style scoped lang="scss">
 .aside {
@@ -73,7 +103,7 @@ const isCollapse = ref(false);
     font-family: '楷体';
   }
   .el-menu {
-    height: calc(100vh - 60px);
+    height: 100vh;
     background-color: #001428;
     border-right: none;
     .el-menu-item {
@@ -103,5 +133,8 @@ const isCollapse = ref(false);
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+.change-width {
+  width: auto;
 }
 </style>
