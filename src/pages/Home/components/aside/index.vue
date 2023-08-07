@@ -36,8 +36,8 @@
         <el-menu-item index="/home/f">
           <template #title><span>宣传信息设置</span></template>
         </el-menu-item>
-        <el-menu-item index="/home/g">
-          <template #title><span>组织管理</span></template>
+        <el-menu-item index="/home/accountManage">
+          <template #title><span>账号管理</span></template>
         </el-menu-item>
         <el-menu-item index="/home/regFormSetting">
           <template #title><span>报名表设置</span></template>

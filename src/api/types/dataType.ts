@@ -12,7 +12,7 @@ type TRegister = {
   key: string;
 };
 
-// ！下为个人信息页面用到的类型⬇️
+// ！下为 个人信息 页面用到的类型⬇️
 
 // ？ 本部分接口命名规范：
 // ？ 第一位（I/T）表示定义时使用Interface还是Type
@@ -36,6 +36,8 @@ type TUpdatePassword = {
   newPassword: string;
 };
 // ！个人信息页面类型结束⬆️
+
+// ！下为 账号管理 页面用到的类型⬇️
 
 export type {
   TUserLogin,

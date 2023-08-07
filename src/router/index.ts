@@ -34,7 +34,14 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home/regFormSetting',
         name: 'regFormSetting',
         component: () =>
-          import('@/pages/Home/regFormSetting/regFormSetting.vue')
+          import('@/pages/Home/SuperAdmin/regFormSetting/regFormSetting.vue')
+      },
+      {
+        // ### 账号管理
+        path: '/home/accountManage',
+        name: 'accountManage',
+        component: () =>
+          import('@/pages/Home/SuperAdmin/accountManage/accountManage.vue')
       }
     ]
   }

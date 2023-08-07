@@ -63,6 +63,18 @@ type TUpdatePasswordDataRes = IBaseResponce<{
 }>;
 
 // ！个人信息页面类型结束⬆️
+
+// ！下为 账号管理 页面用到的类型⬇️
+type TAllAssociationMembersData = {
+  memberInfoDataList: Array<{
+    id: number;
+    studentId: string;
+    name: string;
+    permission: string;
+    phone: string;
+  }>;
+};
+type TAllAssociationMembersRes = IBaseResponce<TAllAssociationMembersData>;
 export type {
   IBaseResponce,
   TGetOrganizationRes,
@@ -70,5 +82,7 @@ export type {
   TUserRegisterRes,
   TUserBasicInfoRes,
   TSwitchOrganizationRes,
-  TUpdatePasswordDataRes
+  TUpdatePasswordDataRes,
+  TAllAssociationMembersRes,
+  TAllAssociationMembersData
 };
