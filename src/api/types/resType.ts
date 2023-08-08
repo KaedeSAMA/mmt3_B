@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 interface IBaseResponce<D> {
   readonly code: string;
   data?: D;
@@ -75,6 +77,18 @@ type TAllAssociationMembersData = {
   }>;
 };
 type TAllAssociationMembersRes = IBaseResponce<TAllAssociationMembersData>;
+
+type TAssociationMemberData = {
+  studentId: string;
+  name: string;
+  permission: string;
+  phone: string;
+  passwd: string;
+};
+type TAssociationMemberRes = IBaseResponce<TAssociationMemberData>;
+
+// ！ 账号管理  页面类型结束⬆️
+
 export type {
   IBaseResponce,
   TGetOrganizationRes,
@@ -84,5 +98,7 @@ export type {
   TSwitchOrganizationRes,
   TUpdatePasswordDataRes,
   TAllAssociationMembersRes,
-  TAllAssociationMembersData
+  TAllAssociationMembersData,
+  TAssociationMemberData,
+  TAssociationMemberRes
 };
