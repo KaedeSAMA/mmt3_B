@@ -13,18 +13,18 @@
         <el-icon><HomeFilled /></el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu index="/home/a">
+      <el-sub-menu index="/home/interviewBoard">
         <template #title>
           <el-icon><location /></el-icon>
           <span>面试总看板</span>
         </template>
-        <el-menu-item index="/home/b">
+        <el-menu-item index="/home/interviewBoard/regStage">
           <template #title><span>报名阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="/home/c">
+        <el-menu-item index="/home/interviewBoard/interviewStage">
           <template #title><span>面试阶段</span></template>
         </el-menu-item>
-        <el-menu-item index="/home/d">
+        <el-menu-item index="/home/interviewBoard/reviewStage">
           <template #title><span>复盘阶段</span></template>
         </el-menu-item>
       </el-sub-menu>

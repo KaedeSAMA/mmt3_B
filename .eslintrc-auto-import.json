@@ -51,7 +51,6 @@
     "toRaw": true,
     "toRef": true,
     "toRefs": true,
-    "toValue": true,
     "triggerRef": true,
     "unref": true,
     "useAttrs": true,
