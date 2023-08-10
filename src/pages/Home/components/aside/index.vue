@@ -28,6 +28,10 @@
           <template #title><span>复盘阶段</span></template>
         </el-menu-item>
       </el-sub-menu>
+      <el-menu-item index="/home/dateBoard">
+        <el-icon><DataLine /></el-icon>
+        <span>数据看板</span>
+      </el-menu-item>
       <el-sub-menu index="/home/e">
         <template #title>
           <el-icon><icon-menu /></el-icon>
@@ -51,7 +55,8 @@
 import {
   Menu as IconMenu,
   Location,
-  HomeFilled
+  HomeFilled,
+  DataLine
 } from '@element-plus/icons-vue';
 import { useResizeHook } from '@/utils/hooks/useResizeHook';
 const route = useRoute();
