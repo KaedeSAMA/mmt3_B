@@ -1,5 +1,5 @@
 <template>
   <div class="div">复盘阶段</div>
 </template>
-<script></script>
-<style></style>
+<script setup lang="ts"></script>
+<style scoped lang="scss"></style>

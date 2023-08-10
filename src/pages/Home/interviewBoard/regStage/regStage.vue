@@ -60,7 +60,6 @@ import barData from './barData.vue';
       .rightData {
         height: 100%;
         width: 48%;
-        background-color: yellow;
       }
     }
   }
