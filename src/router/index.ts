@@ -35,6 +35,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'regFormSetting',
         component: () =>
           import('@/pages/Home/regFormSetting/regFormSetting.vue')
+      },
+      {
+        path: '/home/campaignSetup', // 宣传信息设置
+        name: 'regFormSetting',
+        component: () => import('@/pages/Home/campaignSetup/campaignSetup.vue')
       }
     ]
   }
