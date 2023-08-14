@@ -1,7 +1,7 @@
 <template>
   <div class="setUpRoot">
-    <el-card>
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-card class="tabs-content">
+      <el-tabs v-model="activeName" @tab-click="handleClick" class="demo-tabs">
         <el-tab-pane label="基本信息" name="baseInfo">
           <BaseInfo />
         </el-tab-pane>
@@ -13,7 +13,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
-    <el-card> phone </el-card>
+    <el-card class="tabs-mobile"> phone </el-card>
   </div>
 </template>
 <script lang="ts" setup>
@@ -29,7 +29,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event);
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .setUpRoot {
   height: 100%;
 
@@ -49,10 +49,28 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   justify-content: space-around;
 }
 
-.demo-tabs > .el-tabs__content {
+//el-tabs下属的subpage,:deep()才能穿透生效，其余已弃用，带scoped就需要穿透
+:deep(.demo-tabs > .el-tabs__content) {
   padding: 32px;
-  color: #6b778c;
-  font-size: 32px;
-  font-weight: 600;
+  // color: #6b778c;
+  color: #1559ce;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.tabs-content {
+  flex: 2;
+  height: 100%;
+}
+
+.tabs-mobile {
+  flex: 1;
+
+  @media (max-width: 820px) {
+    display: block;
+    flex: 1;
+    height: 100%;
+    margin-top: 20px;
+  }
 }
 </style>
