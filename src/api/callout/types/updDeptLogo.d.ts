@@ -1,3 +1,3 @@
 export interface AvatarUploadRequest {
-    avatar: File;
-};
+  avatar: File;
+}

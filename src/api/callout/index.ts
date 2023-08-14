@@ -1,6 +1,10 @@
 import { _axios } from '@/server/http';
 import { UpdateDeptInfo } from './types/updDeptInfo';
-import { TUpdateDeptInfoRes, TGetDeptInfoRes,TUpdateDeptLogoRes } from './types/resType';
+import {
+  TUpdateDeptInfoRes,
+  TGetDeptInfoRes,
+  TUpdateDeptLogoRes
+} from './types/resType';
 import { AvatarUploadRequest } from './types/updDeptLogo';
 
 export const updateDeptInfo = async (updateDeptInfo: UpdateDeptInfo) => {
@@ -28,7 +32,7 @@ export const getDeptInfo = async () => {
 };
 
 export const updateDeptLogo = async (formData: AvatarUploadRequest) => {
-  console.log('updateDeptLogo',formData);
+  console.log('updateDeptLogo', formData);
   const data = await _axios.post<TUpdateDeptLogoRes, AvatarUploadRequest>(
     '/local/b/admin/avatar/upload',
     formData,
@@ -44,4 +48,4 @@ export const updateDeptLogo = async (formData: AvatarUploadRequest) => {
   }
   ElMessage.success('更新成功');
   return data.data;
-}
+};
