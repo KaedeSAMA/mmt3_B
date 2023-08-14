@@ -3,7 +3,7 @@ interface IBaseResponse<D> {
   data?: D;
   message: string;
 }
-interface Data {
+export interface Data {
   /**
    * 社团组织头像url
    */
@@ -15,11 +15,11 @@ interface Data {
   /**
    * 社团组织联系方式
    */
-  contactInfo: null | string;
+  contactInfo?: string;
   /**
    * 社团组织日常
    */
-  daily: null | string;
+  daily?: string;
   /**
    * 社团纳新部门列表
    */
@@ -27,7 +27,7 @@ interface Data {
   /**
    * 社团组织特色
    */
-  feature: null | string;
+  feature?: string;
   /**
    * 社团组织介绍
    */
@@ -35,7 +35,7 @@ interface Data {
   /**
    * 社团组织更多
    */
-  more: null | string;
+  more?: string;
   /**
    * 社团组织名称
    */
@@ -43,7 +43,7 @@ interface Data {
   /**
    * 社团组织宣言
    */
-  slogan: null | string;
+  slogan?: string;
   /**
    * 社团标签列表
    */
@@ -69,7 +69,7 @@ interface DepartmentList {
   /**
    * 社团纳新部门标准
    */
-  standard: null | string;
+  standard?: string;
 }
 
 interface TagList {
@@ -84,3 +84,4 @@ interface TagList {
 }
 export type TUpdateDeptInfoRes = IBaseResponse<null>;
 export type TGetDeptInfoRes = IBaseResponse<Data>;
+export type TUpdateDeptLogoRes = IBaseResponse<null>;
