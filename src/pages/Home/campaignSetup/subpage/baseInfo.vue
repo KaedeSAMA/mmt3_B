@@ -6,6 +6,32 @@
       <li v-for="(tag, index) in data.tagList" :key="index">{{ tag.tag }}</li>
     </ul>
     <p>{{ data.introduction }}</p>
+
+    <el-upload
+      ref="upload"
+      class="upload-demo"
+      action="http://mmt-test.sipc115.com/b/admin/avatar/upload"
+      :limit="1"
+      :on-exceed="handleExceed"
+      :with-credentials="true"
+      :show-file-list="false"
+      :headers="uploadHeaders"
+      :auto-upload="true"
+      :http-request="uploadAvatar"
+    >
+      <template #trigger>
+        <el-button type="primary">上传头像</el-button>
+      </template>
+      <!-- <el-button class="ml-3" type="success" @click="submitUpload">
+        upload to server
+      </el-button> -->
+      <!-- <template #tip>
+        <div class="el-upload__tip text-red">
+          limit 1 file, new file will cover the old file
+        </div>
+      </template> -->
+    </el-upload>
+
     <h3>Feature:</h3>
     <p>{{ data.feature }}</p>
     <h3>Daily Focus:</h3>
@@ -28,8 +54,19 @@
 
 <script setup lang="ts">
 import { UpdateDeptInfo } from '@/api/callout/types/updDeptInfo';
-import { updateDeptInfo, getDeptInfo } from '@/api/callout/index';
-import { reactive, onMounted } from 'vue';
+import {
+  updateDeptInfo,
+  getDeptInfo,
+  updateDeptLogo
+} from '@/api/callout/index';
+import { ref, reactive, onMounted } from 'vue';
+import { genFileId } from 'element-plus';
+import type {
+  UploadInstance,
+  UploadProps,
+  UploadRawFile,
+  UploadRequestOptions
+} from 'element-plus';
 
 const data = reactive<UpdateDeptInfo>({
   briefIntroduction: '',
@@ -78,8 +115,8 @@ const updateTest = async () => {
   console.log(data);
   const res = await updateDeptInfo(data);
   console.log(res);
-  // const res_1 = await getDeptInfo();
-  // console.log(res_1);
+  const res_1 = await getDeptInfo();
+  console.log(res_1);
 };
 onMounted(() => {
   data.briefIntroduction = jsonObject.briefIntroduction;
@@ -92,5 +129,26 @@ onMounted(() => {
   data.more = jsonObject.more;
   data.departmentList = jsonObject.departmentList;
 });
+
+const upload = ref<UploadInstance>();
+const uploadHeaders = {
+  Authorization: window.localStorage.getItem('token'),
+  'Content-Type': 'application/form-data'
+};
+const handleExceed: UploadProps['onExceed'] = (files) => {
+  upload.value!.clearFiles(); // 清空已上传的文件列表
+  const file = files[0] as UploadRawFile; // 获取第一个文件
+  file.uid = genFileId(); // 生成一个新的文件id
+  upload.value!.handleStart(file); // 重新上传
+};
+const uploadAvatar = async (option: UploadRequestOptions) => {
+  console.log('uploadAvatar', option);
+  // upload.value!.submit()
+  const res = await updateDeptLogo({ avatar: option.file });
+  console.log('uploadAvatar', res);
+};
+// const submitUpload = () => {
+//   upload.value!.submit()// 提交上传
+// }
 </script>
 <style scoped lang="scss"></style>
