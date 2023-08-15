@@ -1,0 +1,185 @@
+<template>
+    <div class="device iphone-x">
+        <!-- 听筒孔 -->
+        <div class="header">
+            <div class="sensors"></div>
+        </div>
+        <!-- 按键 -->
+        <div class="btns"></div>
+        <div class="power"></div>
+        <!-- 天线 -->
+        <div class="stripe"></div>
+
+        <!--    外部轮廓    -->
+        <div class="frame">
+            <div class="content">
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</template>
+  
+<style lang="scss">
+:root {
+    --mobile-device-width: 342px;
+    --mobile-device-height: 694px;
+}
+</style>
+
+<style scoped lang="scss">
+.device *,
+.device *::before,
+.device *::after {
+    box-sizing: border-box;
+    display: block;
+}
+
+.device {
+    margin: 0px auto;
+    position: relative;
+}
+
+.device .frame {
+    z-index: 1;
+}
+
+.iphone-x {
+    height: var(--mobile-device-height);
+    width: var(--mobile-device-width);
+
+    .content {
+        background-color: #fff;
+        border-radius: 32px;
+        height: 100%;
+        // position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        // justify-content: flex-start;
+        justify-content: center;
+    }
+}
+
+.iphone-x .frame {
+    background: #222;
+    border-radius: 54px;
+    box-shadow: inset 0 0 0 2px #606467, inset 0 0 0 6px #e2e3e4;
+    height: var(--mobile-device-height);
+    padding: 22px;
+    width: var(--mobile-device-width);
+}
+
+.iphone-x .stripe::after,
+.iphone-x .stripe::before {
+    border: solid rgba(51, 51, 51, .25);
+    border-width: 0 6px;
+    content: "";
+    height: 5px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 9;
+}
+
+.iphone-x .stripe::after {
+    top: 68px;
+}
+
+.iphone-x .stripe::before {
+    bottom: 68px;
+}
+
+.iphone-x .header {
+    background: #222;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    height: 24px;
+    left: 50%;
+    margin-left: -82px;
+    position: absolute;
+    top: 22px;
+    width: 164px;
+    z-index: 199;
+}
+
+.iphone-x .header::after,
+.iphone-x .header::before {
+    content: "";
+    height: 6px;
+    position: absolute;
+    top: 0;
+    width: 6px;
+}
+
+.iphone-x .header::after {
+    background: radial-gradient(circle at bottom left, transparent 0, transparent 75%, #222 75%, #222 100%);
+    left: -6px;
+}
+
+.iphone-x .header::before {
+    background: radial-gradient(circle at bottom right, transparent 0, transparent 75%, #222 75%, #222 100%);
+    right: -6px;
+}
+
+.iphone-x .sensors::after,
+.iphone-x .sensors::before {
+    content: "";
+    position: absolute;
+}
+
+.iphone-x .sensors::after {
+    background: #444;
+    border-radius: 2.5px;
+    height: 5px;
+    left: 50%;
+    margin-left: -20px;
+    top: 4px;
+    width: 40px;
+}
+
+.iphone-x .sensors::before {
+    background: #444;
+    border-radius: 50%;
+    height: 11px;
+    left: 50%;
+    margin-left: 30px;
+    top: 1px;
+    width: 11px;
+}
+
+.iphone-x .btns {
+    background: #606467;
+    height: 26px;
+    left: -2px;
+    position: absolute;
+    top: 92px;
+    width: 3px;
+}
+
+.iphone-x .btns::after,
+.iphone-x .btns::before {
+    background: #606467;
+    content: "";
+    height: 50px;
+    left: 0;
+    position: absolute;
+    width: 3px;
+}
+
+.iphone-x .btns::after {
+    top: 48px;
+}
+
+.iphone-x .btns::before {
+    top: 112px;
+}
+
+.iphone-x .power {
+    background: #606467;
+    height: 80px;
+    position: absolute;
+    right: -2px;
+    top: 160px;
+    width: 3px;
+}
+</style> 
