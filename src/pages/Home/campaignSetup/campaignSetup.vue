@@ -68,6 +68,8 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 
 .tabs-mobile {
   flex: 1;
+  // height: 100%;
+  // display: flex;
 
   @media (max-width: 820px) {
     display: block;
