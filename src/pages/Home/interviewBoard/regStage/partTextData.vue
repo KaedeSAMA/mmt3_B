@@ -1,13 +1,13 @@
 <template>
   <div class="big">
-    <div class="title">当前组织报名情况</div>
+    <div class="title">当前部门报名情况</div>
     <hr />
     <div class="main">
       <div class="fistLine">
         截止今日报名总人数：&nbsp;{{ myData.totalNum }}人
       </div>
       <div class="secondLine">
-        第一志愿报名当前组织人数：&nbsp;{{ myData.firstChoiceNum }}人
+        第一志愿报名当前部门人数：&nbsp;{{ myData.firstChoiceNum }}人
       </div>
     </div>
   </div>
@@ -16,11 +16,11 @@
 <script setup lang="ts">
 import { beforeNumData } from '@/api/interviewBoard/index';
 
-const myDepId = 0;
+const myDepId = 1;
 
 const myData = {
-  totalNum: 77,
-  firstChoiceNum: 34
+  totalNum: 30,
+  firstChoiceNum: 9
 };
 
 //挂载时向后端发起请求获取用户数据
@@ -34,15 +34,16 @@ onMounted(async () => {
 </script>
 <style scoped lang="scss">
 .big {
-  height: 30%;
+  height: 100%;
   width: 100%;
   background-color: white;
   border-radius: 10px;
   border: 1px black;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  overflow: hidden;
   .title {
-    height: 15%;
-    margin: 4% 0 1% 6%;
+    height: 18%;
+    margin: 1% 0 0.2% 4%;
   }
   hr {
     width: 100%;
@@ -57,18 +58,17 @@ onMounted(async () => {
   }
   .main {
     height: 70%;
-    margin: 0 0 0 10%;
+    margin: 0 0 0 7%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     .fistLine {
       font-size: 1.5em;
       font-weight: 800;
-      margin-bottom: 3%;
+      margin-bottom: 2%;
     }
     .secondLine {
       color: gray;
-      margin-bottom: 4%;
     }
   }
 }

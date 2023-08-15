@@ -1,18 +1,13 @@
 <template>
   <div class="big">
-    <div class="title">各部门报名情况</div>
+    <div class="title">当前部门志愿情况</div>
     <hr />
     <div class="main">
       <div class="mainInner">
         <div class="leftText">
-          <div style="margin-bottom: 8%" v-for="item in myData.depNums">
-            <div
-              style="font-weight: 600; margin-bottom: 2%; font-size: smaller"
-            >
-              {{ item.departmentName }}：{{ item.num }}人
-            </div>
-            <div style="font-size: small; color: gray">
-              第一志愿报名人数：{{ item.firstChoiceNum }}人
+          <div style="margin-bottom: 8%" v-for="item in myData.nums">
+            <div style="margin-bottom: 10%; font-size: smaller">
+              第{{ item.orderNum }}志愿报名人数：{{ item.num }}人
             </div>
           </div>
         </div>
@@ -23,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { beforeOrgPieChart } from '@/api/interviewBoard/index';
+import { beforeDepPieChart } from '@/api/interviewBoard/index';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { PieChart } from 'echarts/charts';
@@ -47,33 +42,32 @@ use([
   LegendComponent
 ]);
 
+const myDepId = 1;
+
 const myData = {
-  depNum: 3,
-  cNum: 77,
-  depNums: [
+  orderNum: 3,
+  totalNum: 30,
+  nums: [
     {
-      num: 30,
-      firstChoiceNum: 9,
-      departmentName: '部门一'
+      num: 9,
+      orderNum: 1
     },
     {
-      num: 22,
-      firstChoiceNum: 11,
-      departmentName: '部门二'
+      num: 16,
+      orderNum: 2
     },
     {
-      num: 25,
-      firstChoiceNum: 14,
-      departmentName: '部门三'
+      num: 5,
+      orderNum: 3
     }
   ]
 };
 
 var chartsData: ChartsData[] = [];
-myData.depNums.forEach(function (item) {
+myData.nums.forEach(function (item) {
   chartsData.push({
     value: item.num,
-    name: item.departmentName
+    name: '第' + item.orderNum + '志愿'
   });
 });
 
@@ -123,18 +117,18 @@ const option = ref({
 });
 
 //挂载时向后端发起请求获取用户数据
-onMounted(async () => {
-  const data = await beforeOrgPieChart();
-  if (data) {
-    console.log('beforeOrgPieChart');
-    console.log(data);
-  }
-});
+// onMounted(async () => {
+//   const data = await beforeDepPieChart(myDepId);
+//   if (data) {
+//     console.log('beforeDepPieChart');
+//     console.log(data);
+//   }
+// });
 </script>
 <style scoped lang="scss">
 .big {
-  height: 66%;
-  width: 100%;
+  height: 100%;
+  width: 48%;
   background-color: white;
   border-radius: 10px;
   border: 1px black;
