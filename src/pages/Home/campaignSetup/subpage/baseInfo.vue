@@ -1,59 +1,6 @@
-<template>
-  <div>
-    <h1 @click="updateTest">{{ data.briefIntroduction }}</h1>
-    <h3>Tags:</h3>
-    <ul>
-      <li v-for="(tag, index) in data.tagList" :key="index">{{ tag.tag }}</li>
-    </ul>
-    <p>{{ data.introduction }}</p>
-
-    <el-upload
-      ref="upload"
-      class="upload-demo"
-      action="http://mmt-test.sipc115.com/b/admin/avatar/upload"
-      :limit="1"
-      :on-exceed="handleExceed"
-      :with-credentials="true"
-      :show-file-list="false"
-      :headers="uploadHeaders"
-      :auto-upload="true"
-      :http-request="uploadAvatar"
-    >
-      <template #trigger>
-        <el-button type="primary">上传头像</el-button>
-      </template>
-      <!-- <el-button class="ml-3" type="success" @click="submitUpload">
-        upload to server
-      </el-button> -->
-      <!-- <template #tip>
-        <div class="el-upload__tip text-red">
-          limit 1 file, new file will cover the old file
-        </div>
-      </template> -->
-    </el-upload>
-
-    <h3>Feature:</h3>
-    <p>{{ data.feature }}</p>
-    <h3>Daily Focus:</h3>
-    <p>{{ data.daily }}</p>
-    <h3>Slogan:</h3>
-    <p>{{ data.slogan }}</p>
-    <h3>Contact Information:</h3>
-    <p>{{ data.contactInfo }}</p>
-    <h3>Learn More:</h3>
-    <p>{{ data.more }}</p>
-    <h2>Departments:</h2>
-    <div v-for="(department, index) in data.departmentList" :key="index">
-      <h3>{{ department.name }}</h3>
-      <p>{{ department.briefIntroduction }}</p>
-      <p>{{ department.introduction }}</p>
-      <p>{{ department.standard }}</p>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { UpdateDeptInfo } from '@/api/callout/types/updDeptInfo';
+import { Data, TGetDeptInfoRes } from '@/api/callout/types/resType';
 import {
   updateDeptInfo,
   getDeptInfo,
@@ -67,8 +14,66 @@ import type {
   UploadRawFile,
   UploadRequestOptions
 } from 'element-plus';
-
-const data = reactive<UpdateDeptInfo>({
+const selectList1=ref([ //Map
+  {
+    label: '校级组织',
+    value: '校级组织'
+  },
+  {
+    label: '院级组织',
+    value: '院级组织'
+  },
+  {
+    label: '社团',
+    value: '社团'
+  }
+])
+const selectList2=ref([ //Map
+  {
+    label: '思想政治',
+    value: '思想政治'
+  },
+  {
+    label: '学术科技',
+    value: '学术科技'
+  },
+  {
+    label: '文化体育',
+    value: '文化体育'
+  },
+  {
+    label: '创新创业',
+    value: '创新创业'
+  },
+  {
+    label: '志愿公益',
+    value: '志愿公益'
+  },
+  {
+    label: '自律互助',
+    value: '自律互助'
+  }
+])
+let data = reactive<Data>({
+  name: '加载中',
+  avatarUrl: '#',
+  briefIntroduction: '加载中',
+  tagList: [],
+  introduction: '加载中',
+  feature: '加载中',
+  daily: '加载中',
+  slogan: '加载中',
+  contactInfo: '加载中',
+  more: '加载中',
+  departmentList: []
+}); // getDeptInfo返回的数据
+onMounted(async () => {
+  const res = (await getDeptInfo()) as Data;
+  console.log(res);
+  // 使用 Object.assign 更新响应式对象
+  Object.assign(data, res);
+});
+const datat = reactive<UpdateDeptInfo>({
   briefIntroduction: '',
   tagList: [],
   introduction: '',
@@ -100,7 +105,7 @@ const jsonObject = {
   more: 'To learn more about our services, visit our website at www.companyxyz.com.',
   departmentList: [
     {
-      id: null,
+      id: 25,
       name: 'Software Development',
       briefIntroduction:
         'Our software development team creates robust and scalable solutions tailored to your business needs.',
@@ -111,24 +116,16 @@ const jsonObject = {
     }
   ]
 };
+/**
+ * @description: 测试更新部门信息
+ */
 const updateTest = async () => {
   console.log(data);
-  const res = await updateDeptInfo(data);
-  console.log(res);
-  const res_1 = await getDeptInfo();
-  console.log(res_1);
+  // const res = await updateDeptInfo(data);
+  // console.log(res);
+  // const res_1 = await getDeptInfo();
+  // console.log(res_1);
 };
-onMounted(() => {
-  data.briefIntroduction = jsonObject.briefIntroduction;
-  data.tagList = jsonObject.tagList;
-  data.introduction = jsonObject.introduction;
-  data.feature = jsonObject.feature;
-  data.daily = jsonObject.daily;
-  data.slogan = jsonObject.slogan;
-  data.contactInfo = jsonObject.contactInfo;
-  data.more = jsonObject.more;
-  data.departmentList = jsonObject.departmentList;
-});
 
 const upload = ref<UploadInstance>();
 const uploadHeaders = {
@@ -144,11 +141,142 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
 const uploadAvatar = async (option: UploadRequestOptions) => {
   console.log('uploadAvatar', option);
   // upload.value!.submit()
-  const res = await updateDeptLogo({ avatar: option.file });
-  console.log('uploadAvatar', res);
+  // const res = await updateDeptLogo({ avatar: option.file });
+  // console.log('uploadAvatar', res);
 };
 // const submitUpload = () => {
 //   upload.value!.submit()// 提交上传
 // }
 </script>
-<style scoped lang="scss"></style>
+
+<template>
+  <div class="scroll-container">
+    <div class="content">
+      <section class="base-info">
+        <section class="avatar-detail">
+          <el-avatar :size="100" :src="data.avatarUrl" />
+          <el-upload
+            ref="upload"
+            class="upload-demo"
+            action="http://mmt-test.sipc115.com/b/admin/avatar/upload"
+            :limit="1"
+            :on-exceed="handleExceed"
+            :with-credentials="true"
+            :show-file-list="false"
+            :headers="uploadHeaders"
+            :auto-upload="true"
+            :http-request="uploadAvatar"
+          >
+            <template #trigger>
+              <el-button type="primary">上传头像</el-button>
+            </template>
+          </el-upload>
+        </section>
+        <section class="info-detail">
+          <el-form>
+            <el-form-item label="名称" required>
+              <el-input disabled v-model="data.name" style="width: 100px" />
+            </el-form-item>
+            <el-form-item label="属性">             
+              <el-select>
+                <el-option v-for="item in selectList1" :label="item.label" :value="item.value" />
+              </el-select>
+              <el-select>
+                <el-option v-for="item in selectList2" :label="item.label" :value="item.value" />
+              </el-select>
+
+            </el-form-item>
+          </el-form>
+        </section>
+      </section>
+      <h1 @click="updateTest">{{ data.briefIntroduction }}</h1>
+      <h3>Tags:</h3>
+      <ul>
+        <li v-for="(tag, index) in data.tagList" :key="index">{{ tag.tag }}</li>
+      </ul>
+      <p>{{ data.introduction }}</p>
+
+      <h3>Feature:</h3>
+      <p>{{ data.feature }}</p>
+      <h3>Daily Focus:</h3>
+      <p>{{ data.daily }}</p>
+      <h3>Slogan:</h3>
+      <p>{{ data.slogan }}</p>
+      <h3>Contact Information:</h3>
+      <p>{{ data.contactInfo }}</p>
+      <h3>Learn More:</h3>
+      <p>{{ data.more }}</p>
+      <h2>Departments:</h2>
+      <div v-for="(department, index) in data.departmentList" :key="index">
+        <h3>{{ department.name }}</h3>
+        <p>{{ department.briefIntroduction }}</p>
+        <p>{{ department.introduction }}</p>
+        <p>{{ department.standard }}</p>
+      </div>
+      <h2>Departments:</h2>
+      <div v-for="(department, index) in data.departmentList" :key="index">
+        <h3>{{ department.name }}</h3>
+        <p>{{ department.briefIntroduction }}</p>
+        <p>{{ department.introduction }}</p>
+        <p>{{ department.standard }}</p>
+      </div>
+      <h2>Departments:</h2>
+      <div v-for="(department, index) in data.departmentList" :key="index">
+        <h3>{{ department.name }}</h3>
+        <p>{{ department.briefIntroduction }}</p>
+        <p>{{ department.introduction }}</p>
+        <p>{{ department.standard }}</p>
+      </div>
+      <h2>Departments:</h2>
+      <div v-for="(department, index) in data.departmentList" :key="index">
+        <h3>{{ department.name }}</h3>
+        <p>{{ department.briefIntroduction }}</p>
+        <p>{{ department.introduction }}</p>
+        <p>{{ department.standard }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.scroll-container {
+  width: 100%;
+  height: 655px;
+  overflow-y: auto; /* 显示垂直滚动条 */
+  &::-webkit-scrollbar {
+    width: 0.25em;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #bebdbd; //#888888; /* 滑块颜色 */
+    border-radius: 0.25em; /* 滑块圆角 */
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent; /* 背景颜色 */
+    border-radius: 0.25em; /* 背景圆角 */
+  }
+}
+
+.content {
+  height: 100%;
+}
+.base-info {
+  display: flex;
+  // justify-content: space-evenly;
+  align-items: center;
+  .avatar-detail {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
+  }
+  .info-detail {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // margin-bottom: 20px;
+  }
+}
+</style>

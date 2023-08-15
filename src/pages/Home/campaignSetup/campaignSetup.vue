@@ -54,7 +54,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 
 //el-tabs下属的subpage,:deep()才能穿透生效，其余已弃用，带scoped就需要穿透
 :deep(.demo-tabs > .el-tabs__content) {
-  padding: 32px;
+  // padding: 32px;
   // color: #6b778c;
   color: #1559ce;
   font-size: 15px;

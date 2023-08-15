@@ -1,6 +1,6 @@
 <template>
   <div class="right">
-    <div class="rightPreview">
+    <MobileBox class="rightPreview" :device-height="655" :device-width="342">
       <div class="baseInfo" v-if="activeTab === 0">
         <div class="card">
           <div class="organize">
@@ -105,11 +105,12 @@
           ></sign-info-card>
         </div>
       </div>
-    </div>
+    </MobileBox>
   </div>
 </template>
 <script setup lang="ts">
 import SignInfoCard from '../../components/signInfoCard/singInfoCard.vue';
+import MobileBox from '@/pages/Home/components/mobile/index.vue';
 import { Data } from '@/api/callout/types/resType';
 let activeTab = 0;
 let isList = true;
@@ -159,26 +160,15 @@ const organizeInfo: Data = {
 </script>
 <style lang="scss" scoped>
 .right {
-  height: 94vh;
+  // height: 94vh;
+  // height: 100%;
   margin-left: 40px;
-  margin-top: 24px;
-  transform: translateY(-20px);
+  // margin-top: 24px;
+  // transform: translateY(-20px);
   display: flex;
   align-items: center;
 
   .rightPreview {
-    height: 713px;
-    margin-top: 10px;
-    background: url('../../../../assets/img/iPhone13.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 354px;
-    margin-right: 1vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-
     .baseInfo {
       width: 91%;
       height: 84%;
