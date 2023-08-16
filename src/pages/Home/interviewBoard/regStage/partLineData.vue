@@ -23,6 +23,8 @@ import {
 } from 'echarts/components';
 import VChart from 'vue-echarts';
 import { ref } from 'vue';
+import bus from 'vue3-eventbus';
+
 interface ChartsData {
   value: number;
   name: string;
@@ -36,9 +38,12 @@ use([
   GridComponent
 ]);
 
-const myDepId = 1;
+let myDepartmentId = ref(1);
+bus.on('beforeMyDepartmentId', (data: any) => {
+  myDepartmentId.value = data;
+});
 
-let myData = {
+let myData: any = ref({
   date: ['9.1', '9.2', '9.3', '9.4'],
   orders: [
     {
@@ -58,11 +63,11 @@ let myData = {
       data: [0, 2, 3, 5]
     }
   ]
-};
+});
 
 let lineData: any = [];
 
-myData.orders.forEach(function (item) {
+myData.value.orders.forEach(function (item: any) {
   lineData.push({
     name: item.name,
     data: item.data,
@@ -92,7 +97,7 @@ const option = ref({
     }
   },
   xAxis: {
-    data: myData.date,
+    data: myData.value.date,
     name: '时间',
     nameGap: 26, //坐标轴名称与轴线间距离
     show: true, //是否显示x轴
@@ -142,13 +147,14 @@ const option = ref({
 });
 
 //挂载时向后端发起请求获取用户数据
-// onMounted(async () => {
-//   const data = await beforeDepLineChart(myDepId);
-//   if (data) {
-//     console.log('beforeDepLineChart');
-//     console.log(data);
-//   }
-// });
+onMounted(async () => {
+  const data = await beforeDepLineChart(myDepartmentId.value);
+  if (data) {
+    console.log('beforeDepLineChart');
+    console.log(data);
+    // myData.value = data;
+  }
+});
 </script>
 <style scoped lang="scss">
 .big {

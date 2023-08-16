@@ -29,7 +29,7 @@ import {
 } from 'echarts/components';
 import VChart from 'vue-echarts';
 import { ref } from 'vue';
-import { formatter } from 'element-plus';
+import bus from 'vue3-eventbus';
 interface ChartsData {
   value: number;
   name: string;
@@ -42,9 +42,12 @@ use([
   LegendComponent
 ]);
 
-const myDepId = 1;
+let myDepartmentId = ref(1);
+bus.on('beforeMyDepartmentId', (data: any) => {
+  myDepartmentId.value = data;
+});
 
-const myData = {
+let myData: any = ref({
   orderNum: 3,
   totalNum: 30,
   nums: [
@@ -61,10 +64,10 @@ const myData = {
       orderNum: 3
     }
   ]
-};
+});
 
 var chartsData: ChartsData[] = [];
-myData.nums.forEach(function (item) {
+myData.value.nums.forEach(function (item: any) {
   chartsData.push({
     value: item.num,
     name: '第' + item.orderNum + '志愿'
@@ -117,13 +120,14 @@ const option = ref({
 });
 
 //挂载时向后端发起请求获取用户数据
-// onMounted(async () => {
-//   const data = await beforeDepPieChart(myDepId);
-//   if (data) {
-//     console.log('beforeDepPieChart');
-//     console.log(data);
-//   }
-// });
+onMounted(async () => {
+  const data = await beforeDepPieChart(myDepartmentId.value);
+  if (data) {
+    console.log('beforeDepPieChart');
+    console.log(data);
+    // myData.value = data;
+  }
+});
 </script>
 <style scoped lang="scss">
 .big {

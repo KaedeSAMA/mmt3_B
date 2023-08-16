@@ -47,7 +47,7 @@ use([
   LegendComponent
 ]);
 
-const myData = {
+let myData: any = ref({
   depNum: 3,
   cNum: 77,
   depNums: [
@@ -67,10 +67,10 @@ const myData = {
       departmentName: '部门三'
     }
   ]
-};
+});
 
 var chartsData: ChartsData[] = [];
-myData.depNums.forEach(function (item) {
+myData.value.depNums.forEach(function (item: any) {
   chartsData.push({
     value: item.num,
     name: item.departmentName
@@ -128,6 +128,7 @@ onMounted(async () => {
   if (data) {
     console.log('beforeOrgPieChart');
     console.log(data);
+    // myData.value = data;
   }
 });
 </script>

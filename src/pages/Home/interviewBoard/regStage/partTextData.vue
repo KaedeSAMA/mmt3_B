@@ -15,20 +15,25 @@
 
 <script setup lang="ts">
 import { beforeNumData } from '@/api/interviewBoard/index';
+import bus from 'vue3-eventbus';
 
-const myDepId = 1;
+let myDepartmentId = ref(1);
+bus.on('beforeMyDepartmentId', (data: any) => {
+  myDepartmentId.value = data;
+});
 
-const myData = {
+let myData: any = ref({
   totalNum: 30,
   firstChoiceNum: 9
-};
+});
 
 //挂载时向后端发起请求获取用户数据
 onMounted(async () => {
-  const data = await beforeNumData(myDepId);
+  const data = await beforeNumData(myDepartmentId.value);
   if (data) {
     console.log('beforeNumData');
     console.log(data);
+    // myData.value = data;
   }
 });
 </script>

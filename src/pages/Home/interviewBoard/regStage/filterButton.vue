@@ -6,6 +6,7 @@
       style="flex-wrap: wrap; margin-left: 3px"
     >
       <el-button
+        @click="clDepartment($event)"
         style="margin: 0 20px 0 0"
         ref="Btn"
         plain
@@ -13,7 +14,7 @@
         v-for="item in myData.departments"
         :key="item.departmentId"
         :id="item.departmentId"
-        :class="item.departmentId == 0 ? 'clBtn' : ''"
+        :class="item.departmentId == 0 ? 'depBtn clBtn' : 'depBtn'"
         >{{ item.departmentName }}</el-button
       >
     </el-row>
@@ -22,7 +23,9 @@
 
 <script setup lang="ts">
 import { getAllDepartment } from '@/api/interviewBoard/index';
-let myData: any = {
+import bus from 'vue3-eventbus';
+
+let myData: any = ref({
   num: 3,
   departments: [
     {
@@ -42,7 +45,19 @@ let myData: any = {
       departmentName: '部门三'
     }
   ]
-};
+});
+
+let myDepartmentId: number = 0;
+
+function clDepartment(acDep: any) {
+  let depBtn = document.querySelectorAll('.depBtn');
+  depBtn.forEach((e) => {
+    e.classList.remove('clBtn');
+  });
+  acDep.currentTarget.classList.add('clBtn');
+  myDepartmentId = acDep.currentTarget.id;
+  bus.emit('beforeMyDepartmentId', myDepartmentId);
+}
 
 //挂载时向后端发起请求获取用户数据
 onMounted(async () => {
@@ -50,7 +65,7 @@ onMounted(async () => {
   if (data) {
     console.log('getAllDepartment');
     console.log(data);
-    myData = data;
+    // myData.value = data;
   }
 });
 </script>

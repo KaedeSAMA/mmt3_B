@@ -4,8 +4,8 @@
       <div class="topData">
         <filterButton></filterButton>
       </div>
-      <allContent></allContent>
-      <!-- <partContent></partContent> -->
+      <allContent v-if="myDepartmentId == 0"></allContent>
+      <partContent v-else></partContent>
     </div>
   </div>
 </template>
@@ -13,6 +13,12 @@
 import filterButton from './filterButton.vue';
 import allContent from './allContent.vue';
 import partContent from './partContent.vue';
+import bus from 'vue3-eventbus';
+
+let myDepartmentId = ref(0);
+bus.on('beforeMyDepartmentId', (data: any) => {
+  myDepartmentId.value = data;
+});
 </script>
 <style scoped lang="scss">
 .biggest {

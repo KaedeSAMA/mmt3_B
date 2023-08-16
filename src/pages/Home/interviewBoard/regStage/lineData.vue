@@ -36,7 +36,7 @@ use([
   GridComponent
 ]);
 
-let myData = {
+let myData: any = ref({
   date: ['9.1', '9.2', '9.3', '9.4'],
   departments: [
     {
@@ -56,11 +56,11 @@ let myData = {
       data: [5, 10, 17, 25]
     }
   ]
-};
+});
 
 let lineData: any = [];
 
-myData.departments.forEach(function (item) {
+myData.value.departments.forEach(function (item: any) {
   lineData.push({
     name: item.name,
     data: item.data,
@@ -74,6 +74,11 @@ const option = ref({
     right: 5,
     top: 5
   },
+  grid: {
+    show: false,
+    left: '6%',
+    right: '13%'
+  },
   tooltip: {
     trigger: 'axis', //坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
     axisPointer: {
@@ -85,7 +90,7 @@ const option = ref({
     }
   },
   xAxis: {
-    data: myData.date,
+    data: myData.value.date,
     name: '时间',
     nameGap: 26, //坐标轴名称与轴线间距离
     show: true, //是否显示x轴
@@ -140,6 +145,7 @@ onMounted(async () => {
   if (data) {
     console.log('beforeOrgLineChart');
     console.log(data);
+    // myData.value = data;
   }
 });
 </script>
