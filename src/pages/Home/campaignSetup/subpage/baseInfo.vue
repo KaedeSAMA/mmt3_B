@@ -14,7 +14,8 @@ import type {
   UploadRawFile,
   UploadRequestOptions
 } from 'element-plus';
-const selectList1=ref([ //Map
+const selectList1 = ref([
+  //Map
   {
     label: '校级组织',
     value: '校级组织'
@@ -27,8 +28,9 @@ const selectList1=ref([ //Map
     label: '社团',
     value: '社团'
   }
-])
-const selectList2=ref([ //Map
+]);
+const selectList2 = ref([
+  //Map
   {
     label: '思想政治',
     value: '思想政治'
@@ -53,7 +55,7 @@ const selectList2=ref([ //Map
     label: '自律互助',
     value: '自律互助'
   }
-])
+]);
 let data = reactive<Data>({
   name: '加载中',
   avatarUrl: '#',
@@ -147,12 +149,20 @@ const uploadAvatar = async (option: UploadRequestOptions) => {
 // const submitUpload = () => {
 //   upload.value!.submit()// 提交上传
 // }
+
+const addTag = () => {
+  data.tagList.push({
+    tag: 'test',
+    type: 1
+  });
+};
 </script>
 
 <template>
   <div class="scroll-container">
     <div class="content">
       <section class="base-info">
+        <!-- avatar -->
         <section class="avatar-detail">
           <el-avatar :size="100" :src="data.avatarUrl" />
           <el-upload
@@ -172,22 +182,51 @@ const uploadAvatar = async (option: UploadRequestOptions) => {
             </template>
           </el-upload>
         </section>
+        <!-- info -->
         <section class="info-detail">
-          <el-form>
+          <el-form ref="form" :model="data" require-asterisk-position="right">
             <el-form-item label="名称" required>
               <el-input disabled v-model="data.name" style="width: 100px" />
             </el-form-item>
-            <el-form-item label="属性">             
-              <el-select>
-                <el-option v-for="item in selectList1" :label="item.label" :value="item.value" />
+            <el-form-item label="属性" class="tag-list">
+              <el-select placeholder="请输入性质" :disabled="true">
+                <el-option
+                  v-for="item in selectList1"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
-              <el-select>
-                <el-option v-for="item in selectList2" :label="item.label" :value="item.value" />
+              <el-select placeholder="请输入属性">
+                <el-option
+                  v-for="item in selectList2"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
-
+              <template v-for="(item, index) in data.tagList">
+                <el-input
+                  placeholder="请输入标签"
+                  style="max-width: 214.5px"
+                  v-if="item.type === 2"
+                />
+              </template>
+              <el-button style="align-self: self-start" @click="addTag"
+                >+ 自定义</el-button
+              >
             </el-form-item>
           </el-form>
         </section>
+      </section>
+      <!-- briefIntroduction -->
+      <section style="box-sizing: content-box; padding: 0px 5vw">
+        <el-form require-asterisk-position="right" label-position="top">
+          <el-form-item required>
+            <template #label>
+              <label style="font-size: 17px; font-weight: 400">社团简介</label>
+            </template>
+            <el-input type="textarea" :rows="7" />
+          </el-form-item>
+        </el-form>
       </section>
       <h1 @click="updateTest">{{ data.briefIntroduction }}</h1>
       <h3>Tags:</h3>
@@ -276,7 +315,10 @@ const uploadAvatar = async (option: UploadRequestOptions) => {
     display: flex;
     justify-content: center;
     align-items: center;
-    // margin-bottom: 20px;
+    .tag-list > :deep(.el-form-item__content) {
+      gap: 10px;
+      flex-direction: column;
+    }
   }
 }
 </style>

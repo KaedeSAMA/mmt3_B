@@ -57,8 +57,8 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   // padding: 32px;
   // color: #6b778c;
   color: #1559ce;
-  font-size: 15px;
-  font-weight: 400;
+  // font-size: 15px;
+  // font-weight: 400;
 }
 
 .tabs-content {
