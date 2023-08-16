@@ -60,7 +60,16 @@ let data = reactive<Data>({
   name: '加载中',
   avatarUrl: '#',
   briefIntroduction: '加载中',
-  tagList: [],
+  tagList: [
+    {
+      tag: '加载中',
+      type: 1
+    },
+    {
+      tag: '加载中',
+      type: 1
+    }
+  ],
   introduction: '加载中',
   feature: '加载中',
   daily: '加载中',
@@ -143,8 +152,8 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
 const uploadAvatar = async (option: UploadRequestOptions) => {
   console.log('uploadAvatar', option);
   // upload.value!.submit()
-  // const res = await updateDeptLogo({ avatar: option.file });
-  // console.log('uploadAvatar', res);
+  const res = await updateDeptLogo({ avatar: option.file });
+  console.log('uploadAvatar', res);
 };
 // const submitUpload = () => {
 //   upload.value!.submit()// 提交上传
@@ -152,8 +161,8 @@ const uploadAvatar = async (option: UploadRequestOptions) => {
 
 const addTag = () => {
   data.tagList.push({
-    tag: 'test',
-    type: 1
+    tag: '',
+    type: 2
   });
 };
 </script>
@@ -161,127 +170,204 @@ const addTag = () => {
 <template>
   <div class="scroll-container">
     <div class="content">
-      <section class="base-info">
-        <!-- avatar -->
-        <section class="avatar-detail">
-          <el-avatar :size="100" :src="data.avatarUrl" />
-          <el-upload
-            ref="upload"
-            class="upload-demo"
-            action="http://mmt-test.sipc115.com/b/admin/avatar/upload"
-            :limit="1"
-            :on-exceed="handleExceed"
-            :with-credentials="true"
-            :show-file-list="false"
-            :headers="uploadHeaders"
-            :auto-upload="true"
-            :http-request="uploadAvatar"
-          >
-            <template #trigger>
-              <el-button type="primary">上传头像</el-button>
-            </template>
-          </el-upload>
-        </section>
-        <!-- info -->
-        <section class="info-detail">
-          <el-form ref="form" :model="data" require-asterisk-position="right">
-            <el-form-item label="名称" required>
-              <el-input disabled v-model="data.name" style="width: 100px" />
-            </el-form-item>
-            <el-form-item label="属性" class="tag-list">
-              <el-select placeholder="请输入性质" :disabled="true">
-                <el-option
-                  v-for="item in selectList1"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-              <el-select placeholder="请输入属性">
-                <el-option
-                  v-for="item in selectList2"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-              <template v-for="(item, index) in data.tagList">
-                <el-input
-                  placeholder="请输入标签"
-                  style="max-width: 214.5px"
-                  v-if="item.type === 2"
-                />
+      <article>
+        <header style="color: black; margin-left: 4.5%">基本信息</header>
+        <section class="base-info">
+          <!-- avatar -->
+          <section class="avatar-detail">
+            <el-avatar :size="180" :src="data.avatarUrl" />
+            <el-upload
+              ref="upload"
+              class="upload-demo"
+              action="http://mmt-test.sipc115.com/b/admin/avatar/upload"
+              :limit="1"
+              :on-exceed="handleExceed"
+              :with-credentials="true"
+              :show-file-list="false"
+              :headers="uploadHeaders"
+              :auto-upload="true"
+              :http-request="uploadAvatar"
+            >
+              <template #trigger>
+                <el-button type="primary" style="width: 150px"
+                  >上传头像</el-button
+                >
               </template>
-              <el-button style="align-self: self-start" @click="addTag"
-                >+ 自定义</el-button
-              >
+            </el-upload>
+          </section>
+          <!-- info -->
+          <section class="info-detail">
+            <el-form ref="form" :model="data" require-asterisk-position="right">
+              <el-form-item label="名称" required>
+                <el-input disabled v-model="data.name" style="width: 100px" />
+              </el-form-item>
+              <el-form-item label="属性" class="tag-list">
+                <el-select
+                  placeholder="请输入性质"
+                  :disabled="true"
+                  v-model="data.tagList[0].tag"
+                >
+                  <el-option
+                    v-for="item in selectList1"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+                <el-select
+                  placeholder="请输入属性"
+                  v-model="data.tagList[1].tag"
+                >
+                  <el-option
+                    v-for="item in selectList2"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+                <template v-for="(item, index) in data.tagList">
+                  <el-input
+                    placeholder="请输入标签"
+                    style="max-width: 214.5px"
+                    v-if="item.type === 2"
+                    v-model="item.tag"
+                  />
+                </template>
+                <el-button style="align-self: self-start" @click="addTag"
+                  >+ 自定义</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </section>
+        </section>
+        <!-- briefIntroduction -->
+        <section style="box-sizing: border-box; padding: 0px 5vw">
+          <el-form require-asterisk-position="right" label-position="top">
+            <el-form-item required>
+              <template #label>
+                <label style="font-size: 17px; font-weight: 400"
+                  >社团简介</label
+                >
+              </template>
+              <el-input
+                type="textarea"
+                :rows="7"
+                v-model="data.briefIntroduction"
+              />
             </el-form-item>
           </el-form>
         </section>
+      </article>
+      <h1 @click="updateTest">click to test request</h1>
+      <article>
+        <header style="color: black; margin-left: 4.5%">社团宣传</header>
+        <!-- clubPromotion -->
+        <section style="box-sizing: border-box; padding: 0px 5vw">
+          <el-form require-asterisk-position="right" label-position="top">
+            <el-form-item required>
+              <template #label>
+                <label style="font-size: 17px; font-weight: 400"
+                  >社团介绍</label
+                >
+              </template>
+              <el-input type="textarea" :rows="7" v-model="data.introduction" />
+            </el-form-item>
+            <el-form-item required>
+              <template #label>
+                <label style="font-size: 17px; font-weight: 400"
+                  >社团特色</label
+                >
+              </template>
+              <el-input type="textarea" :rows="7" v-model="data.feature" />
+            </el-form-item>
+            <el-form-item required>
+              <template #label>
+                <label style="font-size: 17px; font-weight: 400"
+                  >社团日常</label
+                >
+              </template>
+              <el-input type="textarea" :rows="7" v-model="data.daily" />
+            </el-form-item>
+            <el-form-item required>
+              <template #label>
+                <label style="font-size: 17px; font-weight: 400"
+                  >纳新宣言</label
+                >
+              </template>
+              <el-input type="textarea" :rows="7" v-model="data.slogan" />
+            </el-form-item>
+            <el-form-item required>
+              <template #label>
+                <label style="font-size: 17px; font-weight: 400"
+                  >联系方式</label
+                >
+              </template>
+              <el-input type="textarea" :rows="7" v-model="data.contactInfo" />
+            </el-form-item>
+            <el-form-item required>
+              <template #label>
+                <label style="font-size: 17px; font-weight: 400">更多</label>
+              </template>
+              <el-input type="textarea" :rows="7" v-model="data.more" />
+            </el-form-item>
+          </el-form>
+        </section>
+      </article>
+      <article>
+        <header style="color: black; margin-left: 4.5%">纳新部门</header>
+        <!-- departmentList -->
+        <section style="box-sizing: border-box; padding: 0px 5vw">
+          <template v-for="(department, index) in data.departmentList">
+            <el-form require-asterisk-position="right" label-position="top">
+              <h3>{{ department.name }}</h3>
+              <p>{{ department.briefIntroduction }}</p>
+              <el-form-item required>
+                <template #label>
+                  <label style="font-size: 17px; font-weight: 400"
+                    >部门介绍</label
+                  >
+                </template>
+                <el-input
+                  type="textarea"
+                  :rows="7"
+                  v-model="department.introduction"
+                />
+              </el-form-item>
+              <el-form-item>
+                <template #label>
+                  <label style="font-size: 17px; font-weight: 400"
+                    >部门纳新标准</label
+                  >
+                </template>
+                <el-input
+                  type="textarea"
+                  :rows="7"
+                  v-model="department.standard"
+                />
+              </el-form-item>
+            </el-form>
+          </template>
+        </section>
+      </article>
+      <section
+        style="display: flex; justify-content: flex-end; margin-right: 10%"
+      >
+        <el-button type="primary"> 暂时保存并预览 </el-button>
+        <el-button type="primary"> 确定同步 </el-button>
       </section>
-      <!-- briefIntroduction -->
-      <section style="box-sizing: content-box; padding: 0px 5vw">
-        <el-form require-asterisk-position="right" label-position="top">
-          <el-form-item required>
-            <template #label>
-              <label style="font-size: 17px; font-weight: 400">社团简介</label>
-            </template>
-            <el-input type="textarea" :rows="7" />
-          </el-form-item>
-        </el-form>
-      </section>
-      <h1 @click="updateTest">{{ data.briefIntroduction }}</h1>
-      <h3>Tags:</h3>
-      <ul>
-        <li v-for="(tag, index) in data.tagList" :key="index">{{ tag.tag }}</li>
-      </ul>
-      <p>{{ data.introduction }}</p>
-
-      <h3>Feature:</h3>
-      <p>{{ data.feature }}</p>
-      <h3>Daily Focus:</h3>
-      <p>{{ data.daily }}</p>
-      <h3>Slogan:</h3>
-      <p>{{ data.slogan }}</p>
-      <h3>Contact Information:</h3>
-      <p>{{ data.contactInfo }}</p>
-      <h3>Learn More:</h3>
-      <p>{{ data.more }}</p>
-      <h2>Departments:</h2>
-      <div v-for="(department, index) in data.departmentList" :key="index">
-        <h3>{{ department.name }}</h3>
-        <p>{{ department.briefIntroduction }}</p>
-        <p>{{ department.introduction }}</p>
-        <p>{{ department.standard }}</p>
-      </div>
-      <h2>Departments:</h2>
-      <div v-for="(department, index) in data.departmentList" :key="index">
-        <h3>{{ department.name }}</h3>
-        <p>{{ department.briefIntroduction }}</p>
-        <p>{{ department.introduction }}</p>
-        <p>{{ department.standard }}</p>
-      </div>
-      <h2>Departments:</h2>
-      <div v-for="(department, index) in data.departmentList" :key="index">
-        <h3>{{ department.name }}</h3>
-        <p>{{ department.briefIntroduction }}</p>
-        <p>{{ department.introduction }}</p>
-        <p>{{ department.standard }}</p>
-      </div>
-      <h2>Departments:</h2>
-      <div v-for="(department, index) in data.departmentList" :key="index">
-        <h3>{{ department.name }}</h3>
-        <p>{{ department.briefIntroduction }}</p>
-        <p>{{ department.introduction }}</p>
-        <p>{{ department.standard }}</p>
-      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+/*外层的el-card有overflow:hidden
+导致scroll高度太大就有一部分显示不了，
+先用70vh凑活，如果出bug了再调吧*/
 .scroll-container {
-  width: 100%;
-  height: 655px;
+  height: 70vh;
+  // height: 70%;
+  max-width: 100%;
+  // height: 655px;
   overflow-y: auto; /* 显示垂直滚动条 */
+  // overflow-x: auto; /* 隐藏水平滚动条 */
   &::-webkit-scrollbar {
     width: 0.25em;
   }
@@ -294,8 +380,12 @@ const addTag = () => {
     border-radius: 0.25em; /* 背景圆角 */
   }
 }
-
 .content {
+  /*width这里也莫名奇妙100%会出现横向滚动条,
+  是position:relative的锅，
+  transform: translateX(10%);移位也会有类似的问题，
+  改用margin-left调位置就好了*/
+  max-width: 100%;
   height: 100%;
 }
 .base-info {
@@ -308,12 +398,12 @@ const addTag = () => {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
   }
   .info-detail {
     flex: 3;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     .tag-list > :deep(.el-form-item__content) {
       gap: 10px;

@@ -52,7 +52,8 @@ export default [
         message: '请求正常',
         data: {
           name: '测试协会',
-          avatarUrl: 'https://p5.itc.cn/q_70/images03/20220512/ecc151fbd129466aaa41ec90b4cef96c.gif',
+          avatarUrl:
+            'https://p5.itc.cn/q_70/images03/20220512/ecc151fbd129466aaa41ec90b4cef96c.gif',
           briefIntroduction:
             'Company XYZ specializes in software development and IT solutions.',
           tagList: [
