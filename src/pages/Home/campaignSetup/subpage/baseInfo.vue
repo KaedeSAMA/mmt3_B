@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { UpdateDeptInfo } from '@/api/callout/types/updDeptInfo';
-import { Data, TGetDeptInfoRes } from '@/api/callout/types/resType';
+import { Data } from '@/api/callout/types/resType';
 import {
   updateDeptInfo,
   getDeptInfo,
   updateDeptLogo
 } from '@/api/callout/index';
-import { ref, reactive, onMounted } from 'vue';
 import { genFileId } from 'element-plus';
+import { CirclePlus } from '@element-plus/icons-vue';
 import type {
   UploadInstance,
   UploadProps,
@@ -83,50 +82,8 @@ onMounted(async () => {
   console.log(res);
   // 使用 Object.assign 更新响应式对象
   Object.assign(data, res);
+  initTagListFix(); // 补全tagList
 });
-const datat = reactive<UpdateDeptInfo>({
-  briefIntroduction: '',
-  tagList: [],
-  introduction: '',
-  feature: '',
-  daily: '',
-  slogan: '',
-  contactInfo: '',
-  more: '',
-  departmentList: []
-});
-const jsonObject = {
-  briefIntroduction:
-    'Company XYZ specializes in software development and IT solutions.',
-  tagList: [
-    {
-      tag: 'Technology',
-      type: 2
-    }
-  ],
-  introduction:
-    'Welcome to Company XYZ! We provide innovative software solutions for businesses worldwide.',
-  feature:
-    'We deliver high-quality software products that meet your unique requirements.',
-  daily:
-    'Our focus is on delivering exceptional value to our clients and exceeding their expectations.',
-  slogan: 'Transforming Ideas into Reality',
-  contactInfo:
-    'For inquiries or collaboration opportunities, contact us at info@companyxyz.com or call +123456789.',
-  more: 'To learn more about our services, visit our website at www.companyxyz.com.',
-  departmentList: [
-    {
-      id: 25,
-      name: 'Software Development',
-      briefIntroduction:
-        'Our software development team creates robust and scalable solutions tailored to your business needs.',
-      introduction:
-        'We deliver customized software applications that streamline processes and drive growth.',
-      standard:
-        'We follow industry best practices and agile methodologies to ensure timely delivery and code quality.'
-    }
-  ]
-};
 /**
  * @description: 测试更新部门信息
  */
@@ -137,7 +94,36 @@ const updateTest = async () => {
   // const res_1 = await getDeptInfo();
   // console.log(res_1);
 };
+// 测试更新部门信息
+const updSyncDeptInfoAll = async () => {
+  console.log(data);
+  const {
+    briefIntroduction,
+    contactInfo,
+    daily,
+    departmentList,
+    feature,
+    introduction,
+    more,
+    slogan,
+    tagList
+  } = data;
 
+  const updateData = {
+    briefIntroduction,
+    contactInfo,
+    daily,
+    departmentList,
+    feature,
+    introduction,
+    more,
+    slogan,
+    tagList
+  };
+
+  const res = await updateDeptInfo(updateData);
+  console.log(res);
+};
 const upload = ref<UploadInstance>();
 const uploadHeaders = {
   Authorization: window.localStorage.getItem('token'),
@@ -158,11 +144,39 @@ const uploadAvatar = async (option: UploadRequestOptions) => {
 // const submitUpload = () => {
 //   upload.value!.submit()// 提交上传
 // }
-
+// 如果出现返回系统标签缺失，手动添加
+const initTagListFix = () => {
+  // 未缺失
+  if (data.tagList[0].type == 1) {
+    return;
+  }
+  data.tagList.unshift({
+    tag: '学术科技', // 性质
+    type: 1
+  });
+  data.tagList.unshift({
+    tag: '院级组织', // 性质
+    type: 1
+  });
+};
+// 点击添加自定义标签
 const addTag = () => {
   data.tagList.push({
     tag: '',
     type: 2
+  });
+};
+// 添加部门
+const addDepartment = () => {
+  data.departmentList.push({
+    id: null,
+    name: 'Software Development1',
+    briefIntroduction:
+      'test: Our software development team creates robust and scalable solutions tailored to your business needs.',
+    introduction:
+      'test: We deliver customized software applications that streamline processes and drive growth.',
+    standard:
+      'test: We follow industry best practices and agile methodologies to ensure timely delivery and code quality.'
   });
 };
 </script>
@@ -204,7 +218,7 @@ const addTag = () => {
               <el-form-item label="属性" class="tag-list">
                 <el-select
                   placeholder="请输入性质"
-                  :disabled="true"
+                  :disabled="false"
                   v-model="data.tagList[0].tag"
                 >
                   <el-option
@@ -317,8 +331,42 @@ const addTag = () => {
         <section style="box-sizing: border-box; padding: 0px 5vw">
           <template v-for="(department, index) in data.departmentList">
             <el-form require-asterisk-position="right" label-position="top">
-              <h3>{{ department.name }}</h3>
-              <p>{{ department.briefIntroduction }}</p>
+              <!-- 部门标题 -->
+              <div style="display: flex; margin-bottom: 20px">
+                <el-icon
+                  :size="25"
+                  v-if="index == data.departmentList.length - 1"
+                  @click="addDepartment"
+                  style="cursor: pointer; margin: 0 20px 0 -45px"
+                  ><CirclePlus
+                /></el-icon>
+                <h3 style="color: black">{{ department.name || '未命名' }}</h3>
+              </div>
+              <el-form-item style="display: flex; align-items: center" required>
+                <template #label>
+                  <label style="font-size: 17px; font-weight: 400"
+                    >部门名称</label
+                  >
+                </template>
+                <el-input
+                  placeholder="请输入部门名称"
+                  style="max-width: 214.5px"
+                  v-model="department.name"
+                />
+              </el-form-item>
+              <el-form-item style="display: flex; align-items: center" required>
+                <template #label>
+                  <label style="font-size: 17px; font-weight: 400"
+                    >部门简介</label
+                  >
+                </template>
+                <el-input
+                  placeholder="请输入部门简介"
+                  style="max-width: 214.5px"
+                  v-model="department.briefIntroduction"
+                />
+              </el-form-item>
+
               <el-form-item required>
                 <template #label>
                   <label style="font-size: 17px; font-weight: 400"
@@ -351,7 +399,9 @@ const addTag = () => {
         style="display: flex; justify-content: flex-end; margin-right: 10%"
       >
         <el-button type="primary"> 暂时保存并预览 </el-button>
-        <el-button type="primary"> 确定同步 </el-button>
+        <el-button type="primary" @click="updSyncDeptInfoAll">
+          确定同步
+        </el-button>
       </section>
     </div>
   </div>
