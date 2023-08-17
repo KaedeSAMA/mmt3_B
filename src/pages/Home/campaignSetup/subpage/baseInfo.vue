@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Data } from '@/api/callout/types/resType';
+import { useOrgInfo } from '@/store/mobile';
 import {
   updateDeptInfo,
   getDeptInfo,
@@ -55,7 +56,12 @@ const selectList2 = ref([
     value: '自律互助'
   }
 ]);
-let data = reactive<Data>({
+// store
+const organizeInfo = useOrgInfo();
+/**
+ * getDeptInfo返回的数据
+ */
+const data = reactive<Data>({
   name: '加载中',
   avatarUrl: '#',
   briefIntroduction: '加载中',
@@ -76,12 +82,13 @@ let data = reactive<Data>({
   contactInfo: '加载中',
   more: '加载中',
   departmentList: []
-}); // getDeptInfo返回的数据
+});
 onMounted(async () => {
   const res = (await getDeptInfo()) as Data;
   console.log(res);
   // 使用 Object.assign 更新响应式对象
-  Object.assign(data, res);
+  Object.assign(data, JSON.parse(JSON.stringify(res)));//更新本页
+  organizeInfo.setOrgInfo(res);//更新store
   initTagListFix(); // 补全tagList
 });
 /**
@@ -94,7 +101,9 @@ const updateTest = async () => {
   // const res_1 = await getDeptInfo();
   // console.log(res_1);
 };
-// 测试更新部门信息
+/**
+ * 测试更新部门信息
+ */
 const updSyncDeptInfoAll = async () => {
   console.log(data);
   const {
@@ -123,6 +132,13 @@ const updSyncDeptInfoAll = async () => {
 
   const res = await updateDeptInfo(updateData);
   console.log(res);
+  organizeInfo.setOrgInfo(data);//更新store
+};
+/**
+ * @description: 保存临时数据同步到模拟器
+ */
+const saveTemp = () => {
+  organizeInfo.setOrgInfo(data);
 };
 const upload = ref<UploadInstance>();
 const uploadHeaders = {
@@ -140,6 +156,11 @@ const uploadAvatar = async (option: UploadRequestOptions) => {
   // upload.value!.submit()
   const res = await updateDeptLogo({ avatar: option.file });
   console.log('uploadAvatar', res);
+  // ???
+  /**
+   * 目前没有单独拿头像链接的方法
+   * 需要整体刷新
+   */
 };
 // const submitUpload = () => {
 //   upload.value!.submit()// 提交上传
@@ -398,7 +419,7 @@ const addDepartment = () => {
       <section
         style="display: flex; justify-content: flex-end; margin-right: 10%"
       >
-        <el-button type="primary"> 暂时保存并预览 </el-button>
+        <el-button type="primary" @click="saveTemp"> 暂时保存并预览 </el-button>
         <el-button type="primary" @click="updSyncDeptInfoAll">
           确定同步
         </el-button>

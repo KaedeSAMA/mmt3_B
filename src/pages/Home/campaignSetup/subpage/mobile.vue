@@ -3,7 +3,7 @@
     <MobileBox class="rightPreview" :device-height="655" :device-width="342">
       <div class="baseInfo" v-if="activeTab === 0">
         <div class="card">
-          <div class="organize">
+          <div class="organize" @click="activeTab = 1">
             <div class="organizeImg">
               <img :src="organizeInfo.avatarUrl" alt="" />
             </div>
@@ -12,14 +12,9 @@
                 {{ organizeInfo.name }}
               </div>
               <div class="organizeTags">
-                <div class="tag">{{ organizeInfo.tagList[0].tag }}</div>
-                <div class="tag">{{ organizeInfo.tagList[1].tag }}</div>
-                <!-- <div class="tag" v-if="tagC">
-                  {{ organizeInfo.tag.tagC }}
+                <div class="tag" v-for="item in organizeInfo.tagList">
+                  {{ item.tag }}
                 </div>
-                <div class="tag" v-if="tagD">
-                  {{ organizeInfo.tag.tagD }}
-                </div> -->
               </div>
             </div>
           </div>
@@ -30,7 +25,8 @@
       </div>
       <div class="organizeDrumbeating" v-if="activeTab === 1">
         <div class="nav">
-          <span class="active">社团介绍</span><span>社团部门</span>
+          <span class="active">社团介绍</span
+          ><span @click="activeTab = 2">社团部门</span>
         </div>
         <div class="sign_message">
           <sign-info-card
@@ -69,7 +65,8 @@
       <div class="department" v-if="activeTab === 2">
         <div class="list" v-if="isList">
           <div class="nav">
-            <span>社团介绍</span><span class="active">社团部门</span>
+            <span @click="activeTab = 1">社团介绍</span
+            ><span class="active">社团部门</span>
           </div>
           <div
             class="depList"
@@ -112,50 +109,14 @@
 import SignInfoCard from '../../components/signInfoCard/singInfoCard.vue';
 import MobileBox from '@/pages/Home/components/mobile/index.vue';
 import { Data } from '@/api/callout/types/resType';
-let activeTab = 0;
-let isList = true;
-let activeDep: any = {};
+import { useOrgInfo } from '@/store/mobile';
+let activeTab = ref(0);
+let isList = ref(true);
+let activeDep: any = reactive({});
+const organizeInfo:Data = useOrgInfo().data;
 const toDepDetail = (index: number) => {
-  isList = false;
-  activeDep = organizeInfo.departmentList[index];
-};
-const organizeInfo: Data = {
-  avatarUrl:
-    'https://p5.itc.cn/q_70/images03/20220512/ecc151fbd129466aaa41ec90b4cef96c.gif',
-  briefIntroduction: '社团组织简介',
-  contactInfo: '+123456789',
-  daily: '社团组织日常',
-  feature: '社团组织特色',
-  introduction: '社团组织介绍',
-  more: '更多信息',
-  name: '社团组织名称',
-  slogan: '社团组织宣言',
-  departmentList: [
-    {
-      briefIntroduction: '部门1简介',
-      id: 1,
-      introduction: '部门1介绍',
-      name: '部门1',
-      standard: '部门1标准'
-    },
-    {
-      briefIntroduction: '部门2简介',
-      id: 2,
-      introduction: '部门2介绍',
-      name: '部门2',
-      standard: '部门2标准'
-    }
-  ],
-  tagList: [
-    {
-      tag: '标签1',
-      type: 1
-    },
-    {
-      tag: '标签2',
-      type: 2
-    }
-  ]
+  isList.value = false;
+  Object.assign(activeDep, organizeInfo.departmentList[index]);
 };
 </script>
 <style lang="scss" scoped>
@@ -194,6 +155,7 @@ const organizeInfo: Data = {
           .organizeName {
             font-weight: 600;
             text-align: left;
+            cursor: pointer;
           }
 
           .organizeTags {
@@ -270,6 +232,7 @@ const organizeInfo: Data = {
       span {
         border-bottom: 3px solid transparent;
         padding-bottom: 5px;
+        cursor: pointer;
       }
 
       .active {
