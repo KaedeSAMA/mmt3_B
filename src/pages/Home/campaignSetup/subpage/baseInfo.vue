@@ -87,8 +87,8 @@ onMounted(async () => {
   const res = (await getDeptInfo()) as Data;
   console.log(res);
   // 使用 Object.assign 更新响应式对象
-  Object.assign(data, JSON.parse(JSON.stringify(res)));//更新本页
-  organizeInfo.setOrgInfo(res);//更新store
+  Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
+  organizeInfo.setOrgInfo(res); //更新store
   initTagListFix(); // 补全tagList
 });
 /**
@@ -132,7 +132,7 @@ const updSyncDeptInfoAll = async () => {
 
   const res = await updateDeptInfo(updateData);
   console.log(res);
-  organizeInfo.setOrgInfo(data);//更新store
+  organizeInfo.setOrgInfo(data); //更新store
 };
 /**
  * @description: 保存临时数据同步到模拟器

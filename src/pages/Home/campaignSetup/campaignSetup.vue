@@ -25,11 +25,12 @@ import BaseInfo from './subpage/baseInfo.vue';
 import ClubPromotion from './subpage/clubPromotion.vue';
 import RecruitDept from './subpage/recruitDept.vue';
 import MobilePhone from './subpage/mobile.vue';
+import { useOrgInfo } from '@/store/mobile';
 
 const activeName = ref('baseInfo');
-
+// 切换手机模拟器的tab
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event);
+  useOrgInfo().setActiveTab(+(tab.index ?? 0));
 };
 </script>
 <style lang="scss" scoped>

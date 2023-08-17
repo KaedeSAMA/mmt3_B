@@ -1,11 +1,27 @@
+<script setup lang="ts">
+import SignInfoCard from '../../components/signInfoCard/singInfoCard.vue';
+import MobileBox from '@/pages/Home/components/mobile/index.vue';
+import { Data } from '@/api/callout/types/resType';
+import { useOrgInfo } from '@/store/mobile';
+
+let isList = ref(true);
+let activeDep: any = reactive({}); //具体展示的部门信息
+let { data, activeTab, setActiveTab } = useOrgInfo();
+const organizeInfo: Data = data;
+const toDepDetail = (index: number) => {
+  isList.value = false;
+  Object.assign(activeDep, organizeInfo.departmentList[index]);
+};
+</script>
+
 <template>
   <div class="right">
     <MobileBox class="rightPreview" :device-height="655" :device-width="342">
-      <div class="baseInfo" v-if="activeTab === 0">
+      <div class="baseInfo" v-if="activeTab.value === 0">
         <div class="card">
-          <div class="organize" @click="activeTab = 1">
+          <div class="organize" @click="setActiveTab(1)">
             <div class="organizeImg">
-              <img :src="organizeInfo.avatarUrl" alt="" />
+              <img :src="organizeInfo.avatarUrl" alt="logo" />
             </div>
             <div class="organizeAttr">
               <div class="organizeName">
@@ -23,10 +39,10 @@
           </div>
         </div>
       </div>
-      <div class="organizeDrumbeating" v-if="activeTab === 1">
+      <div class="organizeDrumbeating" v-if="activeTab.value === 1">
         <div class="nav">
           <span class="active">社团介绍</span
-          ><span @click="activeTab = 2">社团部门</span>
+          ><span @click="setActiveTab(2)">社团部门</span>
         </div>
         <div class="sign_message">
           <sign-info-card
@@ -62,10 +78,10 @@
           <div style="height: 30px"></div>
         </div>
       </div>
-      <div class="department" v-if="activeTab === 2">
+      <div class="department" v-if="activeTab.value === 2">
         <div class="list" v-if="isList">
           <div class="nav">
-            <span @click="activeTab = 1">社团介绍</span
+            <span @click="setActiveTab(1)">社团介绍</span
             ><span class="active">社团部门</span>
           </div>
           <div
@@ -105,20 +121,7 @@
     </MobileBox>
   </div>
 </template>
-<script setup lang="ts">
-import SignInfoCard from '../../components/signInfoCard/singInfoCard.vue';
-import MobileBox from '@/pages/Home/components/mobile/index.vue';
-import { Data } from '@/api/callout/types/resType';
-import { useOrgInfo } from '@/store/mobile';
-let activeTab = ref(0);
-let isList = ref(true);
-let activeDep: any = reactive({});
-const organizeInfo:Data = useOrgInfo().data;
-const toDepDetail = (index: number) => {
-  isList.value = false;
-  Object.assign(activeDep, organizeInfo.departmentList[index]);
-};
-</script>
+
 <style lang="scss" scoped>
 .right {
   // height: 94vh;
@@ -135,7 +138,7 @@ const toDepDetail = (index: number) => {
       height: 84%;
 
       .card {
-        height: 90px;
+        // height: 90px;
         width: 96%;
         margin: 0 auto;
         background-color: #f8f8f8;
