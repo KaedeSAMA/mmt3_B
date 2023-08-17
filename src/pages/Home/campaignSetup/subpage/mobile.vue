@@ -19,9 +19,13 @@ const toDepDetail = (index: number) => {
     <MobileBox class="rightPreview" :device-height="655" :device-width="342">
       <div class="baseInfo" v-if="activeTab.value === 0">
         <div class="card">
-          <div class="organize" @click="setActiveTab(1)">
+          <section class="organize" @click="setActiveTab(1)">
             <div class="organizeImg">
               <img :src="organizeInfo.avatarUrl" alt="logo" />
+              <!-- <img
+                src="https://p5.itc.cn/q_70/images03/20220512/ecc151fbd129466aaa41ec90b4cef96c.gif"
+                alt="logo"
+              /> -->
             </div>
             <div class="organizeAttr">
               <div class="organizeName">
@@ -33,10 +37,10 @@ const toDepDetail = (index: number) => {
                 </div>
               </div>
             </div>
-          </div>
-          <div class="describe">
+          </section>
+          <section class="describe">
             {{ organizeInfo.briefIntroduction }}
-          </div>
+          </section>
         </div>
       </div>
       <div class="organizeDrumbeating" v-if="activeTab.value === 1">
@@ -48,32 +52,32 @@ const toDepDetail = (index: number) => {
           <sign-info-card
             title="社团介绍"
             :content="organizeInfo.introduction"
-            v-if="organizeInfo.introduction !== ''"
+            v-if="organizeInfo.introduction ?? '' !== ''"
           ></sign-info-card>
           <sign-info-card
             title="社团特色"
             :content="organizeInfo.feature"
-            v-if="organizeInfo.feature !== ''"
+            v-if="organizeInfo.feature ?? '' !== ''"
           ></sign-info-card>
           <sign-info-card
             title="社团日常"
             :content="organizeInfo.daily"
-            v-if="organizeInfo.daily !== ''"
+            v-if="organizeInfo.daily ?? '' !== ''"
           ></sign-info-card>
           <sign-info-card
             title="社团宣言"
             :content="organizeInfo.slogan"
-            v-if="organizeInfo.slogan !== ''"
+            v-if="organizeInfo.slogan ?? '' !== ''"
           ></sign-info-card>
           <sign-info-card
             title="联系方式"
             :content="organizeInfo.contactInfo"
-            v-if="organizeInfo.contactInfo !== ''"
+            v-if="organizeInfo.contactInfo ?? '' !== ''"
           ></sign-info-card>
           <sign-info-card
             title="更多"
             :content="organizeInfo.more"
-            v-if="organizeInfo.more !== ''"
+            v-if="organizeInfo.more ?? '' !== ''"
           ></sign-info-card>
           <div style="height: 30px"></div>
         </div>
@@ -110,11 +114,13 @@ const toDepDetail = (index: number) => {
           </div>
           <sign-info-card
             title="部门介绍"
-            :content="activeDep.introduction || ''"
+            :content="activeDep.introduction"
+            v-if="activeDep.introduction ?? '' !== ''"
           ></sign-info-card>
           <sign-info-card
             title="纳新标准"
-            :content="activeDep.standard || ''"
+            :content="activeDep.standard"
+            v-if="activeDep.standard ?? '' !== ''"
           ></sign-info-card>
         </div>
       </div>
@@ -124,8 +130,7 @@ const toDepDetail = (index: number) => {
 
 <style lang="scss" scoped>
 .right {
-  // height: 94vh;
-  // height: 100%;
+  height: 100%;
   margin-left: 40px;
   // margin-top: 24px;
   // transform: translateY(-20px);
@@ -138,7 +143,6 @@ const toDepDetail = (index: number) => {
       height: 84%;
 
       .card {
-        // height: 90px;
         width: 96%;
         margin: 0 auto;
         background-color: #f8f8f8;
@@ -164,7 +168,7 @@ const toDepDetail = (index: number) => {
           .organizeTags {
             display: flex;
             margin-top: 6px;
-
+            flex-wrap: wrap;
             .tag {
               font-size: 11px;
               border: 1px solid #1890ff;
@@ -182,7 +186,7 @@ const toDepDetail = (index: number) => {
           white-space: nowrap;
           text-overflow: ellipsis;
           width: 90%;
-          margin: 3px auto 0;
+          margin: 3px auto 5px;
           text-align: left;
         }
 
@@ -198,7 +202,8 @@ const toDepDetail = (index: number) => {
 
     .organizeDrumbeating {
       width: 91%;
-      height: 84%;
+      height: 90%;
+      overflow: hidden; //超出视野隐藏
       background-color: #f8f8f8;
       text-align: left;
 
@@ -245,7 +250,7 @@ const toDepDetail = (index: number) => {
 
     .department {
       width: 91%;
-      height: 84%;
+      height: 90%;
       background-color: #f8f8f8;
       text-align: left;
     }
@@ -257,7 +262,7 @@ const toDepDetail = (index: number) => {
 
     .departmentCard {
       width: 100%;
-      height: 70px;
+      // height: 70px;
       margin-top: 10px;
       margin-bottom: 10px;
       background-color: #fff;

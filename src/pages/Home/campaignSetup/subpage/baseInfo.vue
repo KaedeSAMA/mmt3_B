@@ -191,13 +191,13 @@ const addTag = () => {
 const addDepartment = () => {
   data.departmentList.push({
     id: null,
-    name: 'Software Development1',
+    name: '',
     briefIntroduction:
-      'test: Our software development team creates robust and scalable solutions tailored to your business needs.',
+      '',
     introduction:
-      'test: We deliver customized software applications that streamline processes and drive growth.',
+      '',
     standard:
-      'test: We follow industry best practices and agile methodologies to ensure timely delivery and code quality.'
+      ''
   });
 };
 </script>
@@ -206,7 +206,8 @@ const addDepartment = () => {
   <div class="scroll-container">
     <div class="content">
       <article>
-        <header style="color: black; margin-left: 4.5%">基本信息</header>
+        <h1 @click="updateTest">test</h1>
+        <header class="title-style">基本信息</header>
         <section class="base-info">
           <!-- avatar -->
           <section class="avatar-detail">
@@ -290,10 +291,9 @@ const addDepartment = () => {
             </el-form-item>
           </el-form>
         </section>
-      </article>
-      <h1 @click="updateTest">click to test request</h1>
+      </article>      
       <article>
-        <header style="color: black; margin-left: 4.5%">社团宣传</header>
+        <header class="title-style">社团宣传</header>
         <!-- clubPromotion -->
         <section style="box-sizing: border-box; padding: 0px 5vw">
           <el-form require-asterisk-position="right" label-position="top">
@@ -347,7 +347,7 @@ const addDepartment = () => {
         </section>
       </article>
       <article>
-        <header style="color: black; margin-left: 4.5%">纳新部门</header>
+        <header class="title-style">纳新部门</header>
         <!-- departmentList -->
         <section style="box-sizing: border-box; padding: 0px 5vw">
           <template v-for="(department, index) in data.departmentList">
@@ -356,12 +356,13 @@ const addDepartment = () => {
               <div style="display: flex; margin-bottom: 20px">
                 <el-icon
                   :size="25"
+                  color="#409eff"
                   v-if="index == data.departmentList.length - 1"
                   @click="addDepartment"
                   style="cursor: pointer; margin: 0 20px 0 -45px"
                   ><CirclePlus
                 /></el-icon>
-                <h3 style="color: black">{{ department.name || '未命名' }}</h3>
+                <div style="color: var(--el-text-color-regular);">{{ department.name || '未命名' }}</div>
               </div>
               <el-form-item style="display: flex; align-items: center" required>
                 <template #label>
@@ -481,5 +482,12 @@ const addDepartment = () => {
       flex-direction: column;
     }
   }
+}
+.title-style {
+  color: var(--el-color-primary);
+  margin-left: 4.5%;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-left: 4px solid var(--el-color-primary);;
 }
 </style>
