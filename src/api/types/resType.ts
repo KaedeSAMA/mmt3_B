@@ -72,3 +72,38 @@ export type {
   TSwitchOrganizationRes,
   TUpdatePasswordDataRes
 };
+
+//数据看板参数返回类型
+interface ISiftBar<D> {
+  organizationOrderBar: Array<D>;
+  departmentOrderBar: Array<D>;
+  nowDepartmentBar: Array<D>;
+  nextTimeBar: Array<D>;
+  nextPlaceBar: Array<D>;
+}
+type TSiftBarItem = {
+  info: number;
+  siftName: string;
+  number: number;
+};
+type TSiftBar = ISiftBar<TSiftBarItem>;
+type TGetDateBoardMessage = {
+  siftBar: TSiftBar;
+  interviewerInfoList: Array<{
+    id: number;
+    studentId: string;
+    name: string;
+    className: string;
+    phone: string;
+    organizationOrder: string;
+    departmentOrder: string;
+    nowDepartment: string;
+    volunteerStatus: string;
+    nextTime: string;
+    nextPlace: string;
+  }>;
+  pageNow: number;
+  pageNum: number;
+};
+type TGetDateBoardMessageRes = IBaseResponce<TGetDateBoardMessage>;
+export type { TGetDateBoardMessageRes };

@@ -4,21 +4,21 @@
       <div class="round">
         面试轮次：
         <el-checkbox-group v-model="roundList" class="conditionCheck">
-          <el-checkbox label="一面" />
-          <el-checkbox label="二面" />
-          <el-checkbox label="三面" />
+          <el-checkbox :label="1">一面</el-checkbox>
+          <el-checkbox :label="2">二面</el-checkbox>
+          <el-checkbox :label="3">三面</el-checkbox>
         </el-checkbox-group>
       </div>
       <div class="condition">
         面试情况：
         <el-checkbox-group v-model="conditionList" class="conditionCheck">
-          <el-checkbox label="未开始" />
-          <el-checkbox label="进行中" />
-          <el-checkbox label="失败" />
-          <el-checkbox label="成功" />
+          <el-checkbox :label="1">未开始</el-checkbox>
+          <el-checkbox :label="2">进行中</el-checkbox>
+          <el-checkbox :label="3">失败</el-checkbox>
+          <el-checkbox :label="4">成功</el-checkbox>
         </el-checkbox-group>
       </div>
-      <span class="refresh">
+      <span class="refresh" @click="refresh">
         <!-- <i-ep-RefreshRight size="100"></i-ep-RefreshRight> -->
         <el-icon size="20" class="refreshIcon"><RefreshRight /></el-icon>
         实时刷新</span
@@ -26,99 +26,177 @@
     </div>
     <div class="selectBox">
       <div class="selectDate">
-        <el-input v-model="baseDate" placeholder="输入基本信息" clearable />
+        <el-input v-model="baseData" placeholder="输入基本信息" clearable />
       </div>
       <el-select
         v-model="organizationOrder"
         class="selectDate m-2"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
         placeholder="选择社团志愿次序"
       >
         <el-option
-          v-for="item in organizationOrderOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+          v-for="item in organizationOrderBar"
+          :key="item.info"
+          :label="item.siftName"
+          :value="item.info"
+        >
+          <span style="float: left">{{ item.siftName }}</span>
+          <span
+            style="
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            "
+            >{{ item.number }}人</span
+          >
+        </el-option>
       </el-select>
       <el-select
         v-model="departmentOrder"
         class="m-2 selectDate"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
         placeholder="选择部门志愿次序"
       >
         <el-option
-          v-for="item in departmentOrderOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+          v-for="item in departmentOrderBar"
+          :key="item.info"
+          :label="item.siftName"
+          :value="item.info"
+        >
+          <span style="float: left">{{ item.siftName }}</span>
+          <span
+            style="
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            "
+            >{{ item.number }}人</span
+          >
+        </el-option>
       </el-select>
       <el-select
-        v-model="department"
+        v-model="nowDepartment"
         class="selectDate m-2"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
         placeholder="选择部门"
       >
         <el-option
-          v-for="item in departmentOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+          v-for="item in nowDepartmentBar"
+          :key="item.info"
+          :label="item.siftName"
+          :value="item.info"
+        >
+          <span style="float: left">{{ item.siftName }}</span>
+          <span
+            style="
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            "
+            >{{ item.number }}人</span
+          >
+        </el-option>
       </el-select>
       <el-select
-        v-model="time"
+        v-model="nextTime"
         class="m-2 selectDate"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
         placeholder="选择面试时间"
       >
         <el-option
-          v-for="item in timeOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+          v-for="item in nextTimeBar"
+          :key="item.siftName"
+          :label="item.siftName"
+          :value="item.siftName"
+        >
+          <span style="float: left; margin-right: 10px">{{
+            item.siftName
+          }}</span>
+          <span
+            style="
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            "
+            >{{ item.number }}人</span
+          >
+        </el-option>
       </el-select>
       <el-select
-        v-model="position"
+        v-model="nextPlace"
         class="m-2 selectDate"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
         placeholder="选择面试地点"
       >
         <el-option
-          v-for="item in positionOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
+          v-for="item in nextPlaceBar"
+          :key="item.info"
+          :label="item.siftName"
+          :value="item.info"
+        >
+          <span style="float: left">{{ item.siftName }}</span>
+          <span
+            style="
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            "
+            >{{ item.number }}人</span
+          >
+        </el-option>
       </el-select>
-      <el-button type="primary" class="searchbtn">搜索</el-button>
+      <el-button type="primary" @click="request" class="searchbtn"
+        >搜索</el-button
+      >
     </div>
     <div class="tableBox">
-      <el-table :data="tableData" class="table" stripe>
-        <el-table-column label="简历及评价" align="center" fixed width="100">
+      <el-table
+        :data="tableData"
+        class="table"
+        stripe
+        @sort-change="changeTableSort"
+      >
+        <el-table-column label="简历及评价" align="center" width="100">
           <template #default="scope">
-            <el-icon size="25" @click="console.log(scope)" class="doucument"
+            <el-icon size="25" @click="viewResume(scope.row)" class="doucument"
               ><Document
             /></el-icon>
           </template>
         </el-table-column>
         <el-table-column
-          prop="stunum"
+          prop="studentId"
           label="学号"
           width="150"
           align="center"
-          sortable
+          sortable="custom"
         />
         <el-table-column
           prop="name"
-          fixed
           label="姓名"
+          width="140"
+          align="center"
+          sortable="custom"
+        />
+        <el-table-column
+          prop="className"
+          label="班级"
           width="150"
           align="center"
-          sortable
         />
-        <el-table-column prop="class" label="班级" width="180" align="center" />
         <el-table-column
           prop="phone"
           label="手机号"
-          width="180"
+          width="150"
           align="center"
         />
         <el-table-column
@@ -134,35 +212,38 @@
           align="center"
         />
         <el-table-column
-          prop="department"
+          prop="nowDepartment"
           label="当前志愿部门"
           width="120"
           align="center"
         />
         <el-table-column
-          prop="state"
+          prop="volunteerStatus"
           label="当前志愿情况"
           width="130"
           align="center"
         >
           <template #default="scope">
-            <el-tag class="ml-2" :type="colorCalculate(scope.row.state)">{{
-              scope.row.state
-            }}</el-tag>
+            <el-tag
+              class="ml-2"
+              :type="colorCalculate(scope.row.volunteerStatus)"
+              >{{ scope.row.volunteerStatus }}</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column
-          prop="time"
+          prop="nextTime"
           label="下次面试时间"
-          width="140"
+          width="180"
           align="center"
-          sortable
+          sortable="custom"
         />
         <el-table-column
-          prop="location"
+          prop="nextPlace"
           label="下次面试地点"
-          width="130"
+          width="150"
           align="center"
+          sortable="custom"
         />
       </el-table>
     </div>
@@ -170,248 +251,71 @@
       <el-pagination
         background
         small
-        :total="1000"
-        v-model:current-page="currentPage4"
-        layout="total, prev, pager, next, jumper"
-        @current-change="handleCurrentChange"
+        :page-count="pageNum"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 15, 20, 25, 30]"
+        v-model:current-page="currentPage"
+        layout="prev, pager, next, jumper,sizes"
+        @current-change="request"
+        @size-change="request"
       />
-      <el-button type="primary" class="exportbtn">导出报名表</el-button>
+      <el-button type="primary" class="exportbtn" @click="exportExcel"
+        >导出报名表</el-button
+      >
     </div>
   </el-card>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 import { RefreshRight, Document } from '@element-plus/icons-vue';
-// 选择查看几面数据
-const roundList = ref(['一面', '二面']);
-// 选择面试情况
-const conditionList = ref(['成功', '未开始']);
-// 模糊搜索
-const baseDate = ref('');
-// 选择社团志愿次序
+import { useDateboardStore } from '@/store/index';
+import * as XLSX from 'xlsx';
+import { getFilterData, getExportData } from '@/api/dateBoard';
+import { ElMessage } from 'element-plus';
 type selectType = {
-  value: string;
-  label: string;
+  info: number;
+  siftName: string;
+  number: number;
 };
-const organizationOrder = ref('');
-const organizationOrderOptions = reactive<Array<selectType>>([
-  {
-    value: '1',
-    label: '一志愿'
-  },
-  {
-    value: '2',
-    label: '二志愿'
-  }
-]);
-// 选择部门志愿次序
-const departmentOrder = ref('');
-const departmentOrderOptions = reactive<Array<selectType>>([
-  {
-    value: '1',
-    label: '一志愿'
-  },
-  {
-    value: '2',
-    label: '二志愿'
-  }
-]);
-// 选择部门
-const department = ref('');
-const departmentOptions = reactive<Array<selectType>>([
-  {
-    value: '1',
-    label: '科技部'
-  },
-  {
-    value: '2',
-    label: '技术部'
-  }
-]);
-// 选择面试时间
-const time = ref('');
-const timeOptions = reactive<Array<selectType>>([
-  {
-    value: '1',
-    label: '周一'
-  },
-  {
-    value: '2',
-    label: '周二'
-  }
-]);
-// 选择面试地点
-const position = ref('');
-const positionOptions = reactive<Array<selectType>>([
-  {
-    value: '1',
-    label: '115'
-  },
-  {
-    value: '2',
-    label: '116'
-  }
-]);
-// 表格数据
 type tableDataType = {
-  stunum: string;
+  id: number;
+  studentId: string;
   name: string;
-  class: string;
+  className: string;
   phone: string;
   organizationOrder: string;
   departmentOrder: string;
-  department: string;
-  state: string;
-  time: string;
-  location: string;
+  nowDepartment: string;
+  volunteerStatus: string;
+  nextTime: string;
+  nextPlace: string;
 };
-const tableData = reactive<Array<tableDataType>>([
-  {
-    stunum: '20201111',
-    name: '大聪明1',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '失败',
-    time: '8/25 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20201111',
-    name: '大聪明1',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '失败',
-    time: '8/25 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20201111',
-    name: '大聪明1',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '失败',
-    time: '8/25 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20201122',
-    name: '大聪明2',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '成功',
-    time: '8/20 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20211111',
-    name: '大聪明3',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '一面进行中',
-    time: '8/03 10:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20201125',
-    name: '大聪明3',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '成功',
-    time: '9/25 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20200211',
-    name: '大聪明4',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '二面进行中',
-    time: '8/26 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20223524',
-    name: '大聪明5',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '失败',
-    time: '8/24 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20201111',
-    name: '大聪明7',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '成功',
-    time: '8/25 10:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20205511',
-    name: '熊出没6',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '一面进行中',
-    time: '8/25 13:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20253411',
-    name: '小米9',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '成功',
-    time: '8/10 15:00',
-    location: '7-115'
-  },
-  {
-    stunum: '20205311',
-    name: '地方3',
-    class: '计算机1班',
-    phone: '12535625854',
-    organizationOrder: '第一志愿',
-    departmentOrder: '第一志愿',
-    department: '前端部',
-    state: '成功',
-    time: '8/30 15:00',
-    location: '7-115'
-  }
-]);
+// 接收控制显示与隐藏的数据
+const emit = defineEmits(['change']);
+// 选择查看几面数据
+const roundList = ref([]);
+// 选择面试情况
+const conditionList = ref([]);
+// 模糊搜索
+const baseData = ref('');
+// 选择社团志愿次序
+const organizationOrder = ref([]);
+const organizationOrderBar = ref<Array<selectType>>([]);
+// 选择部门志愿次序
+const departmentOrder = ref([]);
+const departmentOrderBar = ref<Array<selectType>>([]);
+// 选择部门
+const nowDepartment = ref([]);
+const nowDepartmentBar = ref<Array<selectType>>([]);
+// 选择面试时间
+const nextTime = ref([]);
+const nextTimeBar = ref<Array<selectType>>([]);
+// 选择面试地点
+const nextPlace = ref([]);
+const nextPlaceBar = ref<Array<selectType>>([]);
+// 表格数据
+const tableData = ref<Array<tableDataType>>([]);
 function colorCalculate(state: string) {
   switch (state) {
     case '成功':
@@ -423,9 +327,101 @@ function colorCalculate(state: string) {
   }
 }
 // 分页
-const currentPage4 = ref(4);
-const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`);
+const currentPage = ref(1);
+const pageSize = ref(10);
+const pageNum = ref(0);
+// 排序
+const sort = ref({
+  sortId: 0,
+  sortBy: 0
+});
+// 改变排序规则
+const changeTableSort = (column: any) => {
+  switch (column.prop) {
+    case 'name':
+      sort.value.sortId = 1;
+      break;
+    case 'studentId':
+      sort.value.sortId = 2;
+      break;
+    case 'nextTime':
+      sort.value.sortId = 3;
+      break;
+    case 'nextPlace':
+      sort.value.sortId = 4;
+      break;
+  }
+  switch (column.order) {
+    case 'ascending':
+      sort.value.sortBy = 1;
+      break;
+    case 'descending':
+      sort.value.sortBy = 2;
+      break;
+    default:
+      sort.value.sortBy = 0;
+  }
+  request();
+};
+// 请求数据
+const page = ref({
+  page: currentPage,
+  pageNum: pageSize
+});
+const filterCondition = ref({
+  interviewRoundSift: roundList,
+  interviewStatusSift: conditionList,
+  search: baseData,
+  sort,
+  organizationOrderSift: organizationOrder,
+  departmentOrderSift: departmentOrder,
+  nowDepartmentSift: nowDepartment,
+  nextTimeSift: nextTime,
+  nextPlaceSift: nextPlace
+});
+onMounted(async () => {
+  const allData = await getFilterData(page.value, filterCondition.value);
+  departmentOrderBar.value = allData?.siftBar
+    .departmentOrderBar as Array<selectType>;
+  organizationOrderBar.value = allData?.siftBar
+    .organizationOrderBar as Array<selectType>;
+  nowDepartmentBar.value = allData?.siftBar
+    .nowDepartmentBar as Array<selectType>;
+  nextTimeBar.value = allData?.siftBar.nextTimeBar as Array<selectType>;
+  nextPlaceBar.value = allData?.siftBar.nextPlaceBar as Array<selectType>;
+  tableData.value = allData?.interviewerInfoList as Array<tableDataType>;
+  pageNum.value = allData?.pageNum;
+});
+// 请求函数，多次调用
+const request = async () => {
+  const res = await getFilterData(page.value, filterCondition.value);
+  tableData.value = res?.interviewerInfoList as Array<tableDataType>;
+  pageNum.value = res?.pageNum;
+};
+// 实时刷新
+const refresh = async () => {
+  currentPage.value = 1;
+  const res = await getFilterData(page.value, filterCondition.value);
+  tableData.value = res?.interviewerInfoList as Array<tableDataType>;
+  pageNum.value = res?.pageNum;
+  ElMessage.success('页面已刷新');
+};
+// 简历界面
+const viewResume = (PersonDate: object) => {
+  console.log(PersonDate);
+  emit('change', false);
+  const store = useDateboardStore();
+  store.setPersonDate(PersonDate);
+};
+// 导出报名表
+const exportExcel = async () => {
+  const exportData = await getExportData(filterCondition.value);
+  const data = XLSX.utils.json_to_sheet(
+    exportData?.interviewerInfoList as Array<tableDataType>
+  );
+  const ws = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(ws, data, '报名信息');
+  XLSX.writeFile(ws, '报名信息.xlsx');
 };
 </script>
 
@@ -486,6 +482,7 @@ const handleCurrentChange = (val: number) => {
     // background-color: rgb(187, 154, 110);
     height: 5vh;
     min-height: 35px;
+    margin-top: 5px;
     .selectDate {
       display: inline-block;
       width: 13%;
@@ -499,7 +496,7 @@ const handleCurrentChange = (val: number) => {
       @media (max-width: 1150px) {
         width: 80%;
         margin-left: 10%;
-        margin-top: 3px;
+        margin-top: 5px;
       }
     }
     @media (max-width: 1150px) {
@@ -542,8 +539,7 @@ const handleCurrentChange = (val: number) => {
     box-sizing: border-box;
     padding-top: 5px;
     position: relative;
-
-    min-width: 660px;
+    min-width: 750px;
     .exportbtn {
       position: absolute;
       bottom: 0;

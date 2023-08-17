@@ -26,4 +26,15 @@ const useUserInfoStore = defineStore('userInfoStore', () => {
   };
 });
 
-export { useUserInfoStore };
+//数据看板个人信息
+const useDateboardStore = defineStore('useDateboardStore', () => {
+  let personDate = ref({});
+  function setPersonDate(val: object) {
+    personDate.value = val;
+  }
+  return {
+    personDate,
+    setPersonDate
+  };
+});
+export { useUserInfoStore, useDateboardStore };

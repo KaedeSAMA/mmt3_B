@@ -40,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/home/dateBoard',
         name: 'dateBoard',
-        component: () => import('@/pages/Home/dateBoard/dateBoard.vue')
+        component: () => import('@/pages/Home/dateBoard/dateBoardHome.vue')
       }
     ]
   }
