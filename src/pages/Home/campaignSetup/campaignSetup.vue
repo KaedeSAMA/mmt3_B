@@ -1,9 +1,6 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
 import type { TabsPaneContext } from 'element-plus';
 import BaseInfo from './subpage/baseInfo.vue';
-import ClubPromotion from './subpage/clubPromotion.vue';
-import RecruitDept from './subpage/recruitDept.vue';
 import MobilePhone from './subpage/mobile.vue';
 import { useOrgInfo } from '@/store/mobile';
 
