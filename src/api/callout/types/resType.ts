@@ -82,6 +82,12 @@ interface TagList {
    */
   type: number;
 }
+export interface Avatar {
+  /**
+   * 社团组织头像url
+   */
+  avatarUrl: string;
+}
 export type TUpdateDeptInfoRes = IBaseResponse<null>;
 export type TGetDeptInfoRes = IBaseResponse<Data>;
-export type TUpdateDeptLogoRes = IBaseResponse<null>;
+export type TUpdateDeptLogoRes = IBaseResponse<Avatar>;

@@ -32,13 +32,12 @@ export const getDeptInfo = async () => {
 };
 
 export const updateDeptLogo = async (formData: AvatarUploadRequest) => {
-  console.log('updateDeptLogo', formData);
   const data = await _axios.post<TUpdateDeptLogoRes, AvatarUploadRequest>(
-    '/local/b/admin/avatar/upload',
+    '/local/b/admin/organization/avatar/upload',
     formData,
     {
       headers: {
-        'Content-Type': 'application/form-data'
+        'Content-Type': 'multipart/form-data'
       }
     }
   );

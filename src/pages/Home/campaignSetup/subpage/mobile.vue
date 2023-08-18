@@ -32,9 +32,11 @@ const toDepDetail = (index: number) => {
                 {{ organizeInfo.name }}
               </div>
               <div class="organizeTags">
-                <div class="tag" v-for="item in organizeInfo.tagList">
-                  {{ item.tag }}
-                </div>
+                <template v-for="item in organizeInfo.tagList">
+                  <div class="tag" v-if="item.tag ?? '' != ''">
+                    {{ item.tag }}
+                  </div>
+                </template>
               </div>
             </div>
           </section>
@@ -169,6 +171,7 @@ const toDepDetail = (index: number) => {
             display: flex;
             margin-top: 6px;
             flex-wrap: wrap;
+            gap: 5px;
             .tag {
               font-size: 11px;
               border: 1px solid #1890ff;
