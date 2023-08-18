@@ -274,6 +274,7 @@ const toDepDetail = (index: number) => {
       .info {
         width: 90%;
         margin-left: 10px;
+        padding-top: 10px;
 
         .title {
           color: #2c405a;
@@ -285,6 +286,9 @@ const toDepDetail = (index: number) => {
           color: #3f536e;
           font-size: 12px;
           letter-spacing: 2px;
+        }
+        .van-ellipsis {
+          padding: 10px 5px 20px;
         }
       }
     }

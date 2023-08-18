@@ -58,36 +58,37 @@ const selectList2 = ref([
 ]);
 // store
 const organizeInfo = useOrgInfo();
+// const data = reactive<Data>({
+//   name: '加载中',
+//   avatarUrl: '#',
+//   briefIntroduction: '加载中',
+//   tagList: [
+//     {
+//       tag: '加载中',
+//       type: 1
+//     },
+//     {
+//       tag: '加载中',
+//       type: 1
+//     }
+//   ],
+//   introduction: '加载中',
+//   feature: '加载中',
+//   daily: '加载中',
+//   slogan: '加载中',
+//   contactInfo: '加载中',
+//   more: '加载中',
+//   departmentList: []
+// });
 /**
  * getDeptInfo返回的数据
  */
-const data = reactive<Data>({
-  name: '加载中',
-  avatarUrl: '#',
-  briefIntroduction: '加载中',
-  tagList: [
-    {
-      tag: '加载中',
-      type: 1
-    },
-    {
-      tag: '加载中',
-      type: 1
-    }
-  ],
-  introduction: '加载中',
-  feature: '加载中',
-  daily: '加载中',
-  slogan: '加载中',
-  contactInfo: '加载中',
-  more: '加载中',
-  departmentList: []
-});
+const data = organizeInfo.data;
 onMounted(async () => {
   const res = (await getDeptInfo()) as Data;
   console.log(res);
   // 使用 Object.assign 更新响应式对象
-  Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
+  // Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
   organizeInfo.setOrgInfo(res); //更新store
   initTagListFix(); // 补全tagList
 });
@@ -192,20 +193,17 @@ const addDepartment = () => {
   data.departmentList.push({
     id: null,
     name: '',
-    briefIntroduction:
-      '',
-    introduction:
-      '',
-    standard:
-      ''
+    briefIntroduction: '',
+    introduction: '',
+    standard: ''
   });
 };
 </script>
 
 <template>
-  <div class="scroll-container">
+  <div class="scroll-container" id="main-container">
     <div class="content">
-      <article>
+      <article id="baseInfo">
         <h1 @click="updateTest">test</h1>
         <header class="title-style">基本信息</header>
         <section class="base-info">
@@ -291,8 +289,8 @@ const addDepartment = () => {
             </el-form-item>
           </el-form>
         </section>
-      </article>      
-      <article>
+      </article>
+      <article id="clubPromotion">
         <header class="title-style">社团宣传</header>
         <!-- clubPromotion -->
         <section style="box-sizing: border-box; padding: 0px 5vw">
@@ -346,7 +344,7 @@ const addDepartment = () => {
           </el-form>
         </section>
       </article>
-      <article>
+      <article id="recruitDept">
         <header class="title-style">纳新部门</header>
         <!-- departmentList -->
         <section style="box-sizing: border-box; padding: 0px 5vw">
@@ -362,7 +360,9 @@ const addDepartment = () => {
                   style="cursor: pointer; margin: 0 20px 0 -45px"
                   ><CirclePlus
                 /></el-icon>
-                <div style="color: var(--el-text-color-regular);">{{ department.name || '未命名' }}</div>
+                <div style="color: var(--el-text-color-regular)">
+                  {{ department.name || '未命名' }}
+                </div>
               </div>
               <el-form-item style="display: flex; align-items: center" required>
                 <template #label>
@@ -420,7 +420,7 @@ const addDepartment = () => {
       <section
         style="display: flex; justify-content: flex-end; margin-right: 10%"
       >
-        <el-button type="primary" @click="saveTemp"> 暂时保存并预览 </el-button>
+        <el-button type="primary" @click="saveTemp"> 暂时保存 </el-button>
         <el-button type="primary" @click="updSyncDeptInfoAll">
           确定同步
         </el-button>
@@ -488,6 +488,6 @@ const addDepartment = () => {
   margin-left: 4.5%;
   margin-bottom: 20px;
   padding-left: 10px;
-  border-left: 4px solid var(--el-color-primary);;
+  border-left: 4px solid var(--el-color-primary);
 }
 </style>
