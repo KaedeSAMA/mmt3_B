@@ -57,7 +57,7 @@ interface DepartmentList {
   /**
    * 社团纳新部门id，用于更新社团纳新宣传信息时传参，表示已有该社团
    */
-  id: number;
+  id: number | null;
   /**
    * 社团纳新部门介绍
    */

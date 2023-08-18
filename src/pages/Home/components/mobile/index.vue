@@ -1,5 +1,11 @@
 <template>
-  <div class="device iphone-x">
+  <div
+    class="device iphone-x"
+    :style="{
+      width: deviceProp.deviceWidth + 'px',
+      height: deviceProp.deviceHeight + 'px'
+    }"
+  >
     <!-- 听筒孔 -->
     <div class="header">
       <div class="sensors"></div>
@@ -11,22 +17,34 @@
     <div class="stripe"></div>
 
     <!--    外部轮廓    -->
-    <div class="frame">
+    <div
+      class="frame"
+      :style="{
+        width: deviceProp.deviceWidth + 'px',
+        height: deviceProp.deviceHeight + 'px'
+      }"
+    >
       <div class="content">
         <slot></slot>
       </div>
     </div>
   </div>
 </template>
-
-<style lang="scss">
-:root {
-  --mobile-device-width: 342px;
-  --mobile-device-height: 665px;
-}
-</style>
-
+<script setup lang="ts">
+const deviceProp = defineProps({
+  deviceWidth: {
+    type: Number,
+    default: 50
+  },
+  deviceHeight: {
+    type: Number,
+    default: 50
+  }
+});
+</script>
 <style scoped lang="scss">
+// $mobile-device-width: 342px;
+// $mobile-device-height: 665px;
 .device *,
 .device *::before,
 .device *::after {
@@ -44,8 +62,8 @@
 }
 
 .iphone-x {
-  height: var(--mobile-device-height);
-  width: var(--mobile-device-width);
+  // height: $mobile-device-height;
+  // width: $mobile-device-width;
 
   .content {
     background-color: #fff;
@@ -64,9 +82,9 @@
   background: #222;
   border-radius: 54px;
   box-shadow: inset 0 0 0 2px #606467, inset 0 0 0 6px #e2e3e4;
-  height: var(--mobile-device-height);
   padding: 22px;
-  width: var(--mobile-device-width);
+  // height: $mobile-device-height;
+  // width: $mobile-device-width;
 }
 
 .iphone-x .stripe::after,

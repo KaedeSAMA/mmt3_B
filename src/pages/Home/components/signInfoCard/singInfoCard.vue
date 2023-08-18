@@ -17,7 +17,8 @@ const props = defineProps({
   }
 });
 const markContent = computed(() => {
-  return marked(props.content as string).replace(/\n/g, '<br/>');
+  const content = props.content ?? ''; // 判断是否为undefined
+  return marked(content as string).replace(/\n/g, '<br/>');
 });
 </script>
 
