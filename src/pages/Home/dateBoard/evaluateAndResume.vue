@@ -41,12 +41,15 @@ const close = () => {
     cursor: pointer;
   }
   .resume {
-    width: 50%;
+    width: 49%;
     display: inline-block;
     vertical-align: top;
+    box-sizing: border-box;
+    padding-left: 15px;
   }
   .evaluate {
-    width: 50%;
+    width: 49%;
+    margin-left: 2%;
     // background-color: rgb(58, 206, 214);
     display: inline-block;
     vertical-align: top;

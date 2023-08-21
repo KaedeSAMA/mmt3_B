@@ -182,7 +182,7 @@ const tableData = [
       display: inline-block;
       height: 40px;
       line-height: 40px;
-      width: 300px;
+      width: 285px;
       ::v-deep .el-input.is-disabled .el-input__inner,
       ::v-deep .el-input.is-disabled {
         cursor: default;
