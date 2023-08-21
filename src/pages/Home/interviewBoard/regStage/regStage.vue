@@ -5,7 +5,7 @@
         <filterButton></filterButton>
       </div>
       <allContent v-if="myDepartmentId == 0"></allContent>
-      <partContent v-else></partContent>
+      <partContent v-else :key="myDepartmentId"></partContent>
     </div>
   </div>
 </template>
