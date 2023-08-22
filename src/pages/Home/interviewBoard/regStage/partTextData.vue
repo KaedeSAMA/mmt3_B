@@ -16,10 +16,12 @@
 <script setup lang="ts">
 import { beforeNumData } from '@/api/interviewBoard/index';
 import bus from 'vue3-eventbus';
+import { defineComponent, inject } from 'vue';
 
-let myDepartmentId = ref(1);
+let myDepartmentId: any = inject('myDepartmentId');
+
 bus.on('beforeMyDepartmentId', (data: any) => {
-  myDepartmentId.value = data;
+  myDepartmentId = data;
 });
 
 let myData: any = ref({
@@ -33,7 +35,7 @@ onMounted(async () => {
   if (data) {
     console.log('beforeNumData');
     console.log(data);
-    // myData.value = data;
+    myData.value = data;
   }
 });
 </script>

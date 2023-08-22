@@ -14,11 +14,14 @@ import filterButton from './filterButton.vue';
 import allContent from './allContent.vue';
 import partContent from './partContent.vue';
 import bus from 'vue3-eventbus';
+import { defineComponent, provide } from 'vue';
 
 let myDepartmentId = ref(0);
 bus.on('beforeMyDepartmentId', (data: any) => {
   myDepartmentId.value = data;
 });
+
+provide('myDepartmentId', myDepartmentId);
 </script>
 <style scoped lang="scss">
 .biggest {

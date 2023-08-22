@@ -30,6 +30,8 @@ import {
 import VChart from 'vue-echarts';
 import { ref } from 'vue';
 import bus from 'vue3-eventbus';
+import { defineComponent, inject } from 'vue';
+
 interface ChartsData {
   value: number;
   name: string;
@@ -42,9 +44,10 @@ use([
   LegendComponent
 ]);
 
-let myDepartmentId = ref(1);
+let myDepartmentId: any = inject('myDepartmentId');
+
 bus.on('beforeMyDepartmentId', (data: any) => {
-  myDepartmentId.value = data;
+  myDepartmentId = data;
 });
 
 let myData: any = ref({

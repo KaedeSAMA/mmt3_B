@@ -11,10 +11,21 @@
         ref="Btn"
         plain
         size="default"
+        key="0"
+        id="0"
+        class="depBtn clBtn"
+        >全部</el-button
+      >
+      <el-button
+        @click="clDepartment($event)"
+        style="margin: 0 20px 0 0"
+        ref="Btn"
+        plain
+        size="default"
         v-for="item in myData.departments"
         :key="item.departmentId"
         :id="item.departmentId"
-        :class="item.departmentId == 0 ? 'depBtn clBtn' : 'depBtn'"
+        class="depBtn"
         >{{ item.departmentName }}</el-button
       >
     </el-row>
@@ -28,10 +39,6 @@ import bus from 'vue3-eventbus';
 let myData: any = ref({
   num: 3,
   departments: [
-    {
-      departmentId: 0,
-      departmentName: '全部'
-    },
     {
       departmentId: 1,
       departmentName: '部门一'
@@ -56,6 +63,8 @@ function clDepartment(acDep: any) {
   });
   acDep.currentTarget.classList.add('clBtn');
   myDepartmentId = acDep.currentTarget.id;
+  console.log(myDepartmentId);
+
   bus.emit('beforeMyDepartmentId', myDepartmentId);
 }
 
@@ -65,7 +74,7 @@ onMounted(async () => {
   if (data) {
     console.log('getAllDepartment');
     console.log(data);
-    // myData.value = data;
+    myData.value = data;
   }
 });
 </script>

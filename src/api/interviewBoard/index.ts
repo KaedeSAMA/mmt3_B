@@ -23,7 +23,7 @@ const getAllDepartment = async () => {
 const beforeNumData = async (departmentId: number) => {
   const data = await _axios.get<BeforeNumData, BeforeNumDataArg>(
     '/local/b/interview/before/numData',
-    { departmentId }
+    departmentId ? { departmentId } : undefined
   );
   if (data.code !== '00000') {
     ElMessage.error(data.message);

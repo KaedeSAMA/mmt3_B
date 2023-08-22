@@ -33,7 +33,7 @@ onMounted(async () => {
   if (data) {
     console.log('beforeNumData');
     console.log(data);
-    // myData.value = data;
+    myData.value = data;
   }
 });
 </script>
