@@ -26,7 +26,7 @@ export const getDeptInfo = async () => {
   );
   if (data.code !== '00000') {
     ElMessage.error(data.message);
-    return;
+    throw new Error("/b/admin/organization/info/get,114514");
   }
   return data.data;
 };

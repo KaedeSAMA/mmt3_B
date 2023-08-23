@@ -14,6 +14,9 @@ import type {
   UploadRawFile,
   UploadRequestOptions
 } from 'element-plus';
+import IndexDBWrapper from '@/utils/indexDB';
+// ### 用于存储用户登录时的社团ID
+import { useUserInfoStore } from '@/store/index';
 const selectList1 = ref([
   //Map
   {
@@ -56,8 +59,9 @@ const selectList2 = ref([
     value: '自律互助'
   }
 ]);
-// store
+/* store */
 const organizeInfo = useOrgInfo();
+const userInfoStore = useUserInfoStore();
 // const data = reactive<Data>({
 //   name: '加载中',
 //   avatarUrl: '#',
@@ -80,25 +84,38 @@ const organizeInfo = useOrgInfo();
 //   more: '加载中',
 //   departmentList: []
 // });
-/**
- * getDeptInfo返回的数据
- */
+
+/* getDeptInfo返回的数据 */
 const data = organizeInfo.data;
+
+/* indexDB */
+const indexDB = new IndexDBWrapper<Data>('myDatabase', 'myStore', 'name');
+console.log(indexDB);
+/**
+ * @description: 初始化
+ */
 onMounted(async () => {
   //检查本地存储是否有数据
   const res1 = sessionStorage.getItem('promotionInfoData');
   if (res1) {
     const res = JSON.parse(res1) as Data;
-    organizeInfo.setOrgInfo(res); //更新store
-    return;
+    // 检查本地存储的是否是当前社团的信息
+    if (res.id == userInfoStore.nowOrgnazitionId) {
+      organizeInfo.setOrgInfo(res); //更新store
+      return;
+    }
   }
   // 从后端获取数据
-  const res = (await getDeptInfo()) as Data;
-  // 使用 Object.assign 更新响应式对象
-  // Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
-  organizeInfo.setOrgInfo(res); //更新store
-  sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
-  initTagListFix(); // 补全tagList
+  try {
+    const res = (await getDeptInfo()) as Data;
+    // 使用 Object.assign 更新响应式对象
+    // Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
+    organizeInfo.setOrgInfo(res); //更新store
+    sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
+    initTagListFix(); // 补全tagList
+  } catch (err) {
+    console.log(err);
+  }
 });
 /**
  * @description 更新部门信息
