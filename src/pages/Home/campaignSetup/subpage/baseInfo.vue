@@ -85,10 +85,19 @@ const organizeInfo = useOrgInfo();
  */
 const data = organizeInfo.data;
 onMounted(async () => {
+  //检查本地存储是否有数据
+  const res1 = sessionStorage.getItem('promotionInfoData');
+  if (res1) {
+    const res = JSON.parse(res1) as Data;
+    organizeInfo.setOrgInfo(res); //更新store
+    return;
+  }
+  // 从后端获取数据
   const res = (await getDeptInfo()) as Data;
   // 使用 Object.assign 更新响应式对象
   // Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
   organizeInfo.setOrgInfo(res); //更新store
+  sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
   initTagListFix(); // 补全tagList
 });
 /**
@@ -128,6 +137,7 @@ const updSyncDeptInfoAll = async () => {
     if (isConfirm == 'cancel') return;
     await updateDeptInfo(updateData);
     organizeInfo.setOrgInfo(data); //更新store
+    sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
   } catch (err) {
     console.log('取消:', err);
     ElMessage.warning('取消同步');
@@ -138,6 +148,7 @@ const updSyncDeptInfoAll = async () => {
  */
 const saveTemp = () => {
   organizeInfo.setOrgInfo(data);
+  sessionStorage.setItem('promotionInfoData', JSON.stringify(data));
   ElMessage.success('保存成功');
 };
 const upload = ref<UploadInstance>();
