@@ -6,7 +6,7 @@ import {
   getDeptInfo,
   updateDeptLogo
 } from '@/api/callout/index';
-import { genFileId } from 'element-plus';
+import { ElMessageBox, genFileId } from 'element-plus';
 import { CirclePlus, Remove } from '@element-plus/icons-vue';
 import type {
   UploadInstance,
@@ -95,7 +95,7 @@ onMounted(async () => {
  * @description 更新部门信息
  */
 const updSyncDeptInfoAll = async () => {
-  console.log(data);
+  // console.log(data);
   const {
     briefIntroduction,
     contactInfo,
@@ -119,16 +119,26 @@ const updSyncDeptInfoAll = async () => {
     slogan,
     tagList
   };
-
-  const res = await updateDeptInfo(updateData);
-  console.log(res);
-  organizeInfo.setOrgInfo(data); //更新store
+  try {
+    const isConfirm = await ElMessageBox.confirm('确定要同步吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    });
+    if (isConfirm == 'cancel') return;
+    await updateDeptInfo(updateData);
+    organizeInfo.setOrgInfo(data); //更新store
+  } catch (err) {
+    console.log('取消:', err);
+    ElMessage.warning('取消同步');
+  }
 };
 /**
  * @description: 保存临时数据同步到模拟器
  */
 const saveTemp = () => {
   organizeInfo.setOrgInfo(data);
+  ElMessage.success('保存成功');
 };
 const upload = ref<UploadInstance>();
 const handleExceed: UploadProps['onExceed'] = (files) => {

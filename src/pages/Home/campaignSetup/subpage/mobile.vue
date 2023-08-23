@@ -10,7 +10,8 @@ let { data, activeTab, setActiveTab } = useOrgInfo();
 const organizeInfo: Data = data;
 const toDepDetail = (index: number) => {
   isList.value = false;
-  Object.assign(activeDep, organizeInfo.departmentList[index]);
+  activeDep = organizeInfo.departmentList[index]; //为了确保能同步更新，不使用拷贝而传递引用
+  // Object.assign(activeDep, organizeInfo.departmentList[index]);
 };
 </script>
 
@@ -21,11 +22,7 @@ const toDepDetail = (index: number) => {
         <div class="card">
           <section class="organize" @click="setActiveTab(1)">
             <div class="organizeImg">
-              <img :src="organizeInfo.avatarUrl" alt="logo" />
-              <!-- <img
-                src="https://p5.itc.cn/q_70/images03/20220512/ecc151fbd129466aaa41ec90b4cef96c.gif"
-                alt="logo"
-              /> -->
+              <img :src="organizeInfo.avatarUrl" alt="logo" />             
             </div>
             <div class="organizeAttr">
               <div class="organizeName">
