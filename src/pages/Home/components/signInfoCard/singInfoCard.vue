@@ -28,7 +28,7 @@ const markContent = computed(() => {
   min-height: 75px;
   background-color: #fff;
   border-radius: 10px;
-  overflow: hidden;
+  overflow-wrap: break-word;
   .details_content {
     padding: 0 20px;
     font-size: 12px;

@@ -517,6 +517,8 @@ const deleteDepartment = (index: number) => {
   margin-bottom: 20px;
   padding-left: 10px;
   border-left: 4px solid var(--el-color-primary);
+  letter-spacing: 2px;
+  padding: 8px;
 }
 
 #recruitDept {

@@ -75,6 +75,21 @@ const deviceProp = defineProps({
     align-items: center;
     // justify-content: flex-start;
     justify-content: center;
+    /* 兜底，防止组件内容溢出导致样式崩溃 */
+    overflow: hidden;
+    // overflow-y: auto;
+    // overflow-x: hidden;
+    // &::-webkit-scrollbar {
+    //   width: 0em;
+    // }
+    // &::-webkit-scrollbar-thumb {
+    //   background-color: #bebdbd; //#888888; /* 滑块颜色 */
+    //   border-radius: 0.25em; /* 滑块圆角 */
+    // }
+    // &::-webkit-scrollbar-track {
+    //   background-color: transparent; /* 背景颜色 */
+    //   border-radius: 0.25em; /* 背景圆角 */
+    // }
   }
 }
 

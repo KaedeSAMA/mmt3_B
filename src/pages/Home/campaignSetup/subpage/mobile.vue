@@ -22,7 +22,7 @@ const toDepDetail = (index: number) => {
         <div class="card">
           <section class="organize" @click="setActiveTab(1)">
             <div class="organizeImg">
-              <img :src="organizeInfo.avatarUrl" alt="logo" />             
+              <img :src="organizeInfo.avatarUrl" alt="logo" />
             </div>
             <div class="organizeAttr">
               <div class="organizeName">
@@ -111,16 +111,18 @@ const toDepDetail = (index: number) => {
             <i class="el-icon-arrow-left"></i>
             <span>返回</span>
           </div>
-          <sign-info-card
-            title="部门介绍"
-            :content="activeDep.introduction"
-            v-if="activeDep.introduction ?? '' !== ''"
-          ></sign-info-card>
-          <sign-info-card
-            title="纳新标准"
-            :content="activeDep.standard"
-            v-if="activeDep.standard ?? '' !== ''"
-          ></sign-info-card>
+          <div class="detail_message">
+            <sign-info-card
+              title="部门介绍"
+              :content="activeDep.introduction"
+              v-if="activeDep.introduction ?? '' !== ''"
+            ></sign-info-card>
+            <sign-info-card
+              title="纳新标准"
+              :content="activeDep.standard"
+              v-if="activeDep.standard ?? '' !== ''"
+            ></sign-info-card>
+          </div>
         </div>
       </div>
     </MobileBox>
@@ -295,16 +297,37 @@ const toDepDetail = (index: number) => {
   }
 
   .departmentDetail {
+    height: 100%;
+    overflow: hidden;
     .headNav {
       margin-top: 10px;
       margin-left: 10px;
       cursor: pointer;
+      /* 防止mobile组件的after伪元素遮挡 */
+      position: relative;
+      z-index: 200;
 
       span {
         margin-left: 10px;
       }
     }
+    .detail_message {
+      height: 90%;
+      margin: 0 auto;
+      overflow: scroll;
+      // 隐藏滚动条
+      scrollbar-width: none;
 
+      &::-webkit-scrollbar {
+        display: none;
+        /* Chrome Safari */
+      }
+
+      .sign_details {
+        margin-top: 10px;
+      }
+    }
+    /* 未显示reference，但是有用，勿删 */
     .sign_details {
       width: 90%;
       margin: 0 auto;
