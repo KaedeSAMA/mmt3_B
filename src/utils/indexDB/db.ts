@@ -3,7 +3,7 @@ import Dexie, { Table } from 'dexie';
 import { Data } from '@/api/callout/types/resType';
 
 class MyIndexDBClass extends Dexie {
-  promotionInfo!: Table<Data,number>;
+  promotionInfo!: Table<Data, number>;
 
   constructor() {
     super('myDatabase');

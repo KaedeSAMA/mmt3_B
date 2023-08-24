@@ -146,7 +146,7 @@ const toDepDetail = (index: number) => {
       .card {
         width: 96%;
         margin: 0 auto;
-        background-color: #f8f8f8;
+        background-color: #fff;
         border-radius: 20px;
         margin-top: 48px;
         border: 2px solid #e8e8e8;
@@ -206,7 +206,7 @@ const toDepDetail = (index: number) => {
       width: 91%;
       height: 90%;
       overflow: hidden; //超出视野隐藏
-      background-color: #f8f8f8;
+      background-color: #fff;
       text-align: left;
 
       .sign_message {
@@ -253,7 +253,7 @@ const toDepDetail = (index: number) => {
     .department {
       width: 91%;
       height: 90%;
-      background-color: #f8f8f8;
+      background-color: #fff;
       text-align: left;
     }
   }
