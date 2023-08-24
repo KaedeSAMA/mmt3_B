@@ -16,6 +16,7 @@ import type {
 } from 'element-plus';
 // import IndexDBWrapper from '@/utils/indexDB/index';
 import infoDB from '@/utils/indexDB/db';
+import { getUserBasicInfo } from '@/api/personalPage';
 // ### 用于存储用户登录时的社团ID
 // import { useUserInfoStore } from '@/store/index';
 // const userInfoStore = useUserInfoStore();
@@ -208,6 +209,25 @@ const addDepartment = () => {
 const deleteDepartment = (index: number) => {
   data.departmentList.splice(index, 1);
 };
+
+/* 权限 */
+onMounted(async () => {
+  await getPerssion();
+});
+const permission = ref(true);
+/**
+ * @description 获取权限信息
+ * @description 不把权限信息放在store里面，因为刷新会导致丢失，而存到storage不安全
+ */
+const getPerssion = async () => {
+  console.log('getting permission...');
+  const res = (await getUserBasicInfo()) as {
+    permissionId: number;
+    organizationId: number;
+  };
+  if (res.permissionId == 1) permission.value = false;
+  sessionStorage.setItem('organizationId', res.organizationId + '');
+};
 </script>
 
 <template>
@@ -232,7 +252,10 @@ const deleteDepartment = (index: number) => {
               :on-change="handleChange"
             >
               <template #trigger>
-                <el-button type="primary" style="width: 150px"
+                <el-button
+                  type="primary"
+                  style="width: 150px"
+                  :disabled="permission"
                   >上传头像</el-button
                 >
               </template>
@@ -247,7 +270,7 @@ const deleteDepartment = (index: number) => {
               <el-form-item label="属性" class="tag-list">
                 <el-select
                   placeholder="请输入性质"
-                  :disabled="false"
+                  :disabled="permission"
                   v-model="data.tagList[0].tag"
                 >
                   <el-option
@@ -257,6 +280,7 @@ const deleteDepartment = (index: number) => {
                   />
                 </el-select>
                 <el-select
+                  :disabled="permission"
                   placeholder="请输入属性"
                   v-model="data.tagList[1].tag"
                 >
@@ -268,12 +292,13 @@ const deleteDepartment = (index: number) => {
                 </el-select>
                 <template v-for="(item, index) in data.tagList">
                   <el-input
+                    :disabled="permission"
                     placeholder="请输入标签"
                     style="max-width: 214.5px"
                     v-if="item.type === 2"
                     v-model="item.tag"
                   >
-                    <template #suffix>
+                    <template #suffix v-if="!permission">
                       <div @click="deleteTag(index)">
                         <el-icon><Remove /></el-icon>
                       </div>
@@ -281,8 +306,9 @@ const deleteDepartment = (index: number) => {
                   </el-input>
                 </template>
                 <el-button
+                  :disabled="permission"
                   style="align-self: self-start"
-                  v-if="data.tagList.length < 4"
+                  v-if="data.tagList.length < 4 && !permission"
                   @click="addTag"
                   >+ 自定义</el-button
                 >
@@ -300,6 +326,7 @@ const deleteDepartment = (index: number) => {
                 >
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
                 :autosize="{ minRows: 7 }"
                 v-model="data.briefIntroduction"
@@ -320,6 +347,7 @@ const deleteDepartment = (index: number) => {
                 >
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
                 :autosize="{ minRows: 7 }"
                 v-model="data.introduction"
@@ -332,6 +360,7 @@ const deleteDepartment = (index: number) => {
                 >
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
                 :autosize="{ minRows: 7 }"
                 v-model="data.feature"
@@ -344,6 +373,7 @@ const deleteDepartment = (index: number) => {
                 >
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
                 :autosize="{ minRows: 7 }"
                 v-model="data.daily"
@@ -356,6 +386,7 @@ const deleteDepartment = (index: number) => {
                 >
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
                 :autosize="{ minRows: 7 }"
                 v-model="data.slogan"
@@ -368,6 +399,7 @@ const deleteDepartment = (index: number) => {
                 >
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
                 :autosize="{ minRows: 7 }"
                 v-model="data.contactInfo"
@@ -378,6 +410,7 @@ const deleteDepartment = (index: number) => {
                 <label style="font-size: 17px; font-weight: 400">更多</label>
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
                 :autosize="{ minRows: 7 }"
                 v-model="data.more"
@@ -398,7 +431,9 @@ const deleteDepartment = (index: number) => {
                   <el-icon
                     :size="25"
                     color="#409eff"
-                    v-if="index == data.departmentList.length - 1"
+                    v-if="
+                      index == data.departmentList.length - 1 && !permission
+                    "
                     @click="addDepartment"
                     ><CirclePlus
                   /></el-icon>
@@ -407,7 +442,7 @@ const deleteDepartment = (index: number) => {
                   <el-icon
                     :size="25"
                     color="#409eff"
-                    v-if="index !== 0"
+                    v-if="index !== 0 && !permission"
                     @click="deleteDepartment(index)"
                     ><Remove
                   /></el-icon>
@@ -423,6 +458,7 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   placeholder="请输入部门名称"
                   style="max-width: 214.5px"
                   v-model="department.name"
@@ -435,6 +471,7 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   placeholder="请输入部门简介"
                   style="max-width: 214.5px"
                   v-model="department.briefIntroduction"
@@ -448,6 +485,7 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   type="textarea"
                   :autosize="{ minRows: 7 }"
                   v-model="department.introduction"
@@ -460,6 +498,7 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   type="textarea"
                   :autosize="{ minRows: 7 }"
                   v-model="department.standard"
