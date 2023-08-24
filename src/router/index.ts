@@ -51,20 +51,23 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/home/currentInterview',
         name: 'currentInterview',
-        component: () => import('@/pages/Home/currentIntrview/currentInterview.vue')
+        component: () =>
+          import('@/pages/Home/currentIntrview/currentInterview.vue')
       },
       // 面试安排路由
       {
         path: '/home/interviewArrangement',
         name: 'interviewArrangement',
-        component: () => import('@/pages/Home/interviewArrangement/interviewArrangement.vue')
+        component: () =>
+          import('@/pages/Home/interviewArrangement/interviewArrangement.vue')
       },
       // 面试复盘路由
       {
         path: '/home/interviewReply',
         name: 'interviewReply',
-        component: () => import('@/pages/Home/interviewReply/interviewReply.vue')
-      },
+        component: () =>
+          import('@/pages/Home/interviewReply/interviewReply.vue')
+      }
     ]
   }
 ];

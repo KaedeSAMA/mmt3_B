@@ -141,31 +141,31 @@ type TGetResumeMessage = {
 type TGetResumeMessageRes = IBaseResponce<TGetResumeMessage>;
 
 // 面试评价接口返回数据
-type TResultItem={
-  name:string,
-  opinion:string
-}
-type TGetEvaluateMessage={
-  status: number,
-  round: string,
-  interviewResult: Array<TResultItem>,
-  PassDepartment:string,
-  isTransfers:string,
-  passResult:Array<TResultItem>,
-  interviewGradingPo:{
-    rank:number,
-    interviewer:{
-      project:string,
-      name:Array<string>
-    },
-    questionPoList:Array<{
-      question:string,
-      score:[number]
-    }>
-  },
-  comprehensiveQuestionList:Array<TResultItem>
-}
-type TGetEvaluateMessageRes=IBaseResponce<TGetEvaluateMessage>
+type TResultItem = {
+  name: string;
+  opinion: string;
+};
+type TGetEvaluateMessage = {
+  status: number;
+  round: string;
+  interviewResult: Array<TResultItem>;
+  PassDepartment: string;
+  isTransfers: string;
+  passResult: Array<TResultItem>;
+  interviewGradingPo: {
+    rank: number;
+    interviewer: {
+      project: string;
+      name: Array<string>;
+    };
+    questionPoList: Array<{
+      question: string;
+      score: [number];
+    }>;
+  };
+  comprehensiveQuestionList: Array<TResultItem>;
+};
+type TGetEvaluateMessageRes = IBaseResponce<TGetEvaluateMessage>;
 export type {
   IBaseResponce,
   TGetOrganizationRes,

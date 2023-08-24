@@ -4,8 +4,8 @@ type TGetOrganization = {
 type TGetResume = {
   id: number;
 };
-type TGetEvaluate={
-  id:number;
-  round:number
-}
-export type { TGetOrganization, TGetResume ,TGetEvaluate};
+type TGetEvaluate = {
+  id: number;
+  round: number;
+};
+export type { TGetOrganization, TGetResume, TGetEvaluate };

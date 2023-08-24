@@ -8,7 +8,7 @@ import {
   TGetEvaluateMessageRes
 } from '@/api/types/resType';
 import { Tfilter, Tpage } from '@/api/types/dataType';
-import { TGetResume ,TGetEvaluate} from '@/api/types/paramsType';
+import { TGetResume, TGetEvaluate } from '@/api/types/paramsType';
 // 全部数据，既有query又有body原生axios
 const getFilterData = async (page: Tpage, filterCondition: Tfilter) => {
   const res = await axios({
@@ -44,12 +44,11 @@ const getResumeDate = async (id: number) => {
   console.log(res);
 };
 // 面试评价接口
-const getEvaluate=async(id:number,round:number)=>{
-  const res = await _axios.get<TGetEvaluateMessageRes,TGetEvaluate>(
+const getEvaluate = async (id: number, round: number) => {
+  const res = await _axios.get<TGetEvaluateMessageRes, TGetEvaluate>(
     '/local/b/data/dashboard/interview/evaluation/info',
-    { id:id,
-      round:round }
+    { id: id, round: round }
   );
   console.log(res);
-}
-export { getFilterData, getExportData, getResumeDate ,getEvaluate};
+};
+export { getFilterData, getExportData, getResumeDate, getEvaluate };
