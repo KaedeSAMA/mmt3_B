@@ -301,7 +301,7 @@ const deleteDepartment = (index: number) => {
               </template>
               <el-input
                 type="textarea"
-                :rows="7"
+                :autosize="{ minRows: 7 }"
                 v-model="data.briefIntroduction"
               />
             </el-form-item>
@@ -319,7 +319,11 @@ const deleteDepartment = (index: number) => {
                   >社团介绍</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.introduction" />
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.introduction"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -327,7 +331,11 @@ const deleteDepartment = (index: number) => {
                   >社团特色</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.feature" />
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.feature"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -335,7 +343,11 @@ const deleteDepartment = (index: number) => {
                   >社团日常</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.daily" />
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.daily"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -343,7 +355,11 @@ const deleteDepartment = (index: number) => {
                   >纳新宣言</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.slogan" />
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.slogan"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -351,13 +367,21 @@ const deleteDepartment = (index: number) => {
                   >联系方式</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.contactInfo" />
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.contactInfo"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
                 <label style="font-size: 17px; font-weight: 400">更多</label>
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.more" />
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.more"
+              />
             </el-form-item>
           </el-form>
         </section>
@@ -425,7 +449,7 @@ const deleteDepartment = (index: number) => {
                 </template>
                 <el-input
                   type="textarea"
-                  :rows="7"
+                  :autosize="{ minRows: 7 }"
                   v-model="department.introduction"
                 />
               </el-form-item>
@@ -437,7 +461,7 @@ const deleteDepartment = (index: number) => {
                 </template>
                 <el-input
                   type="textarea"
-                  :rows="7"
+                  :autosize="{ minRows: 7 }"
                   v-model="department.standard"
                 />
               </el-form-item>
@@ -445,16 +469,29 @@ const deleteDepartment = (index: number) => {
           </template>
         </section>
       </article>
-      <section
+      <!-- <section
         style="display: flex; justify-content: flex-end; margin-right: 10%"
       >
         <el-button type="primary" @click="saveTemp"> 暂时保存 </el-button>
         <el-button type="primary" @click="updSyncDeptInfoAll">
           确定同步
         </el-button>
-      </section>
+      </section> -->
+      <div style="height: 6%"></div>
     </div>
   </div>
+  <section
+    style="
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-right: 10%;
+      margin-top: 10px;
+    "
+  >
+    <el-button type="primary" @click="saveTemp"> 暂时保存 </el-button>
+    <el-button type="primary" @click="updSyncDeptInfoAll"> 确定同步 </el-button>
+  </section>
 </template>
 
 <style scoped lang="scss">
