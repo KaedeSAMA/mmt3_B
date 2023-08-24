@@ -469,18 +469,18 @@ const deleteDepartment = (index: number) => {
           </template>
         </section>
       </article>
-      <!-- <section
+      <section
         style="display: flex; justify-content: flex-end; margin-right: 10%"
       >
         <el-button type="primary" @click="saveTemp"> 暂时保存 </el-button>
         <el-button type="primary" @click="updSyncDeptInfoAll">
           确定同步
         </el-button>
-      </section> -->
-      <div style="height: 6%"></div>
+      </section>
+      <!-- <div style="height: 6%"></div> -->
     </div>
   </div>
-  <section
+  <!-- <section
     style="
       display: flex;
       justify-content: flex-end;
@@ -491,7 +491,7 @@ const deleteDepartment = (index: number) => {
   >
     <el-button type="primary" @click="saveTemp"> 暂时保存 </el-button>
     <el-button type="primary" @click="updSyncDeptInfoAll"> 确定同步 </el-button>
-  </section>
+  </section> -->
 </template>
 
 <style scoped lang="scss">
