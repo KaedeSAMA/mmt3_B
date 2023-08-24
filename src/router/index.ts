@@ -36,6 +36,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
           import('@/pages/Home/regFormSetting/regFormSetting.vue')
       },
+      //数据看板路由
+      {
+        path: '/home/dateBoard',
+        name: 'dateBoard',
+        component: () => import('@/pages/Home/dateBoard/dateBoardHome.vue')
+      },
       {
         path: '/home/campaignSetup', // 宣传信息设置
         name: 'regFormSetting',
