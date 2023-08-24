@@ -86,6 +86,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
+// import { getEvaluate } from '@/api/dateBoard';
+// getEvaluate();
 type selectDate = {
   value: string;
   label: string;

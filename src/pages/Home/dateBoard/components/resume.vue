@@ -126,6 +126,8 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+// import { getResumeDate } from '@/api/dateBoard';
+// getResumeDate(1);
 // 基本信息
 const baseQuestion = reactive({
   name: '大聪明',
