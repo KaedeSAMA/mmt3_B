@@ -5,6 +5,10 @@ interface IBaseResponse<D> {
 }
 export interface Data {
   /**
+   * 社团组织id
+   */
+  id: number;
+  /**
    * 社团组织头像url
    */
   avatarUrl: string;

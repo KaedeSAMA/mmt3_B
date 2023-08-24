@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { Data } from '@/api/callout/types/resType';
 const useOrgInfo = defineStore('orgInfo', () => {
   const data = reactive<Data>({
+    id: 0,
     name: '加载中',
     avatarUrl: '#',
     briefIntroduction: '加载中',
