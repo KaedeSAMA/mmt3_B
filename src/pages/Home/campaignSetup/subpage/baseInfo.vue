@@ -14,9 +14,11 @@ import type {
   UploadRawFile,
   UploadRequestOptions
 } from 'element-plus';
-import IndexDBWrapper from '@/utils/indexDB';
+// import IndexDBWrapper from '@/utils/indexDB/index';
+import infoDB from '@/utils/indexDB/db';
 // ### 用于存储用户登录时的社团ID
-import { useUserInfoStore } from '@/store/index';
+// import { useUserInfoStore } from '@/store/index';
+// const userInfoStore = useUserInfoStore();
 const selectList1 = ref([
   //Map
   {
@@ -61,57 +63,42 @@ const selectList2 = ref([
 ]);
 /* store */
 const organizeInfo = useOrgInfo();
-const userInfoStore = useUserInfoStore();
-// const data = reactive<Data>({
-//   name: '加载中',
-//   avatarUrl: '#',
-//   briefIntroduction: '加载中',
-//   tagList: [
-//     {
-//       tag: '加载中',
-//       type: 1
-//     },
-//     {
-//       tag: '加载中',
-//       type: 1
-//     }
-//   ],
-//   introduction: '加载中',
-//   feature: '加载中',
-//   daily: '加载中',
-//   slogan: '加载中',
-//   contactInfo: '加载中',
-//   more: '加载中',
-//   departmentList: []
-// });
 
 /* getDeptInfo返回的数据 */
 const data = organizeInfo.data;
 
 /* indexDB */
-const indexDB = new IndexDBWrapper<Data>('myDatabase', 'myStore', 'name');
-console.log(indexDB);
+// const indexDB = new IndexDBWrapper<Data>('myDatabase', 'myStore', 'name');
+// console.log(indexDB);
+
 /**
  * @description: 初始化
  */
 onMounted(async () => {
   //检查本地存储是否有数据
-  const res1 = sessionStorage.getItem('promotionInfoData');
+  // const res1 = sessionStorage.getItem('promotionInfoData');
+  const organizationId = Number(sessionStorage.getItem('organizationId'));
+  const res1 = (await infoDB.promotionInfo.get(organizationId)) as Data;
   if (res1) {
-    const res = JSON.parse(res1) as Data;
-    // 检查本地存储的是否是当前社团的信息
-    if (res.id == userInfoStore.nowOrgnazitionId) {
-      organizeInfo.setOrgInfo(res); //更新store
-      return;
-    }
+    organizeInfo.setOrgInfo(res1); //更新store
+    return;
   }
+
+  // 检查本地存储的是否是当前社团的信息
+  // if (res.id == userInfoStore.nowOrgnazitionId) {
+  //   organizeInfo.setOrgInfo(res); //更新store
+  //   return;
+  // }
+
   // 从后端获取数据
   try {
     const res = (await getDeptInfo()) as Data;
     // 使用 Object.assign 更新响应式对象
     // Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
     organizeInfo.setOrgInfo(res); //更新store
-    sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
+    // sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
+    console.log('put into indexDB');
+    infoDB.promotionInfo.put(res);
     initTagListFix(); // 补全tagList
   } catch (err) {
     console.log(err);
@@ -121,30 +108,8 @@ onMounted(async () => {
  * @description 更新部门信息
  */
 const updSyncDeptInfoAll = async () => {
-  // console.log(data);
-  const {
-    briefIntroduction,
-    contactInfo,
-    daily,
-    departmentList,
-    feature,
-    introduction,
-    more,
-    slogan,
-    tagList
-  } = data;
-
-  const updateData = {
-    briefIntroduction,
-    contactInfo,
-    daily,
-    departmentList,
-    feature,
-    introduction,
-    more,
-    slogan,
-    tagList
-  };
+  /* 不把id和avatarUrl传给后端,虽然传了也没啥 */
+  const { id, avatarUrl, ...updateData } = data;
   try {
     const isConfirm = await ElMessageBox.confirm('确定要同步吗？', '提示', {
       confirmButtonText: '确定',
@@ -154,7 +119,9 @@ const updSyncDeptInfoAll = async () => {
     if (isConfirm == 'cancel') return;
     await updateDeptInfo(updateData);
     organizeInfo.setOrgInfo(data); //更新store
-    sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
+    // sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
+    const put_data = JSON.parse(JSON.stringify(data));
+    infoDB.promotionInfo.put(put_data as Data);
   } catch (err) {
     console.log('取消:', err);
     ElMessage.warning('取消同步');
@@ -165,7 +132,10 @@ const updSyncDeptInfoAll = async () => {
  */
 const saveTemp = () => {
   organizeInfo.setOrgInfo(data);
-  sessionStorage.setItem('promotionInfoData', JSON.stringify(data));
+  // sessionStorage.setItem('promotionInfoData', JSON.stringify(data));
+  /* 必须是深拷贝,indexDB要求把响应式转成可序列化对象 */
+  const put_data = JSON.parse(JSON.stringify(data));
+  infoDB.promotionInfo.put(put_data as Data);
   ElMessage.success('保存成功');
 };
 const upload = ref<UploadInstance>();
@@ -182,7 +152,10 @@ const handleChange: UploadProps['onChange'] = () => {
 // http上传头像
 const uploadAvatar = async (option: UploadRequestOptions) => {
   const res = (await updateDeptLogo({ avatar: option.file })) as Avatar;
-  data.avatarUrl = res.avatarUrl; // 更新头像
+  data.avatarUrl = res.avatarUrl; // 更新头像,由于是引用，会连带更新到store
+  // sessionStorage.setItem('promotionInfoData', JSON.stringify(data));
+  const organizationId = Number(sessionStorage.getItem('organizationId'));
+  infoDB.promotionInfo.update(organizationId, { avatarUrl: res.avatarUrl });
 };
 // 如果出现返回系统标签缺失，手动添加
 const initTagListFix = () => {
