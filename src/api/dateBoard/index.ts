@@ -2,9 +2,13 @@ import { _axios } from '@/server/http';
 import axios from 'axios';
 import { BASE_URL, TIME_OUT } from '@/server/request/config';
 import showErrorInfo from '@/server/request/error';
-import { TGetDateBoardMessageRes } from '@/api/types/resType';
+import {
+  TGetDateBoardMessageRes,
+  TGetResumeMessageRes
+} from '@/api/types/resType';
 import { Tfilter, Tpage } from '@/api/types/dataType';
-// 既有query又有body原生axios
+import { TGetResume } from '@/api/types/paramsType';
+// 全部数据，既有query又有body原生axios
 const getFilterData = async (page: Tpage, filterCondition: Tfilter) => {
   const res = await axios({
     url: BASE_URL + '/local/b/data/dashboard/sift',
@@ -22,6 +26,7 @@ const getFilterData = async (page: Tpage, filterCondition: Tfilter) => {
   }
   return res.data.data;
 };
+//导出报名表的接口
 const getExportData = async (filterCondition: Tfilter) => {
   const res = await _axios.post<TGetDateBoardMessageRes, Tfilter>(
     '/local/b/data/dashboard/export',
@@ -29,4 +34,11 @@ const getExportData = async (filterCondition: Tfilter) => {
   );
   return res.data;
 };
-export { getFilterData, getExportData };
+const getResumeDate = async (id: string) => {
+  const res = await _axios.get<TGetResumeMessageRes, TGetResume>(
+    '/local//b/data/dashboard',
+    { id }
+  );
+  console.log(res);
+};
+export { getFilterData, getExportData, getResumeDate };
