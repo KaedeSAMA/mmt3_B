@@ -99,7 +99,7 @@ type TGetDateBoardMessage = {
 type TGetDateBoardMessageRes = IBaseResponce<TGetDateBoardMessage>;
 
 //简历参数返回类型
-type questionListItem = {
+type TQuestionListItem = {
   order: number;
   questionName: string;
   answer: string;
@@ -119,10 +119,10 @@ type TGetResumeMessage = {
   departmentQuestion: {
     departmentName: string;
     isTransfers: boolean;
-    questionList: Array<questionListItem>;
+    questionList: Array<TQuestionListItem>;
   };
   comprehensiveQuestion: {
-    questionList: Array<questionListItem>;
+    questionList: Array<TQuestionListItem>;
   };
   interviewFeedbackList: Array<{
     time: string;
@@ -140,6 +140,32 @@ type TGetResumeMessage = {
 };
 type TGetResumeMessageRes = IBaseResponce<TGetResumeMessage>;
 
+// 面试评价接口返回数据
+type TResultItem={
+  name:string,
+  opinion:string
+}
+type TGetEvaluateMessage={
+  status: number,
+  round: string,
+  interviewResult: Array<TResultItem>,
+  PassDepartment:string,
+  isTransfers:string,
+  passResult:Array<TResultItem>,
+  interviewGradingPo:{
+    rank:number,
+    interviewer:{
+      project:string,
+      name:Array<string>
+    },
+    questionPoList:Array<{
+      question:string,
+      score:[number]
+    }>
+  },
+  comprehensiveQuestionList:Array<TResultItem>
+}
+type TGetEvaluateMessageRes=IBaseResponce<TGetEvaluateMessage>
 export type {
   IBaseResponce,
   TGetOrganizationRes,
@@ -149,5 +175,6 @@ export type {
   TSwitchOrganizationRes,
   TUpdatePasswordDataRes,
   TGetDateBoardMessageRes,
-  TGetResumeMessageRes
+  TGetResumeMessageRes,
+  TGetEvaluateMessageRes
 };

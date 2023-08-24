@@ -4,10 +4,11 @@ import { BASE_URL, TIME_OUT } from '@/server/request/config';
 import showErrorInfo from '@/server/request/error';
 import {
   TGetDateBoardMessageRes,
-  TGetResumeMessageRes
+  TGetResumeMessageRes,
+  TGetEvaluateMessageRes
 } from '@/api/types/resType';
 import { Tfilter, Tpage } from '@/api/types/dataType';
-import { TGetResume } from '@/api/types/paramsType';
+import { TGetResume ,TGetEvaluate} from '@/api/types/paramsType';
 // 全部数据，既有query又有body原生axios
 const getFilterData = async (page: Tpage, filterCondition: Tfilter) => {
   const res = await axios({
@@ -34,11 +35,21 @@ const getExportData = async (filterCondition: Tfilter) => {
   );
   return res.data;
 };
-const getResumeDate = async (id: string) => {
+//简历接口
+const getResumeDate = async (id: number) => {
   const res = await _axios.get<TGetResumeMessageRes, TGetResume>(
-    '/local//b/data/dashboard',
+    '/local/b/data/dashboard/resume/info',
     { id }
   );
   console.log(res);
 };
-export { getFilterData, getExportData, getResumeDate };
+// 面试评价接口
+const getEvaluate=async(id:number,round:number)=>{
+  const res = await _axios.get<TGetEvaluateMessageRes,TGetEvaluate>(
+    '/local/b/data/dashboard/interview/evaluation/info',
+    { id:id,
+      round:round }
+  );
+  console.log(res);
+}
+export { getFilterData, getExportData, getResumeDate ,getEvaluate};

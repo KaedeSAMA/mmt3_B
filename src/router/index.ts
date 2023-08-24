@@ -46,7 +46,25 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home/campaignSetup', // 宣传信息设置
         name: 'regFormSetting',
         component: () => import('@/pages/Home/campaignSetup/campaignSetup.vue')
-      }
+      },
+      //实时面试路由
+      {
+        path: '/home/currentInterview',
+        name: 'currentInterview',
+        component: () => import('@/pages/Home/currentIntrview/currentInterview.vue')
+      },
+      // 面试安排路由
+      {
+        path: '/home/interviewArrangement',
+        name: 'interviewArrangement',
+        component: () => import('@/pages/Home/interviewArrangement/interviewArrangement.vue')
+      },
+      // 面试复盘路由
+      {
+        path: '/home/interviewReply',
+        name: 'interviewReply',
+        component: () => import('@/pages/Home/interviewReply/interviewReply.vue')
+      },
     ]
   }
 ];

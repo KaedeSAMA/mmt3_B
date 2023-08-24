@@ -269,7 +269,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { RefreshRight, Document } from '@element-plus/icons-vue';
-import { useDateboardStore } from '@/store/index';
 import * as XLSX from 'xlsx';
 import { getFilterData, getExportData } from '@/api/dateBoard';
 import { ElMessage } from 'element-plus';
@@ -410,8 +409,6 @@ const refresh = async () => {
 const viewResume = (PersonDate: object) => {
   console.log(PersonDate);
   emit('change', false);
-  const store = useDateboardStore();
-  store.setPersonDate(PersonDate);
 };
 // 导出报名表
 const exportExcel = async () => {
