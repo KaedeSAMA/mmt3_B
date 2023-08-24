@@ -37,7 +37,7 @@
           <el-icon><icon-menu /></el-icon>
           <span>超级管理</span>
         </template>
-        <el-menu-item index="/home/f">
+        <el-menu-item index="/home/campaignSetup">
           <template #title><span>宣传信息设置</span></template>
         </el-menu-item>
         <el-menu-item index="/home/g">

@@ -17,6 +17,9 @@ dependencies:
   element-plus:
     specifier: ^2.3.3
     version: registry.npmmirror.com/element-plus@2.3.3(vue@3.3.4)
+  marked:
+    specifier: ^7.0.2
+    version: 7.0.2
   pinia:
     specifier: ^2.1.1
     version: 2.1.1(typescript@5.0.4)(vue@3.3.4)
@@ -662,6 +665,15 @@ packages:
     engines: { node: '>=12' }
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /marked@7.0.2:
+    resolution:
+      {
+        integrity: sha512-ADEBjnCHOrsLoV7JPvUNWtELZ0b4SeIALhrfxuA9uhS3hw2PCezROoFduIqMOjeagBPto732+YC5tZHBMQRdqg==
+      }
+    engines: { node: '>= 16' }
+    hasBin: true
+    dev: false
 
   /nanoid@3.3.6:
     resolution:
