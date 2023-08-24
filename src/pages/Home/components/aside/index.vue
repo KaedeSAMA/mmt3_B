@@ -28,6 +28,30 @@
           <template #title><span>复盘阶段</span></template>
         </el-menu-item>
       </el-sub-menu>
+      <el-menu-item index="/home/dateBoard">
+        <el-icon><DataLine /></el-icon>
+        <span>数据看板</span>
+      </el-menu-item>
+      <el-sub-menu index="/home/c">
+        <template #title>
+          <el-icon><DocumentChecked /></el-icon>
+          <span>面试安排</span>
+        </template>
+        <el-menu-item index="/home/interviewArrangement">
+          <template #title><span>面试安排</span></template>
+        </el-menu-item>
+        <el-menu-item index="/home/a">
+          <template #title><span>面试通知</span></template>
+        </el-menu-item>
+      </el-sub-menu>
+      <el-menu-item index="/home/currentInterview">
+        <el-icon><Avatar /></el-icon>
+        <span>实时面试</span>
+      </el-menu-item>
+      <el-menu-item index="/home/interviewReply">
+        <el-icon><Finished /></el-icon>
+        <span>面试复盘</span>
+      </el-menu-item>
       <el-sub-menu index="/home/e">
         <template #title>
           <el-icon><icon-menu /></el-icon>
@@ -51,7 +75,11 @@
 import {
   Menu as IconMenu,
   Location,
-  HomeFilled
+  HomeFilled,
+  DataLine,
+  Avatar,
+  Finished,
+  DocumentChecked
 } from '@element-plus/icons-vue';
 import { useResizeHook } from '@/utils/hooks/useResizeHook';
 const route = useRoute();
