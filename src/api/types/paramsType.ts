@@ -1,5 +1,11 @@
 type TGetOrganization = {
   studentId: string;
 };
-
-export type { TGetOrganization };
+type TGetResume = {
+  id: number;
+};
+type TGetEvaluate = {
+  id: number;
+  round: number;
+};
+export type { TGetOrganization, TGetResume, TGetEvaluate };

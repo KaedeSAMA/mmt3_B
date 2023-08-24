@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 type TUserLogin = {
   studentId: string;
   password: string;
@@ -44,3 +46,24 @@ export type {
   TSwitchOrganization,
   TUpdatePassword
 };
+
+type Tpage = {
+  page: number;
+  pageNum: number;
+};
+type Tsort = {
+  sortId: number;
+  sortBy: number;
+};
+type Tfilter = {
+  interviewRoundSift: Array<number>;
+  interviewStatusSift: Array<number>;
+  search: string;
+  sort: Tsort;
+  organizationOrderSift: Array<number>;
+  departmentOrderSift: Array<number>;
+  nowDepartmentSift: Array<number>;
+  nextTimeSift: Array<string>;
+  nextPlaceSift: Array<number>;
+};
+export type { Tsort, Tfilter, Tpage };
