@@ -9,7 +9,7 @@ import { QueryMainData } from './types/query';
  * @param {number} params.pageNum 每页数量
  * @param {number} params.round 轮次
  */
-export const getMainData = async (params:QueryMainData) => {
+export const getMainData = async (params: QueryMainData) => {
   const data = await _axios.get<GetMainDataRes, QueryMainData>(
     '/local/b/interview/arrangement/all',
     params

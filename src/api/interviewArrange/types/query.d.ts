@@ -3,7 +3,7 @@
  * @param {number} round 轮次
  */
 export interface QueryCurrent {
-    round: number;
+  round: number;
 }
 
 /**
@@ -13,6 +13,6 @@ export interface QueryCurrent {
  * @param {number} round 轮次
  */
 export interface QueryMainData extends QueryCurrent {
-    page: number;
-    pageNum: number;
+  page: number;
+  pageNum: number;
 }

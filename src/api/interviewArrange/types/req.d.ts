@@ -7,9 +7,9 @@
  * @param {number} time 时间
  */
 export interface ManualReq {
-    addressIdList: number[];
-    endTime: number;
-    interviewIdList: number[];
-    startTime: number;
-    time: number;
+  addressIdList: number[];
+  endTime: number;
+  interviewIdList: number[];
+  startTime: number;
+  time: number;
 }
