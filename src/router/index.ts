@@ -57,7 +57,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home/regFormSetting',
         name: 'regFormSetting',
         component: () =>
-          import('@/pages/Home/regFormSetting/regFormSetting.vue')
+          import('@/pages/Home/SuperAdmin/regFormSetting/regFormSetting.vue')
       },
       //数据看板路由
       {
@@ -90,6 +90,13 @@ const routes: Array<RouteRecordRaw> = [
         name: 'interviewReply',
         component: () =>
           import('@/pages/Home/interviewReply/interviewReply.vue')
+      },
+      {
+        // ### 账号管理
+        path: '/home/accountManage',
+        name: 'accountManage',
+        component: () =>
+          import('@/pages/Home/SuperAdmin/accountManage/accountManage.vue')
       }
     ]
   }

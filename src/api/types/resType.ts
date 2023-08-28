@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 interface IBaseResponce<D> {
   readonly code: string;
   data?: D;
@@ -166,6 +168,30 @@ type TGetEvaluateMessage = {
   comprehensiveQuestionList: Array<TResultItem>;
 };
 type TGetEvaluateMessageRes = IBaseResponce<TGetEvaluateMessage>;
+
+// ！下为 账号管理 页面用到的类型⬇️
+type TAllAssociationMembersData = {
+  memberInfoDataList: Array<{
+    id: number;
+    studentId: string;
+    name: string;
+    permission: string;
+    phone: string;
+  }>;
+};
+type TAllAssociationMembersRes = IBaseResponce<TAllAssociationMembersData>;
+
+type TAssociationMemberData = {
+  studentId: string;
+  name: string;
+  permission: string;
+  phone: string;
+  passwd: string;
+};
+type TAssociationMemberRes = IBaseResponce<TAssociationMemberData>;
+
+// ！ 账号管理  页面类型结束⬆️
+
 export type {
   IBaseResponce,
   TGetOrganizationRes,
@@ -176,5 +202,9 @@ export type {
   TUpdatePasswordDataRes,
   TGetDateBoardMessageRes,
   TGetResumeMessageRes,
-  TGetEvaluateMessageRes
+  TGetEvaluateMessageRes,
+  TAllAssociationMembersRes,
+  TAllAssociationMembersData,
+  TAssociationMemberData,
+  TAssociationMemberRes
 };
