@@ -4,7 +4,12 @@
     <hr />
     <div class="main">
       <div class="mainInner">
-        <v-chart class="chart" :option="option" autoresize />
+        <v-chart
+          class="chart"
+          :option="option"
+          :update-options="{ notMerge: true }"
+          autoresize
+        />
       </div>
     </div>
   </div>
@@ -23,10 +28,7 @@ import {
 } from 'echarts/components';
 import VChart from 'vue-echarts';
 import { ref } from 'vue';
-interface ChartsData {
-  value: number;
-  name: string;
-}
+
 use([
   CanvasRenderer,
   LineChart,
@@ -37,38 +39,28 @@ use([
 ]);
 
 let myData: any = ref({
-  date: ['9.1', '9.2', '9.3', '9.4'],
+  date: ['0', '0', '0', '0'],
   departments: [
     {
       name: '总人数',
-      data: [11, 44, 55, 77]
+      data: [0, 0, 0, 0]
     },
     {
       name: '部门一',
-      data: [4, 15, 18, 30]
+      data: [0, 0, 0, 0]
     },
     {
       name: '部门二',
-      data: [2, 19, 20, 22]
+      data: [0, 0, 0, 0]
     },
     {
       name: '部门三',
-      data: [5, 10, 17, 25]
+      data: [0, 0, 0, 0]
     }
   ]
 });
 
-let lineData: any = [];
-
-myData.value.departments.forEach(function (item: any) {
-  lineData.push({
-    name: item.name,
-    data: item.data,
-    type: 'line'
-  });
-});
-
-const option = ref({
+let option = ref({
   legend: {
     orient: 'vertical',
     right: 5,
@@ -90,7 +82,7 @@ const option = ref({
     }
   },
   xAxis: {
-    data: myData.value.date,
+    data: null,
     name: '时间',
     nameGap: 26, //坐标轴名称与轴线间距离
     show: true, //是否显示x轴
@@ -136,7 +128,7 @@ const option = ref({
       inside: true // 坐标轴刻度是否朝内，默认朝外
     }
   },
-  series: lineData
+  series: null
 });
 
 //挂载时向后端发起请求获取用户数据
@@ -145,8 +137,20 @@ onMounted(async () => {
   if (data) {
     console.log('beforeOrgLineChart');
     console.log(data);
-    // myData.value = data;
+    myData.value = data;
   }
+
+  var lineData: any = [];
+  myData.value.departments.forEach(function (item: any) {
+    lineData.push({
+      name: item.name,
+      data: item.data,
+      type: 'line'
+    });
+  });
+
+  option.value.xAxis.data = myData.value.date;
+  option.value.series = lineData;
 });
 </script>
 <style scoped lang="scss">

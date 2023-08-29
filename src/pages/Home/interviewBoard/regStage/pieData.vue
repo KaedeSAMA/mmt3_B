@@ -16,7 +16,12 @@
             </div>
           </div>
         </div>
-        <v-chart class="chart" :option="option" autoresize />
+        <v-chart
+          class="chart"
+          :option="option"
+          autoresize
+          :update-options="{ notMerge: true }"
+        />
       </div>
     </div>
   </div>
@@ -48,36 +53,28 @@ use([
 ]);
 
 let myData: any = ref({
-  depNum: 3,
-  cNum: 77,
+  depNum: 1,
+  cNum: 0,
   depNums: [
     {
-      num: 30,
-      firstChoiceNum: 9,
+      num: 0,
+      firstChoiceNum: 0,
       departmentName: '部门一'
     },
     {
-      num: 22,
-      firstChoiceNum: 11,
+      num: 0,
+      firstChoiceNum: 0,
       departmentName: '部门二'
     },
     {
-      num: 25,
-      firstChoiceNum: 14,
+      num: 0,
+      firstChoiceNum: 0,
       departmentName: '部门三'
     }
   ]
 });
 
-var chartsData: ChartsData[] = [];
-myData.value.depNums.forEach(function (item: any) {
-  chartsData.push({
-    value: item.num,
-    name: item.departmentName
-  });
-});
-
-const option = ref({
+let option = ref({
   legend: {
     orient: 'horizontal', //图例的布局，水平布局、垂直布局
     top: '75%',
@@ -92,18 +89,16 @@ const option = ref({
   series: [
     {
       type: 'pie',
-      data: chartsData,
+      data: null,
       radius: '60%',
       center: ['50%', '40%'],
       label: {
-        normal: {
-          //饼图图形上的文本标签
-          show: true,
-          position: 'inner', //标签的位置
-          fontWeight: 300,
-          fontSize: 12, //文字的字体大小
-          formatter: '{c}人'
-        }
+        //饼图图形上的文本标签
+        show: true,
+        position: 'inner', //标签的位置
+        fontWeight: 300,
+        fontSize: 12, //文字的字体大小
+        formatter: '{c}人'
       },
       itemStyle: {
         color: function (colors: any) {
@@ -121,15 +116,24 @@ const option = ref({
     }
   ]
 });
-
 //挂载时向后端发起请求获取用户数据
-onMounted(async () => {
+onMounted(async function () {
   const data = await beforeOrgPieChart();
   if (data) {
     console.log('beforeOrgPieChart');
     console.log(data);
-    // myData.value = data;
+    myData.value = data;
   }
+
+  var chartsData: any = [];
+  myData.value.depNums.forEach(function (item: any) {
+    chartsData.push({
+      value: item.num,
+      name: item.departmentName
+    });
+  });
+
+  option.value.series[0].data = chartsData;
 });
 </script>
 <style scoped lang="scss">

@@ -4,7 +4,12 @@
     <hr />
     <div class="main">
       <div class="mainInner">
-        <v-chart class="chart" :option="option" autoresize />
+        <v-chart
+          class="chart"
+          :option="option"
+          :update-options="{ notMerge: true }"
+          autoresize
+        />
       </div>
     </div>
   </div>
@@ -26,10 +31,6 @@ import { ref } from 'vue';
 import bus from 'vue3-eventbus';
 import { defineComponent, inject } from 'vue';
 
-interface ChartsData {
-  value: number;
-  name: string;
-}
 use([
   CanvasRenderer,
   LineChart,
@@ -46,38 +47,28 @@ bus.on('beforeMyDepartmentId', (data: any) => {
 });
 
 let myData: any = ref({
-  date: ['9.1', '9.2', '9.3', '9.4'],
+  date: ['0', '0', '0', '0'],
   orders: [
     {
       name: '总人数',
-      data: [7, 16, 23, 30]
+      data: [0, 0, 0, 0]
     },
     {
       name: '第一志愿',
-      data: [2, 5, 7, 9]
+      data: [0, 0, 0, 0]
     },
     {
       name: '第二志愿',
-      data: [5, 9, 13, 16]
+      data: [0, 0, 0, 0]
     },
     {
       name: '第三志愿',
-      data: [0, 2, 3, 5]
+      data: [0, 0, 0, 0]
     }
   ]
 });
 
-let lineData: any = [];
-
-myData.value.orders.forEach(function (item: any) {
-  lineData.push({
-    name: item.name,
-    data: item.data,
-    type: 'line'
-  });
-});
-
-const option = ref({
+let option = ref({
   legend: {
     orient: 'vertical',
     right: 5,
@@ -99,7 +90,7 @@ const option = ref({
     }
   },
   xAxis: {
-    data: myData.value.date,
+    data: null,
     name: '时间',
     nameGap: 26, //坐标轴名称与轴线间距离
     show: true, //是否显示x轴
@@ -145,7 +136,7 @@ const option = ref({
       inside: true // 坐标轴刻度是否朝内，默认朝外
     }
   },
-  series: lineData
+  series: null
 });
 
 //挂载时向后端发起请求获取用户数据
@@ -154,8 +145,45 @@ onMounted(async () => {
   if (data) {
     console.log('beforeDepLineChart');
     console.log(data);
-    // myData.value = data;
+    myData.value = data;
+
+    // 测试数据
+    // myData.value = {
+    //   date: ['9.1', '9.2', '9.3'],
+    //   orders: [
+    //     {
+    //       name: '总人数',
+    //       data: [7, 23, 30]
+    //     },
+    //     {
+    //       name: '第一志愿',
+    //       data: [2, 7, 9]
+    //     },
+    //     {
+    //       name: '第二志愿',
+    //       data: [5, 13, 16]
+    //     },
+    //     {
+    //       name: '第三志愿',
+    //       data: [0, 3, 5]
+    //     }
+    //   ]
+    // };
   }
+
+  var lineData: any = [];
+  myData.value.orders.forEach(function (item: any) {
+    lineData.push({
+      name: item.name,
+      data: item.data,
+      type: 'line'
+    });
+  });
+
+  console.log(myData.value.date);
+
+  option.value.xAxis.data = myData.value.date;
+  option.value.series = lineData;
 });
 </script>
 <style scoped lang="scss">

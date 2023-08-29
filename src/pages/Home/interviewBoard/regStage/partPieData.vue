@@ -52,32 +52,24 @@ bus.on('beforeMyDepartmentId', (data: any) => {
 
 let myData: any = ref({
   orderNum: 3,
-  totalNum: 30,
+  totalNum: 0,
   nums: [
     {
-      num: 9,
+      num: 0,
       orderNum: 1
     },
     {
-      num: 16,
+      num: 0,
       orderNum: 2
     },
     {
-      num: 5,
+      num: 0,
       orderNum: 3
     }
   ]
 });
 
-var chartsData: ChartsData[] = [];
-myData.value.nums.forEach(function (item: any) {
-  chartsData.push({
-    value: item.num,
-    name: '第' + item.orderNum + '志愿'
-  });
-});
-
-const option = ref({
+let option = ref({
   legend: {
     orient: 'horizontal', //图例的布局，水平布局、垂直布局
     top: '75%',
@@ -92,7 +84,7 @@ const option = ref({
   series: [
     {
       type: 'pie',
-      data: chartsData,
+      data: null,
       radius: '60%',
       center: ['50%', '40%'],
       label: {
@@ -128,8 +120,34 @@ onMounted(async () => {
   if (data) {
     console.log('beforeDepPieChart');
     console.log(data);
-    // myData.value = data;
+    myData.value = data;
+
+    // 测试数据
+    // myData.value = {
+    //   orderNum: 2,
+    //   totalNum: 30,
+    //   nums: [
+    //     {
+    //       num: 12,
+    //       orderNum: 1
+    //     },
+    //     {
+    //       num: 18,
+    //       orderNum: 2
+    //     }
+    //   ]
+    // };
   }
+
+  var chartsData: any = [];
+  myData.value.nums.forEach(function (item: any) {
+    chartsData.push({
+      value: item.num,
+      name: '第' + item.orderNum + '志愿'
+    });
+  });
+
+  option.value.series[0].data = chartsData;
 });
 </script>
 <style scoped lang="scss">

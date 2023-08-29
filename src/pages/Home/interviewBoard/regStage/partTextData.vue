@@ -25,8 +25,8 @@ bus.on('beforeMyDepartmentId', (data: any) => {
 });
 
 let myData: any = ref({
-  totalNum: 30,
-  firstChoiceNum: 9
+  totalNum: 0,
+  firstChoiceNum: 0
 });
 
 //挂载时向后端发起请求获取用户数据
