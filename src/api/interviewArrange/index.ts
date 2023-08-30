@@ -1,7 +1,11 @@
 import { _axios } from '@/server/http';
-import { GetMainDataRes,GetMainDataFilterRes,GetAddressRes } from './types/res';
+import {
+  GetMainDataRes,
+  GetMainDataFilterRes,
+  GetAddressRes
+} from './types/res';
 import { ElMessage } from 'element-plus';
-import { QueryMainData,QueryCurrent } from './types/query';
+import { QueryMainData, QueryCurrent } from './types/query';
 
 /**
  * @description 获取主数据
@@ -20,24 +24,32 @@ export const getMainData = async (params: QueryMainData) => {
   return data.data;
 };
 
-export const getMainDataFilter = async(round:QueryCurrent)=>{
-  const data = await _axios.get<GetMainDataFilterRes,QueryCurrent>(
+/**
+ * @description 获取主数据筛选条件
+ * @param {number} params.round 轮次
+ */
+export const getMainDataFilter = async (round: QueryCurrent) => {
+  const data = await _axios.get<GetMainDataFilterRes, QueryCurrent>(
     '/local/b/interview/arrangement/sift/bar',
     round
   );
-  if(data.code !== '00000') {
+  if (data.code !== '00000') {
     ElMessage.error(data.message);
   }
   return data.data;
 };
 
-export const getAddressRes = async (round:QueryCurrent)=>{
-  const data = await _axios.get<GetAddressRes,QueryCurrent>(
+/**
+ * @description 获取当前面试地点
+ * @param {number} params.round 轮次
+ */
+export const getAddressRes = async (round: QueryCurrent) => {
+  const data = await _axios.get<GetAddressRes, QueryCurrent>(
     '/local/b/interview/arrangement/address/all',
     round
   );
-  if(data.code !== '00000') {
+  if (data.code !== '00000') {
     ElMessage.error(data.message);
-  };
+  }
   return data.data;
-}
+};

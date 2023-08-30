@@ -61,6 +61,13 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
           import('@/pages/Home/interviewArrangement/interviewArrangement.vue')
       },
+      // 面试通知路由
+      {
+        path: '/home/interviewNotice',
+        name: 'interviewNotice',
+        component: () =>
+          import('@/pages/Home/interviewArrangement/interviewNotice.vue')
+      },
       // 面试复盘路由
       {
         path: '/home/interviewReply',
