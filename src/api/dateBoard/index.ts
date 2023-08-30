@@ -8,8 +8,8 @@ import {
   TGetEvaluateMessageRes,
   TGetRoundRes
 } from '@/api/types/resType';
-import { Tfilter, Tpage ,Tchange} from '@/api/types/dataType';
-import { TGetResume, TGetEvaluate,TGetRound } from '@/api/types/paramsType';
+import { Tfilter, Tpage, Tchange } from '@/api/types/dataType';
+import { TGetResume, TGetEvaluate, TGetRound } from '@/api/types/paramsType';
 // 全部数据，既有query又有body原生axios
 const getFilterData = async (page: Tpage, filterCondition: Tfilter) => {
   const res = await axios({
@@ -40,9 +40,9 @@ const getExportData = async (filterCondition: Tfilter) => {
 const getResumeData = async (id: number) => {
   const res = await _axios.get<TGetResumeMessageRes, TGetResume>(
     '/local/b/data/dashboard/resume/info',
-    { id:id }
+    { id: id }
   );
-  return res.data
+  return res.data;
 };
 // 面试评价接口
 const getEvaluate = async (id: number, round: number) => {
@@ -50,19 +50,19 @@ const getEvaluate = async (id: number, round: number) => {
     '/local/b/data/dashboard/interview/evaluation/info',
     { id: id, round: round }
   );
-  return res.data
+  return res.data;
 };
 // 获取面试轮次
-const getRound=async(id:number)=>{
-  const res = await _axios.get<TGetRoundRes,TGetRound>(
+const getRound = async (id: number) => {
+  const res = await _axios.get<TGetRoundRes, TGetRound>(
     '/local/b/data/dashboard/interview/evaluation/round',
-    { id: id}
+    { id: id }
   );
-  return res.data
-}
+  return res.data;
+};
 //改变面试状态
-const changeStatus = async (id:number,round:number,state:number) => {
-  const res=await _axios.post<any, Tchange>(
+const changeStatus = async (id: number, round: number, state: number) => {
+  const res = await _axios.post<any, Tchange>(
     '/local/b/data/dashboard/interview/evaluation/change',
     {
       id,
@@ -70,17 +70,24 @@ const changeStatus = async (id:number,round:number,state:number) => {
       state
     }
   );
-  console.log(res.message)
-  if(res.message==='更改成功'){
+  console.log(res.message);
+  if (res.message === '更改成功') {
     ElMessage({
       message: res.message,
       type: 'success'
     });
-  }else{
+  } else {
     ElMessage({
       message: res.message,
       type: 'warning'
     });
   }
 };
-export { getFilterData, getExportData, getResumeData, getEvaluate,getRound ,changeStatus};
+export {
+  getFilterData,
+  getExportData,
+  getResumeData,
+  getEvaluate,
+  getRound,
+  changeStatus
+};

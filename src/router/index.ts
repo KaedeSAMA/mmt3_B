@@ -51,8 +51,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/home/currentInterview',
         name: 'currentInterview',
-        component: () =>
-          import('@/pages/Home/currentIntrview/currentHome.vue')
+        component: () => import('@/pages/Home/currentIntrview/currentHome.vue')
       },
       // 面试安排路由
       {
@@ -71,8 +70,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/home/resultInform',
         name: 'resultInform',
-        component: () =>
-          import('@/pages/Home/interviewReply/resultInform.vue')
+        component: () => import('@/pages/Home/interviewReply/resultInform.vue')
       }
     ]
   }

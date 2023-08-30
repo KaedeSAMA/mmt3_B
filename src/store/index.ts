@@ -26,14 +26,14 @@ const useUserInfoStore = defineStore('userInfoStore', () => {
   };
 });
 //简历传参
-const dataBoardMeaasge=defineStore('stuInfoStore',()=>{
-  const id=ref(0)
-  function setId(msg:number){
-    id.value=msg
+const dataBoardMeaasge = defineStore('stuInfoStore', () => {
+  const id = ref(0);
+  function setId(msg: number) {
+    id.value = msg;
   }
-  return{
+  return {
     id,
     setId
-  }
-})
-export { useUserInfoStore,dataBoardMeaasge };
+  };
+});
+export { useUserInfoStore, dataBoardMeaasge };

@@ -60,11 +60,11 @@ type Tfilter = {
   nextPlaceSift: Array<number>;
 };
 //面试评价界面
-type Tchange={
-  id:number,
-  round:number,
-  state:number
-}
+type Tchange = {
+  id: number;
+  round: number;
+  state: number;
+};
 export type {
   TUserLogin,
   TRegister,

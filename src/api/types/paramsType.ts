@@ -10,24 +10,24 @@ type TGetEvaluate = {
   round: number;
 };
 //获取轮次
-type TGetRound={
-  id:number
-}
+type TGetRound = {
+  id: number;
+};
 // 实时面试界面
 //获取进度条
-type TGetProgress={
-  place:number
-}
+type TGetProgress = {
+  place: number;
+};
 //获取面试者信息
-type TGetMessage={
-  place:number,
-  page:number,
-  keyword:string
-}
+type TGetMessage = {
+  place: number;
+  page: number;
+  keyword: string;
+};
 export type {
   TGetOrganization,
   TGetResume,
-  TGetEvaluate ,
+  TGetEvaluate,
   TGetRound,
   TGetMessage,
   TGetProgress
