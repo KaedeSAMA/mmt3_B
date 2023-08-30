@@ -5,10 +5,11 @@ import showErrorInfo from '@/server/request/error';
 import {
   TGetDateBoardMessageRes,
   TGetResumeMessageRes,
-  TGetEvaluateMessageRes
+  TGetEvaluateMessageRes,
+  TGetRoundRes
 } from '@/api/types/resType';
-import { Tfilter, Tpage } from '@/api/types/dataType';
-import { TGetResume, TGetEvaluate } from '@/api/types/paramsType';
+import { Tfilter, Tpage ,Tchange} from '@/api/types/dataType';
+import { TGetResume, TGetEvaluate,TGetRound } from '@/api/types/paramsType';
 // 全部数据，既有query又有body原生axios
 const getFilterData = async (page: Tpage, filterCondition: Tfilter) => {
   const res = await axios({
@@ -36,12 +37,12 @@ const getExportData = async (filterCondition: Tfilter) => {
   return res.data;
 };
 //简历接口
-const getResumeDate = async (id: number) => {
+const getResumeData = async (id: number) => {
   const res = await _axios.get<TGetResumeMessageRes, TGetResume>(
     '/local/b/data/dashboard/resume/info',
-    { id }
+    { id:id }
   );
-  console.log(res);
+  return res.data
 };
 // 面试评价接口
 const getEvaluate = async (id: number, round: number) => {
@@ -49,6 +50,37 @@ const getEvaluate = async (id: number, round: number) => {
     '/local/b/data/dashboard/interview/evaluation/info',
     { id: id, round: round }
   );
-  console.log(res);
+  return res.data
 };
-export { getFilterData, getExportData, getResumeDate, getEvaluate };
+// 获取面试轮次
+const getRound=async(id:number)=>{
+  const res = await _axios.get<TGetRoundRes,TGetRound>(
+    '/local/b/data/dashboard/interview/evaluation/round',
+    { id: id}
+  );
+  return res.data
+}
+//改变面试状态
+const changeStatus = async (id:number,round:number,state:number) => {
+  const res=await _axios.post<any, Tchange>(
+    '/local/b/data/dashboard/interview/evaluation/change',
+    {
+      id,
+      round,
+      state
+    }
+  );
+  console.log(res.message)
+  if(res.message==='更改成功'){
+    ElMessage({
+      message: res.message,
+      type: 'success'
+    });
+  }else{
+    ElMessage({
+      message: res.message,
+      type: 'warning'
+    });
+  }
+};
+export { getFilterData, getExportData, getResumeData, getEvaluate,getRound ,changeStatus};

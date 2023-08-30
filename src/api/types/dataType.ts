@@ -39,14 +39,7 @@ type TUpdatePassword = {
 };
 // ！个人信息页面类型结束⬆️
 
-export type {
-  TUserLogin,
-  TRegister,
-  TJoinOrganization,
-  TSwitchOrganization,
-  TUpdatePassword
-};
-
+//数据看板页面
 type Tpage = {
   page: number;
   pageNum: number;
@@ -66,4 +59,20 @@ type Tfilter = {
   nextTimeSift: Array<string>;
   nextPlaceSift: Array<number>;
 };
-export type { Tsort, Tfilter, Tpage };
+//面试评价界面
+type Tchange={
+  id:number,
+  round:number,
+  state:number
+}
+export type {
+  TUserLogin,
+  TRegister,
+  TJoinOrganization,
+  TSwitchOrganization,
+  TUpdatePassword,
+  Tsort,
+  Tfilter,
+  Tpage,
+  Tchange
+};
