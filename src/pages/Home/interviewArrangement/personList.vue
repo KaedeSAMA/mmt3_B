@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { Warning } from '@element-plus/icons-vue';
-import { GetMainDataResData,AddressIdList,DepartmentList,MessageStatusList } from '@/api/interviewArrange/types/res';
-import { getMainData,getMainDataFilter,getAddressRes } from '@/api/interviewArrange'
+import { Filter, Warning } from '@element-plus/icons-vue';
+import {
+  GetMainDataResData,
+  AddressIdList,
+  DepartmentList,
+  MessageStatusList
+} from '@/api/interviewArrange/types/res';
+import {
+  getMainData,
+  getMainDataFilter,
+  getAddressRes
+} from '@/api/interviewArrange';
 import { ref, watch, onMounted } from 'vue';
 const sameDepartment = ref(true);
 const departmentId = ref(0);
-const filterDepartment = ref([]);
 const filterStatus = ref<number | null>(null);
 const departmentName = ref('');
 const order = ref('');
@@ -17,13 +25,16 @@ const timer = ref<NodeJS.Timeout | null>(null);
 const tableData = ref<any[]>([]); // 根据你的数据结构进行调整
 const filterDepartmentId = ref(0);
 
-//下面是22级废物写的
+/**
+ * @description 展示使用说明
+ */
 const dialogVisible = ref(false);
-
-const handleClose = (done: () => void) => {
+const showUsinginfo = () => {
+  dialogVisible.value = true;
+};
+const handleDialogClose = (done: () => void) => {
   done();
 };
-//上面是22级废物写的
 
 const round = ref<number>(1);
 /* readonly */
@@ -63,6 +74,37 @@ const addressIdListValue = ref<number[]>([]);
 const addressIdList = reactive<AddressIdList[]>([]);
 const messageStatusList = reactive<MessageStatusList[]>([]);
 const departmentList = reactive<DepartmentList[]>([]);
+interface Filter {
+  text: string;
+  value: string;
+}
+const addressIdListFilter = ref<Filter[]>([]);
+const messageStatusListFilter = ref<Filter[]>([]);
+const departmentListFilter = ref<Filter[]>([]);
+
+// 拼接筛选项
+const filterItemReady = () => {
+  console.log(addressIdList);
+  addressIdListFilter.value = addressIdList.map((item) => {
+    return {
+      text: item.name,
+      value: item.id + ''
+    };
+  });
+  console.log(addressIdListFilter.value);
+  messageStatusListFilter.value = messageStatusList.map((item) => {
+    return {
+      text: item.name,
+      value: item.id + ''
+    };
+  });
+  departmentListFilter.value = departmentList.map((item) => {
+    return {
+      text: item.name,
+      value: item.id + ''
+    };
+  });
+};
 
 const mainData = ref<GetMainDataResData>({
   allNum: 50,
@@ -204,13 +246,6 @@ const mainData = ref<GetMainDataResData>({
   pageNum: 10
 });
 
-/**
- * @description 展示使用说明
- */
-const showUsinginfo = () => {
-  // ... 处理 showUsinginfo 逻辑 ...
-  console.log('showUsinginfo');
-};
 const setStartTime = () => {
   console.log(startTime.value?.getTime());
 };
@@ -221,6 +256,7 @@ const setEndTime = () => {
 
 const handleSeclect = (val: any[]) => {
   // ... 处理 handleSeclect 逻辑 ...
+  console.log(val);
 };
 
 const filterChange = (filters: any) => {
@@ -232,8 +268,19 @@ const indexMethod = (index: number) => {
   return index + 1;
 };
 
-const current_change = (newCurrentPage: number) => {
-  // ... 处理 current_change 逻辑 ...
+/**
+ * @description 切换页码
+ * @param newCurrentPage
+ */
+const current_change = async (newCurrentPage: number) => {
+  const res = await getMainData({
+    page: newCurrentPage,
+    pageNum: 10,
+    round: round.value
+  });
+  if (res) {
+    mainData.value = res;
+  }
 };
 
 const pdBtn = () => {
@@ -242,17 +289,17 @@ const pdBtn = () => {
 
 onMounted(async () => {
   // ... 处理组件创建前的逻辑 ...
-  const mainList = await getMainData({
-    page:1,
+  const mainList = getMainData({
+    page: 1,
     pageNum: 10,
     round: 1
-  }) 
-  const mainFilter = await getMainDataFilter({
-    round:1
-  })
-  const addressList = await getAddressRes({
-    round:1
-  })
+  });
+  const mainFilter = getMainDataFilter({
+    round: 1
+  });
+  const addressList = getAddressRes({
+    round: 1
+  });
   // if(mainList){
   //   mainData.value = mainList;
   // }
@@ -264,13 +311,15 @@ onMounted(async () => {
   // if(addressList){
   //   Object.assign(addressPoList,addressList);
   // }
-  Promise.all([mainList,mainFilter,addressList]).then((values)=>{
-      mainData.value = values[0];
-      Object.assign(addressIdList,values[1].addressIdList);
-      Object.assign(messageStatusList,values[1].messageStatusList);
-      Object.assign(departmentList,values[1].departmentList); 
-      Object.assign(addressPoList,addressList);
-  })
+  await Promise.all([mainList, mainFilter, addressList]).then((values) => {
+    mainData.value = values[0];
+    Object.assign(addressIdList, values[1].addressIdList);
+    Object.assign(messageStatusList, values[1].messageStatusList);
+    Object.assign(departmentList, values[1].departmentList);
+    Object.assign(addressPoList, addressList);
+  });
+  // 生成筛选项
+  filterItemReady();
 });
 </script>
 
@@ -282,7 +331,7 @@ onMounted(async () => {
       <template #label>
         <div class="info-provider" @click="showUsinginfo">
           <el-icon><Warning /></el-icon>
-          <span @click="dialogVisible = true">如何进行面试安排？</span>
+          <span>如何进行面试安排？</span>
         </div>
       </template>
       <el-select v-model="round" class="input-style">
@@ -388,7 +437,7 @@ onMounted(async () => {
       <el-table-column
         prop="nowDepartment"
         label="面试部门"
-        :filters="filterDepartment"
+        :filters="departmentListFilter"
         column-key="department"
         filter-placement="bottom-end"
         show-overflow-tooltip
@@ -422,14 +471,12 @@ onMounted(async () => {
         prop="nextPlace"
         label="预计面试地点"
         show-overflow-tooltip
+        :filters="addressIdListFilter"
+        column-key="nextPlace"
       ></el-table-column>
       <el-table-column
         label="通知状态"
-        :filters="[
-          { text: '未安排', value: 3 + '' },
-          { text: '已安排未通知', value: 2 + '' },
-          { text: '已通知', value: 1 + '' }
-        ]"
+        :filters="messageStatusListFilter"
         column-key="messageStatus"
         show-overflow-tooltip
       >
@@ -453,7 +500,7 @@ onMounted(async () => {
       background
       layout="prev, pager, next"
       :total="mainData.allNum"
-      :page-size="mainData.pageNum"
+      :page-size="10"
       :current-page="mainData.page"
       @current-change="current_change"
     >
@@ -476,7 +523,7 @@ onMounted(async () => {
       width="750px"
       center
       align-center
-      :before-close="handleClose"
+      :before-close="handleDialogClose"
     >
       <template #header="{ titleId, titleClass }">
         <div class="dialog-header">
