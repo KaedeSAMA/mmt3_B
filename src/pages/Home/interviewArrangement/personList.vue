@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Warning } from '@element-plus/icons-vue';
-import { GetMainDataResData } from '@/api/interviewArrange/types/res';
+import { GetMainDataResData,AddressIdList,DepartmentList,MessageStatusList } from '@/api/interviewArrange/types/res';
+import { getMainData,getMainDataFilter,getAddressRes } from '@/api/interviewArrange'
 import { ref, watch, onMounted } from 'vue';
 const sameDepartment = ref(true);
 const departmentId = ref(0);
@@ -15,6 +16,14 @@ const search = ref('');
 const timer = ref<NodeJS.Timeout | null>(null);
 const tableData = ref<any[]>([]); // 根据你的数据结构进行调整
 const filterDepartmentId = ref(0);
+
+//下面是22级废物写的
+const dialogVisible = ref(false);
+
+const handleClose = (done: () => void) => {
+  done();
+};
+//上面是22级废物写的
 
 const round = ref<number>(1);
 /* readonly */
@@ -50,9 +59,12 @@ const addressPoList = reactive([
   }
 ]);
 const addressIdListValue = ref<number[]>([]);
-const addressIdList = reactive([]);
 
-const mainData: GetMainDataResData = {
+const addressIdList = reactive<AddressIdList[]>([]);
+const messageStatusList = reactive<MessageStatusList[]>([]);
+const departmentList = reactive<DepartmentList[]>([]);
+
+const mainData = ref<GetMainDataResData>({
   allNum: 50,
   iaInfoPos: [
     {
@@ -190,7 +202,7 @@ const mainData: GetMainDataResData = {
   ],
   page: 1,
   pageNum: 10
-};
+});
 
 /**
  * @description 展示使用说明
@@ -228,45 +240,38 @@ const pdBtn = () => {
   // ... 处理 pdBtn 逻辑 ...
 };
 
-onMounted(() => {
+onMounted(async () => {
   // ... 处理组件创建前的逻辑 ...
+  const mainList = await getMainData({
+    page:1,
+    pageNum: 10,
+    round: 1
+  }) 
+  const mainFilter = await getMainDataFilter({
+    round:1
+  })
+  const addressList = await getAddressRes({
+    round:1
+  })
+  // if(mainList){
+  //   mainData.value = mainList;
+  // }
+  // if(mainFilter){
+  //   Object.assign(addressIdList,mainFilter.addressIdList);
+  //   Object.assign(messageStatusList,mainFilter.messageStatusList);
+  //   Object.assign(departmentList,mainFilter.departmentList);
+  // }
+  // if(addressList){
+  //   Object.assign(addressPoList,addressList);
+  // }
+  Promise.all([mainList,mainFilter,addressList]).then((values)=>{
+      mainData.value = values[0];
+      Object.assign(addressIdList,values[1].addressIdList);
+      Object.assign(messageStatusList,values[1].messageStatusList);
+      Object.assign(departmentList,values[1].departmentList); 
+      Object.assign(addressPoList,addressList);
+  })
 });
-
-watch(
-  [sameDepartment, search, filterStatus, filterDepartmentId, currentPage],
-  ([
-    newSameDepartment,
-    newSearch,
-    newFilterStatus,
-    newFilterDepartmentId,
-    newCurrentPage
-  ]) => {
-    if (timer.value !== null) {
-      clearTimeout(timer.value);
-    }
-    timer.value = setTimeout(() => {
-      let url = 'api/interview-arrangement/info/like';
-      let params = {};
-      if (newFilterStatus === null) {
-        params = {
-          admissionId: sessionStorage['homeAdmissionId'],
-          round: round.value,
-          keyword: newSearch,
-          departmentId: newFilterDepartmentId
-        };
-      } else {
-        params = {
-          admissionId: sessionStorage['homeAdmissionId'],
-          round: round.value,
-          keyword: newSearch,
-          departmentId: newFilterDepartmentId,
-          status: newFilterStatus
-        };
-      }
-      // ... 发送请求并处理响应 ...
-    }, 600);
-  }
-);
 </script>
 
 <template>
@@ -277,7 +282,7 @@ watch(
       <template #label>
         <div class="info-provider" @click="showUsinginfo">
           <el-icon><Warning /></el-icon>
-          <span>如何进行面试安排？</span>
+          <span @click="dialogVisible = true">如何进行面试安排？</span>
         </div>
       </template>
       <el-select v-model="round" class="input-style">
@@ -350,7 +355,7 @@ watch(
     <el-table
       :data="mainData.iaInfoPos"
       :header-cell-style="{ 'text-align': 'center' }"
-      height="451px"
+      height="60vh"
       :border="true"
       ref="table"
       style="
@@ -464,6 +469,41 @@ watch(
       确定安排
     </el-button>
   </footer>
+
+  <section class="dialog">
+    <el-dialog
+      v-model="dialogVisible"
+      width="750px"
+      center
+      align-center
+      :before-close="handleClose"
+    >
+      <template #header="{ titleId, titleClass }">
+        <div class="dialog-header">
+          <h1 :id="titleId" :class="titleClass">安排面试</h1>
+        </div>
+      </template>
+      <div class="dialog-main">
+        <h3 style="font-weight: 400; margin-bottom: 10px">两种安排面试方法:</h3>
+        &nbsp;&nbsp;<strong
+          >1.[手动选择] :
+          安排面试开始时间，面试结束时间可以不做限制，可以根据选择的人数和每个人面试的时间进行分配，设置面试场地，</strong
+        >
+        例如:<br />
+        设置开始时间为某日早.上9: 00点，-人面试20min,场地配置共6个,
+        选择了90个人(15*6=90)，则每个场地均15人，结束时间自动为12:00,
+        第一个人为9:00-9:20，以此顺延<br />
+        &nbsp;&nbsp;<strong
+          >2. [一键选择] :
+          仅安排面试开始时间、结束时间和每个人面试时长，设置面试场地，后即可进行一键选择。</strong
+        >
+        例如:<br />
+        设置开始时间为某日早上9: 00点，结束时间为12:00，一人面试
+        20min，场地配置共6个，则一键选择90人，每个场地15人，第一个人为
+        9:00-9:20，以此顺延
+      </div>
+    </el-dialog>
+  </section>
 </template>
 
 <style scoped lang="scss">
@@ -504,7 +544,7 @@ watch(
   margin-bottom: 10px;
 }
 .footer {
-  margin-top: 30px;
+  margin-top: 15px;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -512,5 +552,27 @@ watch(
     margin-left: auto;
     margin-right: 5px;
   }
+}
+.dialog {
+  :deep(.el-dialog__header) {
+    padding-bottom: 20px;
+  }
+}
+.dialog {
+  :deep(.el-dialog__body) {
+    border-top: 1px solid #d4d7de;
+    padding-top: 20px;
+  }
+}
+.dialog-header {
+  h1 {
+    font-size: 22px;
+  }
+}
+.dialog-main {
+  color: black;
+  font-size: 18px;
+  line-height: 30px;
+  letter-spacing: 0.2em;
 }
 </style>
