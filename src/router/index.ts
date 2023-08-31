@@ -57,7 +57,46 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home/regFormSetting',
         name: 'regFormSetting',
         component: () =>
-          import('@/pages/Home/regFormSetting/regFormSetting.vue')
+          import('@/pages/Home/SuperAdmin/regFormSetting/regFormSetting.vue')
+      },
+      //数据看板路由
+      {
+        path: '/home/dateBoard',
+        name: 'dateBoard',
+        component: () => import('@/pages/Home/dateBoard/dateBoardHome.vue')
+      },
+      {
+        path: '/home/campaignSetup', // 宣传信息设置
+        name: 'regFormSetting',
+        component: () => import('@/pages/Home/campaignSetup/campaignSetup.vue')
+      },
+      //实时面试路由
+      {
+        path: '/home/currentInterview',
+        name: 'currentInterview',
+        component: () =>
+          import('@/pages/Home/currentIntrview/currentInterview.vue')
+      },
+      // 面试安排路由
+      {
+        path: '/home/interviewArrangement',
+        name: 'interviewArrangement',
+        component: () =>
+          import('@/pages/Home/interviewArrangement/interviewArrangement.vue')
+      },
+      // 面试复盘路由
+      {
+        path: '/home/interviewReply',
+        name: 'interviewReply',
+        component: () =>
+          import('@/pages/Home/interviewReply/interviewReply.vue')
+      },
+      {
+        // ### 账号管理
+        path: '/home/accountManage',
+        name: 'accountManage',
+        component: () =>
+          import('@/pages/Home/SuperAdmin/accountManage/accountManage.vue')
       }
     ]
   }
