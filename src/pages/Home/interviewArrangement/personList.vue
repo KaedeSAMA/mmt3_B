@@ -15,19 +15,9 @@ import {
   DeleteAddress,
   filterMainData
 } from '@/api/interviewArrange';
-import { ref, watch, onMounted } from 'vue';
-const sameDepartment = ref(true);
-const departmentId = ref(0);
-const filterStatus = ref<number | null>(null);
-const departmentName = ref('');
-const order = ref('');
-const pagesize = ref(10);
-const currentPage = ref(1);
-const total = ref(0);
-const timer = ref<NodeJS.Timeout | null>(null);
-const tableData = ref<any[]>([]); // 根据你的数据结构进行调整
-const filterDepartmentId = ref(0);
+import { ref, onMounted } from 'vue';
 
+const timer = ref<NodeJS.Timeout | null>(null);
 const router = useRouter();
 /**
  * @description 展示使用说明
@@ -87,20 +77,20 @@ const roundList = [
 const startTime = ref<Date>();
 const endTime = ref<Date>();
 const time = ref<number>();
-//安排地点的选项
+// 一键安排地点的可选项
 const addressPoList = reactive<
   {
     id: number;
     addressName: string;
   }[]
 >([]);
-//选中的地点list
+// 一键安排选中的地点list
 const addressIdListValue = ref<number[]>([]);
 // 待转换成过滤项
 const addressIdList = reactive<AddressIdList[]>([]);
 const messageStatusList = reactive<MessageStatusList[]>([]);
 const departmentList = reactive<DepartmentList[]>([]);
-// 选中过滤项list
+// 选中的过滤项list
 const filterAddressIdList = ref<number[]>([]);
 const filterMessageStatusList = ref<number[]>([]);
 const filterDepartmentList = ref<number[]>([]);
@@ -136,7 +126,9 @@ const filterItemReady = () => {
     };
   });
 };
-
+/**
+ * @description 表格主数据
+ */
 const mainData = ref<GetMainDataResData>({
   allNum: 50,
   iaInfoPos: [
@@ -284,7 +276,10 @@ const setStartTime = () => {
 const setEndTime = () => {
   console.log(endTime.value?.getTime());
 };
-// 被选中的行
+
+/**
+ * @description 被选中的行
+ */
 const select_row_arr = ref<any[]>([]);
 const handleSeclect = (val: any[]) => {
   // ... 处理 handleSeclect 逻辑 ...
@@ -313,11 +308,6 @@ const filterChange = (filters: any) => {
       break;
   }
   shiftSearch();
-};
-
-const indexMethod = (index: number) => {
-  // ... 处理 indexMethod 逻辑 ...
-  return index + 1;
 };
 
 /**
@@ -380,11 +370,30 @@ const shiftSearch = () => {
     );
     // ...deal
     console.log(data);
-    /* update */
+    /* ###### update */
     // mainData.value = data;
   }, 1000);
 };
-onMounted(async () => {
+
+/**
+ * @description 面试轮次变化
+ */
+const handleRoundChange = async () => {
+  console.log(round.value);
+  // shiftSearch();
+  // 获取全部数据
+  // const mainList = await getMainData({
+  //   page: 1,
+  //   pageNum: 10,
+  //   round: round.value
+  // });
+  // mainData.value = mainList;
+  initGeneral();
+};
+/**
+ * @description 初始化: 获取全部数据and过滤项
+ */
+const initGeneral = async () => {
   // ... 处理组件创建前的逻辑 ...
   const mainList = getMainData({
     page: 1,
@@ -417,7 +426,8 @@ onMounted(async () => {
   });
   // 生成筛选项
   filterItemReady();
-});
+};
+onMounted(initGeneral);
 </script>
 
 <template>
@@ -431,7 +441,11 @@ onMounted(async () => {
           <span>如何进行面试安排？</span>
         </div>
       </template>
-      <el-select v-model="round" class="input-style">
+      <el-select
+        v-model="round"
+        class="input-style"
+        @change="handleRoundChange"
+      >
         <el-option
           v-for="item in roundList"
           :value="item.value"
