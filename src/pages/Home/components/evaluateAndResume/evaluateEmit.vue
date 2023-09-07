@@ -59,7 +59,7 @@
       </div>
     </div>
     <div class="evaluate">
-      <div class="tlt">实时面试评价</div>
+      <div class="tlt" style="font-weight: 700">基本评价</div>
       <div class="question">
         <div>专业能力</div>
         <div>
@@ -76,52 +76,131 @@
       <div class="question">
         <div>专业能力</div>
         <div>
-          <el-input-number
-            v-model="num"
-            :min="1"
-            :max="100"
-            controls-position="right"
-            style="margin-top: 10px"
-          />
-          <span>（满分：100）</span>
+          <el-radio-group v-model="radio1" class="ml-4">
+            <el-radio label="1" size="large">Option 1</el-radio>
+            <el-radio label="2" size="large">Option 2</el-radio>
+          </el-radio-group>
         </div>
       </div>
       <div class="question">
         <div>专业能力</div>
-        <div>
-          <el-input-number
-            v-model="num"
-            :min="1"
-            :max="100"
-            controls-position="right"
-            style="margin-top: 10px"
+        <div style="margin-top: 5px">
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox label="Option A" />
+            <el-checkbox label="Option B" />
+            <el-checkbox label="Option C" />
+            <el-checkbox label="disabled" disabled />
+            <el-checkbox label="selected and disabled" disabled />
+          </el-checkbox-group>
+        </div>
+      </div>
+      <div class="question">
+        <div>专业能力</div>
+        <div style="margin-top: 10px">
+          <el-input v-model="input" placeholder="Please input" />
+        </div>
+      </div>
+      <div class="question">
+        <div>专业能力</div>
+        <div style="margin-top: 10px">
+          <el-select v-model="value" class="m-2" placeholder="Select">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </div>
+      <div class="question">
+        <div>专业能力</div>
+        <div style="margin-top: 10px">
+          <el-cascader
+            v-model="value2"
+            :options="options2"
+            :props="props"
+            @change="handleChange"
           />
-          <span>（满分：100）</span>
         </div>
       </div>
     </div>
     <div class="evaluate">
-      <div class="tlt">综合评价</div>
-      <div>
-        <el-input-number
-          v-model="num"
-          :min="1"
-          :max="100"
-          controls-position="right"
-          style="margin-top: 10px"
-        />
-        <span>（满分：100）</span>
+      <div class="tlt" style="font-weight: 700">综合评价</div>
+      <div class="question">
+        <div>专业能力</div>
+        <div>
+          <el-input-number
+            v-model="num"
+            :min="1"
+            :max="100"
+            controls-position="right"
+            style="margin-top: 10px"
+          />
+          <span>（满分：100）</span>
+        </div>
       </div>
-      <el-input
+      <div class="question">
+        <div>专业能力</div>
+        <div>
+          <el-radio-group v-model="radio1" class="ml-4">
+            <el-radio label="1" size="large">Option 1</el-radio>
+            <el-radio label="2" size="large">Option 2</el-radio>
+          </el-radio-group>
+        </div>
+      </div>
+      <div class="question">
+        <div>专业能力</div>
+        <div style="margin-top: 5px">
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox label="Option A" />
+            <el-checkbox label="Option B" />
+            <el-checkbox label="Option C" />
+            <el-checkbox label="disabled" disabled />
+            <el-checkbox label="selected and disabled" disabled />
+          </el-checkbox-group>
+        </div>
+      </div>
+      <div class="question">
+        <div>专业能力</div>
+        <div style="margin-top: 10px">
+          <el-input v-model="input" placeholder="Please input" />
+        </div>
+      </div>
+      <div class="question">
+        <div>专业能力</div>
+        <div style="margin-top: 10px">
+          <el-select v-model="value" class="m-2" placeholder="Select">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </div>
+      <div class="question">
+        <div>专业能力</div>
+        <div style="margin-top: 10px">
+          <el-cascader
+            v-model="value2"
+            :options="options2"
+            :props="props"
+            @change="handleChange"
+          />
+        </div>
+      </div>
+      <!-- <el-input
         class="textarea"
         v-model="textarea"
         :rows="6"
         type="textarea"
         placeholder="请输入"
-      />
+      /> -->
     </div>
     <div class="evaluate" style="padding-bottom: 20px">
-      <div class="tlt">面试问题</div>
+      <div class="tlt" style="font-weight: 700">面试问题</div>
       <div class="questionItem">
         <div class="a">问题：未来规划</div>
         <div class="b">
@@ -217,7 +296,313 @@ const departmentDate = ref([
 // 评分
 const num = ref(100);
 // 综合问题
-const textarea = ref('');
+// const textarea = ref('');
+// 单选
+const radio1 = ref('1');
+// 多选
+const checkList = ref(['selected and disabled', 'Option A']);
+// 输入框
+const input = ref('');
+// 下拉框
+const value = ref('');
+const options = [
+  {
+    value: 'Option1',
+    label: 'Option1'
+  },
+  {
+    value: 'Option2',
+    label: 'Option2'
+  },
+  {
+    value: 'Option3',
+    label: 'Option3'
+  },
+  {
+    value: 'Option4',
+    label: 'Option4'
+  },
+  {
+    value: 'Option5',
+    label: 'Option5'
+  }
+];
+// 级联
+const props = {
+  expandTrigger: 'hover' as const
+};
+const handleChange = (value: any) => {
+  console.log(value);
+};
+const value2 = ref([]);
+const options2 = [
+  {
+    value: 'guide',
+    label: 'Guide',
+    children: [
+      {
+        value: 'disciplines',
+        label: 'Disciplines',
+        children: [
+          {
+            value: 'consistency',
+            label: 'Consistency'
+          },
+          {
+            value: 'feedback',
+            label: 'Feedback'
+          },
+          {
+            value: 'efficiency',
+            label: 'Efficiency'
+          },
+          {
+            value: 'controllability',
+            label: 'Controllability'
+          }
+        ]
+      },
+      {
+        value: 'navigation',
+        label: 'Navigation',
+        children: [
+          {
+            value: 'side nav',
+            label: 'Side Navigation'
+          },
+          {
+            value: 'top nav',
+            label: 'Top Navigation'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    value: 'component',
+    label: 'Component',
+    children: [
+      {
+        value: 'basic',
+        label: 'Basic',
+        children: [
+          {
+            value: 'layout',
+            label: 'Layout'
+          },
+          {
+            value: 'color',
+            label: 'Color'
+          },
+          {
+            value: 'typography',
+            label: 'Typography'
+          },
+          {
+            value: 'icon',
+            label: 'Icon'
+          },
+          {
+            value: 'button',
+            label: 'Button'
+          }
+        ]
+      },
+      {
+        value: 'form',
+        label: 'Form',
+        children: [
+          {
+            value: 'radio',
+            label: 'Radio'
+          },
+          {
+            value: 'checkbox',
+            label: 'Checkbox'
+          },
+          {
+            value: 'input',
+            label: 'Input'
+          },
+          {
+            value: 'input-number',
+            label: 'InputNumber'
+          },
+          {
+            value: 'select',
+            label: 'Select'
+          },
+          {
+            value: 'cascader',
+            label: 'Cascader'
+          },
+          {
+            value: 'switch',
+            label: 'Switch'
+          },
+          {
+            value: 'slider',
+            label: 'Slider'
+          },
+          {
+            value: 'time-picker',
+            label: 'TimePicker'
+          },
+          {
+            value: 'date-picker',
+            label: 'DatePicker'
+          },
+          {
+            value: 'datetime-picker',
+            label: 'DateTimePicker'
+          },
+          {
+            value: 'upload',
+            label: 'Upload'
+          },
+          {
+            value: 'rate',
+            label: 'Rate'
+          },
+          {
+            value: 'form',
+            label: 'Form'
+          }
+        ]
+      },
+      {
+        value: 'data',
+        label: 'Data',
+        children: [
+          {
+            value: 'table',
+            label: 'Table'
+          },
+          {
+            value: 'tag',
+            label: 'Tag'
+          },
+          {
+            value: 'progress',
+            label: 'Progress'
+          },
+          {
+            value: 'tree',
+            label: 'Tree'
+          },
+          {
+            value: 'pagination',
+            label: 'Pagination'
+          },
+          {
+            value: 'badge',
+            label: 'Badge'
+          }
+        ]
+      },
+      {
+        value: 'notice',
+        label: 'Notice',
+        children: [
+          {
+            value: 'alert',
+            label: 'Alert'
+          },
+          {
+            value: 'loading',
+            label: 'Loading'
+          },
+          {
+            value: 'message',
+            label: 'Message'
+          },
+          {
+            value: 'message-box',
+            label: 'MessageBox'
+          },
+          {
+            value: 'notification',
+            label: 'Notification'
+          }
+        ]
+      },
+      {
+        value: 'navigation',
+        label: 'Navigation',
+        children: [
+          {
+            value: 'menu',
+            label: 'Menu'
+          },
+          {
+            value: 'tabs',
+            label: 'Tabs'
+          },
+          {
+            value: 'breadcrumb',
+            label: 'Breadcrumb'
+          },
+          {
+            value: 'dropdown',
+            label: 'Dropdown'
+          },
+          {
+            value: 'steps',
+            label: 'Steps'
+          }
+        ]
+      },
+      {
+        value: 'others',
+        label: 'Others',
+        children: [
+          {
+            value: 'dialog',
+            label: 'Dialog'
+          },
+          {
+            value: 'tooltip',
+            label: 'Tooltip'
+          },
+          {
+            value: 'popover',
+            label: 'Popover'
+          },
+          {
+            value: 'card',
+            label: 'Card'
+          },
+          {
+            value: 'carousel',
+            label: 'Carousel'
+          },
+          {
+            value: 'collapse',
+            label: 'Collapse'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    value: 'resource',
+    label: 'Resource',
+    children: [
+      {
+        value: 'axure',
+        label: 'Axure Components'
+      },
+      {
+        value: 'sketch',
+        label: 'Sketch Templates'
+      },
+      {
+        value: 'docs',
+        label: 'Design Documentation'
+      }
+    ]
+  }
+];
 </script>
 
 <style scoped lang="scss">
@@ -234,6 +619,7 @@ const textarea = ref('');
 }
 .tlt {
   font-size: 20px;
+  // font-weight: 700;
 }
 .select {
   height: 35px;
@@ -287,7 +673,7 @@ const textarea = ref('');
 .evaluate {
   margin-top: 20px;
   .question {
-    margin-top: 10px;
+    margin-top: 15px;
   }
   .textarea {
     margin-top: 15px;

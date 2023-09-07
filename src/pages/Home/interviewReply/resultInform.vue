@@ -23,13 +23,13 @@
     <el-table :data="gridData" class="table" border>
       <el-table-column property="name" label="姓名" align="center" />
       <el-table-column property="result" label="面试结果" align="center" />
-      <el-table-column label="简历及评价" align="center">
+      <!-- <el-table-column label="简历及评价" align="center">
         <template #default="scope">
           <el-icon size="25" @click="viewResume(scope.row)" class="document"
             ><Document
           /></el-icon>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <div class="pagination">
       <el-pagination
@@ -77,9 +77,20 @@
 </template>
 
 <script setup lang="ts">
-import { Document } from '@element-plus/icons-vue';
+// import { Document } from '@element-plus/icons-vue';
+import { getMessage } from '@/api/interviewReply';
+// 获取通知模板和进度
+const getInform = async () => {
+  const res = await getMessage(0);
+  console.log(res);
+};
+getInform();
 // 已选人
 const gridData = ref([
+  {
+    name: '王小虎',
+    result: '通过'
+  },
   {
     name: '王小虎',
     result: '通过'
@@ -111,9 +122,10 @@ const gridData = ref([
 ]);
 // 弹出框的显示与隐藏
 const dialogTableVisible = ref(false);
-const viewResume = (row: any) => {
-  console.log(row);
-};
+// 查看简历
+// const viewResume = (row: any) => {
+//   console.log(row);
+// };
 // 弹出框分页
 const handleCurrentChange = () => {
   console.log(11);
@@ -195,7 +207,7 @@ const format = (percentage: any) => {
   margin: 0 auto;
   margin-top: 20px;
   height: 330px;
-  width: 80%;
+  width: 70%;
   .document:hover {
     color: #409eff;
     cursor: pointer;
