@@ -40,5 +40,5 @@ export interface FilterMainDataReq {
   departmentIdList: number[];
   admissionAddressList: number[];
   messageStatusList: number[];
-  search: string|null;
+  search: string | null;
 }

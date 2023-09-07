@@ -335,7 +335,7 @@ const current_change = async (newCurrentPage: number) => {
       departmentIdList: filterDepartmentList.value,
       admissionAddressList: filterAddressIdList.value,
       messageStatusList: filterMessageStatusList.value,
-      search: searchWord.value||null
+      search: searchWord.value || null
     }
   );
   if (res) {
@@ -375,7 +375,7 @@ const shiftSearch = () => {
         departmentIdList: filterDepartmentList.value,
         admissionAddressList: filterAddressIdList.value,
         messageStatusList: filterMessageStatusList.value,
-        search: searchWord.value||null
+        search: searchWord.value || null
       }
     );
     // ...deal
