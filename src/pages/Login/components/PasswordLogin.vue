@@ -45,6 +45,7 @@
 import { UserFilled, Lock } from '@element-plus/icons-vue';
 import { FormInstance, FormRules } from 'element-plus';
 import { getOrganization, userLogin } from '@/api/login/index';
+import { useUserInfoStore } from '@/store/index';
 const router = useRouter();
 const formRef = ref<FormInstance>();
 const loginForm = reactive<{
@@ -103,6 +104,10 @@ const login = (formEl: FormInstance | undefined) => {
       const data = await userLogin(loginForm);
       if (!data) return;
       data?.token && localStorage.setItem('token', data?.token);
+      // 保存权限字段
+      const store = useUserInfoStore();
+      data?.permissionId && store.setPermissionId(data?.permissionId);
+      store.setPermissionName(data?.permissionName);
       setTimeout(() => {
         router.push({
           path: 'home'

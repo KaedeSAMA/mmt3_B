@@ -25,5 +25,15 @@ const useUserInfoStore = defineStore('userInfoStore', () => {
     setNowOrganizationId
   };
 });
-
-export { useUserInfoStore };
+//简历传参
+const dataBoardMeaasge = defineStore('stuInfoStore', () => {
+  const id = ref(0);
+  function setId(msg: number) {
+    id.value = msg;
+  }
+  return {
+    id,
+    setId
+  };
+});
+export { useUserInfoStore, dataBoardMeaasge };

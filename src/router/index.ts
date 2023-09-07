@@ -51,8 +51,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/home/currentInterview',
         name: 'currentInterview',
-        component: () =>
-          import('@/pages/Home/currentIntrview/currentInterview.vue')
+        component: () => import('@/pages/Home/currentIntrview/currentHome.vue')
       },
       // 面试安排路由
       {
@@ -70,10 +69,15 @@ const routes: Array<RouteRecordRaw> = [
       },
       // 面试复盘路由
       {
-        path: '/home/interviewReply',
-        name: 'interviewReply',
+        path: '/home/interviewReplyHome',
+        name: 'interviewReplyHome',
         component: () =>
-          import('@/pages/Home/interviewReply/interviewReply.vue')
+          import('@/pages/Home/interviewReply/interviewReplyHome.vue')
+      },
+      {
+        path: '/home/resultInform',
+        name: 'resultInform',
+        component: () => import('@/pages/Home/interviewReply/resultInform.vue')
       }
     ]
   }

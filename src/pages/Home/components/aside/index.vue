@@ -48,10 +48,18 @@
         <el-icon><Avatar /></el-icon>
         <span>实时面试</span>
       </el-menu-item>
-      <el-menu-item index="/home/interviewReply">
-        <el-icon><Finished /></el-icon>
-        <span>面试复盘</span>
-      </el-menu-item>
+      <el-sub-menu index="/home/d">
+        <template #title>
+          <el-icon><Finished /></el-icon>
+          <span>面试复盘</span>
+        </template>
+        <el-menu-item index="/home/interviewReplyHome">
+          <template #title><span>面试复盘</span></template>
+        </el-menu-item>
+        <el-menu-item index="/home/resultInform">
+          <template #title><span>结果通知</span></template>
+        </el-menu-item>
+      </el-sub-menu>
       <el-sub-menu index="/home/e">
         <template #title>
           <el-icon><icon-menu /></el-icon>
