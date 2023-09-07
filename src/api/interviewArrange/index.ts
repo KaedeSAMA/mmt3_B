@@ -2,7 +2,8 @@ import { _axios } from '@/server/http';
 import {
   GetMainDataRes,
   GetMainDataFilterRes,
-  GetAddressRes
+  GetAddressRes,
+  MessageCheckRes
 } from './types/res';
 import { ElMessage } from 'element-plus';
 import { QueryMainData, QueryCurrent } from './types/query';
@@ -97,4 +98,18 @@ export const DeleteAddress = async (params: {
     ElMessage.error(data.message);
   }
   return data;
+};
+
+/**
+ * @description 发送消息页面查看
+ */
+export const getSendMsg = async (params:QueryCurrent) => {
+  const data = await _axios.get<MessageCheckRes,QueryCurrent>(
+    '/local/b/interview/arrangement/message/check',
+    params
+  );
+  if (data.code !== '00000') {
+    ElMessage.error(data.message);
+  }
+  return data.data;
 };

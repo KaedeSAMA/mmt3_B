@@ -1,83 +1,6 @@
-<template>
-  <el-card class="mainbox1" shadow="always">
-    <div class="tlt">面试通知</div>
-    <article class="tab">
-      <p class="info-content-card">
-        通知内容：您好，您已通过我司面试，欢迎加入我司，您的入职时间为2021年5月1日，入职地点为北京市朝阳区望京SOHO，入职前请您准备好相关材料，如有疑问请联系您的HR，联系方式为：123456789
-      </p>
-    </article>
-    <div class="bottom">
-      <div class="checkNum">
-        当前已选<span style="color: #1087fd">100</span>人
-      </div>
-      <el-button text @click="dialogTableVisible = true"> 查看 </el-button>
-      <el-button type="primary" style="float: right">一键发送通知</el-button>
-    </div>
-  </el-card>
-  <el-dialog
-    style="min-width: 500px"
-    v-model="dialogTableVisible"
-    title="通知查看"
-    center
-  >
-    <div class="tip">增加和删除需要到对应功能模块进行，此处仅可以查看</div>
-    <el-table :data="gridData" class="table" border>
-      <el-table-column property="name" label="姓名" align="center" />
-      <el-table-column property="result" label="面试结果" align="center" />
-      <el-table-column label="简历及评价" align="center">
-        <template #default="scope">
-          <el-icon size="25" @click="viewResume(scope.row)" class="document"
-            ><Document
-          /></el-icon>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="pagination">
-      <el-pagination
-        small
-        background
-        layout="prev, pager, next"
-        :total="100"
-        @current-change="handleCurrentChange"
-        v-model:current-page="currentPage"
-        class="mt-4"
-      />
-    </div>
-  </el-dialog>
-  <el-card class="mainbox2" shadow="always">
-    <div class="tlt">
-      发送进度
-      <!-- <el-select
-        v-model="value"
-        class="m-2"
-        placeholder="Select"
-        style="width: 150px; float: right"
-        size="large"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select> -->
-    </div>
-    <div class="progress">
-      <el-progress
-        type="circle"
-        :width="300"
-        :stroke-width="25"
-        :percentage="percentage"
-        :format="format"
-        :status="progressStatus"
-      />
-    </div>
-    <div class="number">已通知总人数:70/100</div>
-    <div class="number">未通知人数：100</div>
-  </el-card>
-</template>
-
 <script setup lang="ts">
+import { getSendMsg } from '@/api/interviewArrange';
+import { MessageCheckResData } from '@/api/interviewArrange/types/res';
 import { Document } from '@element-plus/icons-vue';
 // 已选人
 const gridData = ref([
@@ -123,24 +46,8 @@ const handleCurrentChange = () => {
 const currentPage = ref(1);
 // 选择框所选内容
 const value = ref(0);
-// 选择框
-// const options = [
-//   {
-//     value: 0,
-//     label: '全部'
-//   },
-//   {
-//     value: 1,
-//     label: '未通过'
-//   },
-//   {
-//     value: 2,
-//     label: '通过'
-//   }
-// ];
-// 进度
 const progressStatus: any = ref('');
-const percentage = ref(70);
+const percentage = ref(0);
 const format = (percentage: any) => {
   switch (percentage) {
     case 100:
@@ -150,7 +57,99 @@ const format = (percentage: any) => {
       return `${percentage}%`;
   }
 };
+
+/**
+ * @description: 获取的通知内容
+ *
+ */
+const noticeInfo = ref<MessageCheckResData>({
+  messageTemple: '测试假数据',
+  allNum: 10,
+  notifiedNum: 6,
+  NotNotifiedNum: 4
+});
+onMounted(async () => {
+  const res = await getSendMsg({
+    round: 1
+  });
+  console.log(res);
+  noticeInfo.value = res;
+  percentage.value =
+    (noticeInfo.value.notifiedNum * 100) / noticeInfo.value.allNum;
+  progressStatus.value = percentage.value === 100 ? 'success' : '';
+});
 </script>
+
+<template>
+  <el-card class="mainbox1" shadow="always">
+    <div class="tlt">面试通知</div>
+    <article class="tab">
+      <p class="info-content-card">
+        {{ noticeInfo?.messageTemple }}
+      </p>
+    </article>
+    <div class="bottom">
+      <div class="checkNum">
+        当前已选<span style="color: #1087fd">{{ noticeInfo?.allNum }}</span
+        >人
+      </div>
+      <el-button text @click="dialogTableVisible = true"> 查看 </el-button>
+      <el-button type="primary" style="float: right">一键发送通知</el-button>
+    </div>
+  </el-card>
+  <el-dialog
+    style="min-width: 500px"
+    v-model="dialogTableVisible"
+    title="通知查看"
+    center
+  >
+    <div class="tip">增加和删除需要到对应功能模块进行，此处仅可以查看</div>
+    <el-table :data="gridData" class="table" border>
+      <el-table-column property="name" label="姓名" align="center" />
+      <el-table-column property="result" label="面试结果" align="center" />
+      <el-table-column label="简历及评价" align="center">
+        <template #default="scope">
+          <el-icon size="25" @click="viewResume(scope.row)" class="document"
+            ><Document
+          /></el-icon>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="pagination">
+      <el-pagination
+        small
+        background
+        layout="prev, pager, next"
+        :total="100"
+        @current-change="handleCurrentChange"
+        v-model:current-page="currentPage"
+        class="mt-4"
+      />
+    </div>
+  </el-dialog>
+  <el-card class="mainbox2" shadow="always">
+    <div class="tlt">发送进度</div>
+    <div class="progress">
+      <el-progress
+        type="circle"
+        :width="300"
+        :stroke-width="25"
+        :percentage="percentage"
+        :format="format"
+        :status="progressStatus"
+      />
+    </div>
+    <div class="number">
+      已通知总人数:{{ noticeInfo?.notifiedNum }}/{{ noticeInfo?.allNum }}
+    </div>
+    <div class="number">
+      未通知人数：{{
+        noticeInfo?.NotNotifiedNum ??
+        noticeInfo?.allNum - noticeInfo?.notifiedNum
+      }}
+    </div>
+  </el-card>
+</template>
 
 <style scoped lang="scss">
 .tlt {
