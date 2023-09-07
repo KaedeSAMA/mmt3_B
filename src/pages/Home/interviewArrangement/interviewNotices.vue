@@ -69,6 +69,9 @@ const noticeInfo = ref<MessageCheckResData>({
   NotNotifiedNum: 4
 });
 onMounted(async () => {
+  let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
+  select_row_arr = JSON.parse(select_row_arr);
+  // console.log(select_row_arr);
   const res = await getSendMsg({
     round: 1
   });

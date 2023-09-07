@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Filter, Warning } from '@element-plus/icons-vue';
+import { useRouter } from 'vue-router';
 import {
   GetMainDataResData,
   AddressIdList,
@@ -27,6 +28,7 @@ const timer = ref<NodeJS.Timeout | null>(null);
 const tableData = ref<any[]>([]); // 根据你的数据结构进行调整
 const filterDepartmentId = ref(0);
 
+const router = useRouter();
 /**
  * @description 展示使用说明
  */
@@ -275,10 +277,12 @@ const setStartTime = () => {
 const setEndTime = () => {
   console.log(endTime.value?.getTime());
 };
-
+// 被选中的行
+const select_row_arr = ref<any[]>([]);
 const handleSeclect = (val: any[]) => {
   // ... 处理 handleSeclect 逻辑 ...
   console.log(val);
+  select_row_arr.value = val;
 };
 
 const filterChange = (filters: any) => {
@@ -305,8 +309,16 @@ const current_change = async (newCurrentPage: number) => {
   }
 };
 
+/**
+ * @description 确定安排
+ */
 const pdBtn = () => {
-  // ... 处理 pdBtn 逻辑 ...
+  // 持久化 (避免反复读写磁盘, 只在最后一次性写入)
+  sessionStorage.setItem(
+    'select_row_arr',
+    JSON.stringify(select_row_arr.value)
+  );
+  router.push('/home/interviewNotice');
 };
 
 onMounted(async () => {
