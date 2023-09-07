@@ -9,7 +9,9 @@ import {
 import {
   getMainData,
   getMainDataFilter,
-  getAddressRes
+  getAddressRes,
+  AddAddress,
+  DeleteAddress
 } from '@/api/interviewArrange';
 import { ref, watch, onMounted } from 'vue';
 const sameDepartment = ref(true);
@@ -34,6 +36,34 @@ const showUsinginfo = () => {
 };
 const handleDialogClose = (done: () => void) => {
   done();
+};
+// 添加地址的输入框显示
+const showAddAddress = ref(false);
+const newAddressToAdd = ref('');
+// 添加地址
+const confirmAddAddress = async () => {
+  showAddAddress.value = false;
+  const res = await AddAddress({
+    name: newAddressToAdd.value,
+    round: round.value,
+    departmentId: Number(sessionStorage.getItem('organizationId'))
+  });
+  // 请求成功
+  if (res.code == '00000') {
+    console.log(res.data.addressPoList);
+  }
+};
+//删除地址
+const deleteAddress = async (id: number) => {
+  // addressPoList.splice(id, 1);
+  const res = await DeleteAddress({
+    round: round.value,
+    addressId: id
+  });
+  // 请求成功
+  if (res.code == '00000') {
+    console.log(res.data.addressPoList);
+  }
 };
 
 const round = ref<number>(1);
@@ -377,7 +407,7 @@ onMounted(async () => {
           style="width: 210px"
         />
       </section>
-      <section>
+      <section class="option-custom">
         <!-- 有点难实现 -->
         <el-select
           v-model="addressIdListValue"
@@ -395,7 +425,51 @@ onMounted(async () => {
             :key="item.id"
             :label="item.addressName"
             :value="item.id"
-          />
+          >
+            <template #default>
+              <span>{{ item.addressName }}</span>
+              <span
+                @click="deleteAddress(item.id)"
+                style="
+                  /* float: right; */
+                  margin-left: 10px;
+                  color: var(--el-text-color-secondary);
+                  font-size: 13px;
+                "
+                >&#10006;</span
+              >
+            </template>
+            <!--           
+            <span style="float: left">{{ item.addressName }}</span>
+            <span
+              style="
+                float: right;
+                color: var(--el-text-color-secondary);
+                font-size: 13px;
+              "
+              >&#10006;</span
+            > -->
+          </el-option>
+          <el-option disabled label="无匹配数据" value="noMatch">
+            <template #default>
+              <template v-if="showAddAddress">
+                <el-input
+                  v-model="newAddressToAdd"
+                  placeholder="请输入地址"
+                  style="width: 50%"
+                />
+                <el-button
+                  type="primary"
+                  @click="confirmAddAddress"
+                  style="margin-left: 10px"
+                  >确认添加</el-button
+                >
+              </template>
+              <template v-else>
+                <el-button @click="showAddAddress = true">点击添加</el-button>
+              </template>
+            </template>
+          </el-option>
         </el-select>
       </section>
       <el-button type="primary">一键选择</el-button>
@@ -585,6 +659,26 @@ onMounted(async () => {
 .query-list {
   display: flex;
   gap: 10px;
+
+  .option-custom {
+    // background-color: red;
+
+    :deep(.el-select-dropdown__item) {
+      background-color: red;
+      ::after {
+        content: 'hhh';
+        color: red;
+      }
+    }
+    :deep(
+        .el-select-dropdown.is-multiple
+          .el-select-dropdown__item.selected::after
+      ) {
+      // display: none;
+      content: 'hhh';
+      color: red;
+    }
+  }
 }
 .search {
   width: 20%;
