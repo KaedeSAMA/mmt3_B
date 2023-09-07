@@ -62,7 +62,7 @@ const deleteAddress = async (id: number) => {
   });
   // 请求成功
   if (res.code == '00000') {
-    console.log(res.data.addressPoList);
+    Object.assign(addressPoList, res.data.addressPoList);
   }
 };
 
@@ -85,20 +85,12 @@ const roundList = [
 const startTime = ref<Date>();
 const endTime = ref<Date>();
 const time = ref<number>();
-const addressPoList = reactive([
+const addressPoList = reactive<
   {
-    id: 1,
-    addressName: '115'
-  },
-  {
-    id: 0,
-    addressName: '114'
-  },
-  {
-    id: 2,
-    addressName: '113'
-  }
-]);
+    id: number;
+    addressName: string;
+  }[]
+>([]);
 const addressIdListValue = ref<number[]>([]);
 
 const addressIdList = reactive<AddressIdList[]>([]);
@@ -346,7 +338,7 @@ onMounted(async () => {
     Object.assign(addressIdList, values[1].addressIdList);
     Object.assign(messageStatusList, values[1].messageStatusList);
     Object.assign(departmentList, values[1].departmentList);
-    Object.assign(addressPoList, addressList);
+    Object.assign(addressPoList, values[2].addressPoList);
   });
   // 生成筛选项
   filterItemReady();
