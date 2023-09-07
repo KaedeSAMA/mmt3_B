@@ -3,10 +3,12 @@ import {
   GetMainDataRes,
   GetMainDataFilterRes,
   GetAddressRes,
-  MessageCheckRes
+  MessageCheckRes,
+  MessageSendRes
 } from './types/res';
 import { ElMessage } from 'element-plus';
 import { QueryMainData, QueryCurrent } from './types/query';
+import { MessageDataReq } from './types/req';
 
 /**
  * @description 获取主数据
@@ -103,8 +105,8 @@ export const DeleteAddress = async (params: {
 /**
  * @description 发送消息页面查看
  */
-export const getSendMsg = async (params:QueryCurrent) => {
-  const data = await _axios.get<MessageCheckRes,QueryCurrent>(
+export const getSendMsg = async (params: QueryCurrent) => {
+  const data = await _axios.get<MessageCheckRes, QueryCurrent>(
     '/local/b/interview/arrangement/message/check',
     params
   );
@@ -112,4 +114,18 @@ export const getSendMsg = async (params:QueryCurrent) => {
     ElMessage.error(data.message);
   }
   return data.data;
+};
+
+/**
+ * @description 发送消息
+ */
+export const sendMsg = async (params: MessageDataReq) => {
+  const data = await _axios.post<MessageSendRes, MessageDataReq>(
+    '/local/b/interview/arrangement/message/send',
+    params
+  );
+  if (data.code !== '00000') {
+    ElMessage.error(data.message);
+  }
+  return data;
 };

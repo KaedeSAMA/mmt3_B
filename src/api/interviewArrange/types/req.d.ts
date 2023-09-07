@@ -13,3 +13,18 @@ export interface ManualReq {
   startTime: number;
   time: number;
 }
+
+/**
+ * @description 发送消息
+ * @param {MessageData.messageSendPoList} 消息发送列表
+ * @param {MessageData.message} 消息模板
+ */
+export interface MessageDataReq {
+  messageSendPoList: MessageSendPo[];
+  message: string;
+}
+
+interface MessageSendPo {
+  interviewId: number;
+  userId: number;
+}
