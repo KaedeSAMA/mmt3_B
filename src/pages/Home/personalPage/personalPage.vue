@@ -236,6 +236,11 @@ const getOrgList = async () => {
   const data = await getUserOrganizations();
   if (data) {
     organizationTabs.value = data.organizations;
+    // !! debug 需要使用到organizationId
+    sessionStorage.setItem(
+      'organizationId',
+      data.organizations[0].organizationId.toString()
+    );
   }
 };
 onMounted(() => {

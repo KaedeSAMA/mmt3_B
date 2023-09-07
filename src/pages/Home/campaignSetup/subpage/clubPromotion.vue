@@ -58,6 +58,7 @@ const selectList2 = ref([
   }
 ]);
 let data = reactive<Data>({
+  id: 0,
   name: '加载中',
   avatarUrl: '#',
   briefIntroduction: '加载中',

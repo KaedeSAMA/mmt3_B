@@ -6,7 +6,7 @@ import {
   getDeptInfo,
   updateDeptLogo
 } from '@/api/callout/index';
-import { genFileId } from 'element-plus';
+import { ElMessageBox, genFileId } from 'element-plus';
 import { CirclePlus, Remove } from '@element-plus/icons-vue';
 import type {
   UploadInstance,
@@ -14,6 +14,12 @@ import type {
   UploadRawFile,
   UploadRequestOptions
 } from 'element-plus';
+// import IndexDBWrapper from '@/utils/indexDB/index';
+import infoDB from '@/utils/indexDB/db';
+import { getUserBasicInfo } from '@/api/personalPage';
+// ### 用于存储用户登录时的社团ID
+// import { useUserInfoStore } from '@/store/index';
+// const userInfoStore = useUserInfoStore();
 const selectList1 = ref([
   //Map
   {
@@ -56,79 +62,82 @@ const selectList2 = ref([
     value: '自律互助'
   }
 ]);
-// store
+/* store */
 const organizeInfo = useOrgInfo();
-// const data = reactive<Data>({
-//   name: '加载中',
-//   avatarUrl: '#',
-//   briefIntroduction: '加载中',
-//   tagList: [
-//     {
-//       tag: '加载中',
-//       type: 1
-//     },
-//     {
-//       tag: '加载中',
-//       type: 1
-//     }
-//   ],
-//   introduction: '加载中',
-//   feature: '加载中',
-//   daily: '加载中',
-//   slogan: '加载中',
-//   contactInfo: '加载中',
-//   more: '加载中',
-//   departmentList: []
-// });
-/**
- * getDeptInfo返回的数据
- */
+
+/* getDeptInfo返回的数据 */
 const data = organizeInfo.data;
+
+/* indexDB */
+// const indexDB = new IndexDBWrapper<Data>('myDatabase', 'myStore', 'name');
+// console.log(indexDB);
+
+/**
+ * @description: 初始化
+ */
 onMounted(async () => {
-  const res = (await getDeptInfo()) as Data;
-  // 使用 Object.assign 更新响应式对象
-  // Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
-  organizeInfo.setOrgInfo(res); //更新store
-  initTagListFix(); // 补全tagList
+  //检查本地存储是否有数据
+  // const res1 = sessionStorage.getItem('promotionInfoData');
+  const organizationId = Number(sessionStorage.getItem('organizationId'));
+  const res1 = (await infoDB.promotionInfo.get(organizationId)) as Data;
+  if (res1) {
+    organizeInfo.setOrgInfo(res1); //更新store
+    return;
+  }
+
+  // 检查本地存储的是否是当前社团的信息
+  // if (res.id == userInfoStore.nowOrgnazitionId) {
+  //   organizeInfo.setOrgInfo(res); //更新store
+  //   return;
+  // }
+
+  // 从后端获取数据
+  try {
+    const res = (await getDeptInfo()) as Data;
+    // 使用 Object.assign 更新响应式对象
+    // Object.assign(data, JSON.parse(JSON.stringify(res))); //更新本页
+    organizeInfo.setOrgInfo(res); //更新store
+    // sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
+    console.log('put into indexDB');
+    infoDB.promotionInfo.put(res);
+    initTagListFix(); // 补全tagList
+  } catch (err) {
+    console.log(err);
+  }
 });
 /**
  * @description 更新部门信息
  */
 const updSyncDeptInfoAll = async () => {
-  console.log(data);
-  const {
-    briefIntroduction,
-    contactInfo,
-    daily,
-    departmentList,
-    feature,
-    introduction,
-    more,
-    slogan,
-    tagList
-  } = data;
-
-  const updateData = {
-    briefIntroduction,
-    contactInfo,
-    daily,
-    departmentList,
-    feature,
-    introduction,
-    more,
-    slogan,
-    tagList
-  };
-
-  const res = await updateDeptInfo(updateData);
-  console.log(res);
-  organizeInfo.setOrgInfo(data); //更新store
+  /* 不把id和avatarUrl传给后端,虽然传了也没啥 */
+  const { id, avatarUrl, ...updateData } = data;
+  try {
+    const isConfirm = await ElMessageBox.confirm('确定要同步吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    });
+    if (isConfirm == 'cancel') return;
+    await updateDeptInfo(updateData);
+    organizeInfo.setOrgInfo(data); //更新store
+    // sessionStorage.setItem('promotionInfoData', JSON.stringify(data)); //更新sessionStorage
+    const put_data = JSON.parse(JSON.stringify(data));
+    infoDB.promotionInfo.put(put_data as Data);
+  } catch (err) {
+    console.log('取消:', err);
+    ElMessage.warning('取消同步');
+  }
 };
 /**
  * @description: 保存临时数据同步到模拟器
  */
 const saveTemp = () => {
   organizeInfo.setOrgInfo(data);
+  // sessionStorage.setItem('promotionInfoData', JSON.stringify(data));
+  /* 必须是深拷贝,indexDB要求把响应式转成可序列化对象 */
+  const put_data = JSON.parse(JSON.stringify(data));
+  infoDB.promotionInfo.put(put_data as Data);
+  ElMessage.success('保存成功');
 };
 const upload = ref<UploadInstance>();
 const handleExceed: UploadProps['onExceed'] = (files) => {
@@ -144,7 +153,10 @@ const handleChange: UploadProps['onChange'] = () => {
 // http上传头像
 const uploadAvatar = async (option: UploadRequestOptions) => {
   const res = (await updateDeptLogo({ avatar: option.file })) as Avatar;
-  data.avatarUrl = res.avatarUrl; // 更新头像
+  data.avatarUrl = res.avatarUrl; // 更新头像,由于是引用，会连带更新到store
+  // sessionStorage.setItem('promotionInfoData', JSON.stringify(data));
+  const organizationId = Number(sessionStorage.getItem('organizationId'));
+  infoDB.promotionInfo.update(organizationId, { avatarUrl: res.avatarUrl });
 };
 // 如果出现返回系统标签缺失，手动添加
 const initTagListFix = () => {
@@ -197,6 +209,25 @@ const addDepartment = () => {
 const deleteDepartment = (index: number) => {
   data.departmentList.splice(index, 1);
 };
+
+/* 权限 */
+onMounted(async () => {
+  await getPerssion();
+});
+const permission = ref(true);
+/**
+ * @description 获取权限信息
+ * @description 不把权限信息放在store里面，因为刷新会导致丢失，而存到storage不安全
+ */
+const getPerssion = async () => {
+  console.log('getting permission...');
+  const res = (await getUserBasicInfo()) as {
+    permissionId: number;
+    organizationId: number;
+  };
+  if (res.permissionId == 1) permission.value = false;
+  sessionStorage.setItem('organizationId', res.organizationId + '');
+};
 </script>
 
 <template>
@@ -221,7 +252,10 @@ const deleteDepartment = (index: number) => {
               :on-change="handleChange"
             >
               <template #trigger>
-                <el-button type="primary" style="width: 150px"
+                <el-button
+                  type="primary"
+                  style="width: 150px"
+                  :disabled="permission"
                   >上传头像</el-button
                 >
               </template>
@@ -236,7 +270,7 @@ const deleteDepartment = (index: number) => {
               <el-form-item label="属性" class="tag-list">
                 <el-select
                   placeholder="请输入性质"
-                  :disabled="false"
+                  :disabled="permission"
                   v-model="data.tagList[0].tag"
                 >
                   <el-option
@@ -246,6 +280,7 @@ const deleteDepartment = (index: number) => {
                   />
                 </el-select>
                 <el-select
+                  :disabled="permission"
                   placeholder="请输入属性"
                   v-model="data.tagList[1].tag"
                 >
@@ -257,12 +292,13 @@ const deleteDepartment = (index: number) => {
                 </el-select>
                 <template v-for="(item, index) in data.tagList">
                   <el-input
+                    :disabled="permission"
                     placeholder="请输入标签"
                     style="max-width: 214.5px"
                     v-if="item.type === 2"
                     v-model="item.tag"
                   >
-                    <template #suffix>
+                    <template #suffix v-if="!permission">
                       <div @click="deleteTag(index)">
                         <el-icon><Remove /></el-icon>
                       </div>
@@ -270,8 +306,9 @@ const deleteDepartment = (index: number) => {
                   </el-input>
                 </template>
                 <el-button
+                  :disabled="permission"
                   style="align-self: self-start"
-                  v-if="data.tagList.length < 4"
+                  v-if="data.tagList.length < 4 && !permission"
                   @click="addTag"
                   >+ 自定义</el-button
                 >
@@ -289,8 +326,9 @@ const deleteDepartment = (index: number) => {
                 >
               </template>
               <el-input
+                :disabled="permission"
                 type="textarea"
-                :rows="7"
+                :autosize="{ minRows: 7 }"
                 v-model="data.briefIntroduction"
               />
             </el-form-item>
@@ -308,7 +346,12 @@ const deleteDepartment = (index: number) => {
                   >社团介绍</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.introduction" />
+              <el-input
+                :disabled="permission"
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.introduction"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -316,7 +359,12 @@ const deleteDepartment = (index: number) => {
                   >社团特色</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.feature" />
+              <el-input
+                :disabled="permission"
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.feature"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -324,7 +372,12 @@ const deleteDepartment = (index: number) => {
                   >社团日常</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.daily" />
+              <el-input
+                :disabled="permission"
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.daily"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -332,7 +385,12 @@ const deleteDepartment = (index: number) => {
                   >纳新宣言</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.slogan" />
+              <el-input
+                :disabled="permission"
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.slogan"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
@@ -340,13 +398,23 @@ const deleteDepartment = (index: number) => {
                   >联系方式</label
                 >
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.contactInfo" />
+              <el-input
+                :disabled="permission"
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.contactInfo"
+              />
             </el-form-item>
             <el-form-item required>
               <template #label>
                 <label style="font-size: 17px; font-weight: 400">更多</label>
               </template>
-              <el-input type="textarea" :rows="7" v-model="data.more" />
+              <el-input
+                :disabled="permission"
+                type="textarea"
+                :autosize="{ minRows: 7 }"
+                v-model="data.more"
+              />
             </el-form-item>
           </el-form>
         </section>
@@ -363,7 +431,9 @@ const deleteDepartment = (index: number) => {
                   <el-icon
                     :size="25"
                     color="#409eff"
-                    v-if="index == data.departmentList.length - 1"
+                    v-if="
+                      index == data.departmentList.length - 1 && !permission
+                    "
                     @click="addDepartment"
                     ><CirclePlus
                   /></el-icon>
@@ -372,7 +442,7 @@ const deleteDepartment = (index: number) => {
                   <el-icon
                     :size="25"
                     color="#409eff"
-                    v-if="index !== 0"
+                    v-if="index !== 0 && !permission"
                     @click="deleteDepartment(index)"
                     ><Remove
                   /></el-icon>
@@ -388,6 +458,7 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   placeholder="请输入部门名称"
                   style="max-width: 214.5px"
                   v-model="department.name"
@@ -400,6 +471,7 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   placeholder="请输入部门简介"
                   style="max-width: 214.5px"
                   v-model="department.briefIntroduction"
@@ -413,8 +485,9 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   type="textarea"
-                  :rows="7"
+                  :autosize="{ minRows: 7 }"
                   v-model="department.introduction"
                 />
               </el-form-item>
@@ -425,8 +498,9 @@ const deleteDepartment = (index: number) => {
                   >
                 </template>
                 <el-input
+                  :disabled="permission"
                   type="textarea"
-                  :rows="7"
+                  :autosize="{ minRows: 7 }"
                   v-model="department.standard"
                 />
               </el-form-item>
@@ -442,8 +516,21 @@ const deleteDepartment = (index: number) => {
           确定同步
         </el-button>
       </section>
+      <!-- <div style="height: 6%"></div> -->
     </div>
   </div>
+  <!-- <section
+    style="
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-right: 10%;
+      margin-top: 10px;
+    "
+  >
+    <el-button type="primary" @click="saveTemp"> 暂时保存 </el-button>
+    <el-button type="primary" @click="updSyncDeptInfoAll"> 确定同步 </el-button>
+  </section> -->
 </template>
 
 <style scoped lang="scss">
@@ -507,6 +594,8 @@ const deleteDepartment = (index: number) => {
   margin-bottom: 20px;
   padding-left: 10px;
   border-left: 4px solid var(--el-color-primary);
+  letter-spacing: 2px;
+  padding: 8px;
 }
 
 #recruitDept {

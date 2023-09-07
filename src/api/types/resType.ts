@@ -1,3 +1,5 @@
+// import { type } from 'os';
+
 interface IBaseResponce<D> {
   readonly code: string;
   data?: D;
@@ -166,12 +168,10 @@ type TGetEvaluateMessage = {
   comprehensiveQuestionList: Array<TResultItem>;
 };
 type TGetEvaluateMessageRes = IBaseResponce<TGetEvaluateMessage>;
-
 type TGetRound = {
   round: number;
 };
 type TGetRoundRes = IBaseResponce<TGetRound>;
-
 //实时面试界面
 //获取面试地点
 type TGetPlace = {
@@ -327,6 +327,28 @@ type TGetEmitResumeMessage = {
   }>;
 };
 type TGetEmitResumeMessageRes = IBaseResponce<TGetEmitResumeMessage>;
+// ！下为 账号管理 页面用到的类型⬇️
+type TAllAssociationMembersData = {
+  memberInfoDataList: Array<{
+    id: number;
+    studentId: string;
+    name: string;
+    permission: string;
+    phone: string;
+  }>;
+};
+type TAllAssociationMembersRes = IBaseResponce<TAllAssociationMembersData>;
+
+type TAssociationMemberData = {
+  studentId: string;
+  name: string;
+  permission: string;
+  phone: string;
+  passwd: string;
+};
+type TAssociationMemberRes = IBaseResponce<TAssociationMemberData>;
+
+// ！ 账号管理  页面类型结束⬆️
 
 export type {
   IBaseResponce,
@@ -349,5 +371,9 @@ export type {
   TGetPieRes,
   TGetInformMessageRes,
   TGetTableRes,
-  TGetEmitResumeMessageRes
+  TGetEmitResumeMessageRes,
+  TAllAssociationMembersRes,
+  TAllAssociationMembersData,
+  TAssociationMemberData,
+  TAssociationMemberRes
 };

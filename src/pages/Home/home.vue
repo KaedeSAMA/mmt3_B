@@ -39,7 +39,7 @@ useResizeHook((wid, hei) => {
       //   display: flex;
       //   align-items: center;
       //   justify-content: center;
-      //   background-color: rgb(247, 248, 249);
+      background-color: rgb(240, 242, 247);
     }
   }
 }
