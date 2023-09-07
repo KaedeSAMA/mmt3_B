@@ -28,3 +28,17 @@ interface MessageSendPo {
   interviewId: number;
   userId: number;
 }
+
+/**
+ * @description 筛选主数据
+ * @param {number[]} departmentIdList 部门id列表
+ * @param {number[]} admissionAddressList 地点id列表
+ * @param {number[]} messageStatusList 消息状态列表
+ * @param {string} search 搜索内容
+ */
+export interface FilterMainDataReq {
+  departmentIdList: number[];
+  admissionAddressList: number[];
+  messageStatusList: number[];
+  search: string;
+}

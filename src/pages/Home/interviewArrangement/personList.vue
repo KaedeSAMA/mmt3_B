@@ -12,7 +12,8 @@ import {
   getMainDataFilter,
   getAddressRes,
   AddAddress,
-  DeleteAddress
+  DeleteAddress,
+  filterMainData
 } from '@/api/interviewArrange';
 import { ref, watch, onMounted } from 'vue';
 const sameDepartment = ref(true);
@@ -23,7 +24,6 @@ const order = ref('');
 const pagesize = ref(10);
 const currentPage = ref(1);
 const total = ref(0);
-const search = ref('');
 const timer = ref<NodeJS.Timeout | null>(null);
 const tableData = ref<any[]>([]); // 根据你的数据结构进行调整
 const filterDepartmentId = ref(0);
@@ -87,17 +87,24 @@ const roundList = [
 const startTime = ref<Date>();
 const endTime = ref<Date>();
 const time = ref<number>();
+//安排地点的选项
 const addressPoList = reactive<
   {
     id: number;
     addressName: string;
   }[]
 >([]);
+//选中的地点list
 const addressIdListValue = ref<number[]>([]);
-
+// 待转换成过滤项
 const addressIdList = reactive<AddressIdList[]>([]);
 const messageStatusList = reactive<MessageStatusList[]>([]);
 const departmentList = reactive<DepartmentList[]>([]);
+// 选中过滤项list
+const filterAddressIdList = ref<number[]>([]);
+const filterMessageStatusList = ref<number[]>([]);
+const filterDepartmentList = ref<number[]>([]);
+// 过滤项
 interface Filter {
   text: string;
   value: string;
@@ -287,6 +294,19 @@ const handleSeclect = (val: any[]) => {
 
 const filterChange = (filters: any) => {
   // ... 处理 filterChange 逻辑 ...
+  console.log(filters);
+  switch (Object.keys(filters)[0]) {
+    case 'messageStatus':
+      filterMessageStatusList.value = filters.messageStatus.map((n:string)=>parseInt(n));
+      break;
+    case 'nextPlace':
+      filterAddressIdList.value = filters.nextPlace.map((n:string)=>parseInt(n));
+      break;
+    case 'department':
+      filterDepartmentList.value = filters.department.map((n:string)=>parseInt(n));
+      break;
+  }
+  shiftSearch();
 };
 
 const indexMethod = (index: number) => {
@@ -321,6 +341,35 @@ const pdBtn = () => {
   router.push('/home/interviewNotice');
 };
 
+/**
+ * @description 搜索字段
+ */
+const searchWord = ref('');
+const shiftSearch = () => {
+  if (timer.value) {
+    clearTimeout(timer.value);
+  }
+  timer.value = setTimeout(async () => {
+    console.log(searchWord.value);
+    const data = await filterMainData(
+      {
+        round: round.value,
+        pageNum: 10,
+        page: 1
+      },
+      {
+        departmentIdList: filterDepartmentList.value,
+        admissionAddressList: filterAddressIdList.value,
+        messageStatusList: filterMessageStatusList.value,
+        search: searchWord.value
+      }
+    );
+    // ...deal
+    console.log(data);
+    /* update */
+    // mainData.value = data;
+  }, 1000);
+};
 onMounted(async () => {
   // ... 处理组件创建前的逻辑 ...
   const mainList = getMainData({
@@ -386,7 +435,8 @@ onMounted(async () => {
         <el-input
           placeholder="请输入关键字"
           suffix-icon="el-icon-search"
-          v-model="search"
+          v-model="searchWord"
+          @input="shiftSearch"
           class="input-style"
         />
       </section>

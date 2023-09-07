@@ -15,4 +15,5 @@ export interface QueryCurrent {
 export interface QueryMainData extends QueryCurrent {
   page: number;
   pageNum: number;
+  [key: string]: number; // 添加索引签名,可以使用任意的字符串去索引
 }
