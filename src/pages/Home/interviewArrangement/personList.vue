@@ -297,13 +297,19 @@ const filterChange = (filters: any) => {
   console.log(filters);
   switch (Object.keys(filters)[0]) {
     case 'messageStatus':
-      filterMessageStatusList.value = filters.messageStatus.map((n:string)=>parseInt(n));
+      filterMessageStatusList.value = filters.messageStatus.map((n: string) =>
+        parseInt(n)
+      );
       break;
     case 'nextPlace':
-      filterAddressIdList.value = filters.nextPlace.map((n:string)=>parseInt(n));
+      filterAddressIdList.value = filters.nextPlace.map((n: string) =>
+        parseInt(n)
+      );
       break;
     case 'department':
-      filterDepartmentList.value = filters.department.map((n:string)=>parseInt(n));
+      filterDepartmentList.value = filters.department.map((n: string) =>
+        parseInt(n)
+      );
       break;
   }
   shiftSearch();
@@ -319,11 +325,19 @@ const indexMethod = (index: number) => {
  * @param newCurrentPage
  */
 const current_change = async (newCurrentPage: number) => {
-  const res = await getMainData({
-    page: newCurrentPage,
-    pageNum: 10,
-    round: round.value
-  });
+  const res = await filterMainData(
+    {
+      page: newCurrentPage,
+      pageNum: 10,
+      round: round.value
+    },
+    {
+      departmentIdList: filterDepartmentList.value,
+      admissionAddressList: filterAddressIdList.value,
+      messageStatusList: filterMessageStatusList.value,
+      search: searchWord.value||null
+    }
+  );
   if (res) {
     mainData.value = res;
   }
@@ -361,7 +375,7 @@ const shiftSearch = () => {
         departmentIdList: filterDepartmentList.value,
         admissionAddressList: filterAddressIdList.value,
         messageStatusList: filterMessageStatusList.value,
-        search: searchWord.value
+        search: searchWord.value||null
       }
     );
     // ...deal
