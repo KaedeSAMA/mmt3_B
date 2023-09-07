@@ -78,6 +78,10 @@ onMounted(async () => {
     (noticeInfo.value.notifiedNum * 100) / noticeInfo.value.allNum;
   progressStatus.value = percentage.value === 100 ? 'success' : '';
 });
+
+const putSendNotice = () => {
+  console.log(11);
+};
 </script>
 
 <template>
@@ -94,7 +98,9 @@ onMounted(async () => {
         >人
       </div>
       <el-button text @click="dialogTableVisible = true"> 查看 </el-button>
-      <el-button type="primary" style="float: right">一键发送通知</el-button>
+      <el-button type="primary" style="float: right" @click="putSendNotice"
+        >一键发送通知</el-button
+      >
     </div>
   </el-card>
   <el-dialog
@@ -178,7 +184,7 @@ onMounted(async () => {
     .info-content-card {
       height: 50%;
       padding: 10px;
-      border: 1px solid #909399;
+      // border: 1px solid #909399;
       // border-radius: 10px;
       box-shadow: 0 0 4px #74767b;
     }
