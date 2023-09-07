@@ -38,8 +38,8 @@ const dataBoardMeaasge = defineStore('stuInfoStore', () => {
 });
 //面试复盘传参
 const selectMeaasge = defineStore('selectStore', () => {
-  const data:any =ref([]);
-  function setdata(msg:any) {
+  const data: any = ref([]);
+  function setdata(msg: any) {
     data.value = msg;
   }
   return {
@@ -47,4 +47,4 @@ const selectMeaasge = defineStore('selectStore', () => {
     setdata
   };
 });
-export { useUserInfoStore, dataBoardMeaasge,selectMeaasge };
+export { useUserInfoStore, dataBoardMeaasge, selectMeaasge };

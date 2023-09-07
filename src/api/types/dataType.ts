@@ -67,15 +67,15 @@ type Tchange = {
 };
 //面试复盘界面
 // 表格接口数据
-type Ttable={
-  page: number,
-  departmentId: number|null,
-  addressId: number|null,
-  isSort: boolean|null,
-  stateList: Array<number>,
-  messagestateList: Array<number>,
-  search: string
-}
+type Ttable = {
+  page: number;
+  departmentId: number | null;
+  addressId: number | null;
+  isSort: boolean | null;
+  stateList: Array<number>;
+  messagestateList: Array<number>;
+  search: string;
+};
 export type {
   TUserLogin,
   TRegister,

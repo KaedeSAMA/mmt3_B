@@ -30,9 +30,9 @@ type TGetMessage = {
 type TGetInformMessage = {
   status: number;
 };
-type TGetResumeQuestion={
-  interview:number
-}
+type TGetResumeQuestion = {
+  interview: number;
+};
 export type {
   TGetOrganization,
   TGetResume,
