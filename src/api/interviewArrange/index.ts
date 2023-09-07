@@ -53,3 +53,48 @@ export const getAddressRes = async (round: QueryCurrent) => {
   }
   return data.data;
 };
+
+/**
+ * @description 添加面试地点
+ */
+export const AddAddress = async (params: {
+  departmentId: number;
+  round: number;
+  name: string;
+}) => {
+  // console.log(params);
+  const data = await _axios.post<
+    GetAddressRes,
+    {
+      departmentId: number;
+      round: number;
+      name: string;
+    }
+  >('/local/b/interview/arrangement/address/add', params);
+  if (data.code !== '00000') {
+    ElMessage.error(data.message);
+  }
+  return data;
+};
+
+/**
+ * @description 删除面试地点
+ * @param {number} params.id 地点id
+ */
+export const DeleteAddress = async (params: {
+  round: number;
+  addressId: number;
+}) => {
+  console.log(params);
+  const data = await _axios.post<
+    GetAddressRes,
+    {
+      round: number;
+      addressId: number;
+    }
+  >('/local/b/interview/arrangement/address/deleted', params);
+  if (data.code !== '00000') {
+    ElMessage.error(data.message);
+  }
+  return data;
+};
