@@ -1,18 +1,14 @@
 <template>
   <el-card class="mainbox" shadow="always">
-    <div class="resume">
-      <resume></resume>
-    </div>
-    <div class="evaluate">
-      <evaluate></evaluate>
-    </div>
+    <div class="resume"><resume></resume></div>
+    <div class="evaluate"><evaluateEmit></evaluateEmit></div>
     <el-icon size="20" class="closeIcon" @click="close"><Close /></el-icon>
   </el-card>
 </template>
 
 <script setup lang="ts">
 import resume from '@/pages/Home/components/evaluateAndResume/resume.vue';
-import evaluate from '@/pages/Home/components/evaluateAndResume/evaluate.vue';
+import evaluateEmit from '@/pages/Home/components/evaluateAndResume/evaluateEmit.vue';
 import { Close } from '@element-plus/icons-vue';
 const emit = defineEmits(['change']);
 const close = () => {

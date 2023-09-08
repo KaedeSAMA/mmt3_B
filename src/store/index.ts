@@ -25,5 +25,26 @@ const useUserInfoStore = defineStore('userInfoStore', () => {
     setNowOrganizationId
   };
 });
-
-export { useUserInfoStore };
+//简历传参
+const dataBoardMeaasge = defineStore('stuInfoStore', () => {
+  const id = ref(0);
+  function setId(msg: number) {
+    id.value = msg;
+  }
+  return {
+    id,
+    setId
+  };
+});
+//面试复盘传参
+const selectMeaasge = defineStore('selectStore', () => {
+  const data: any = ref([]);
+  function setdata(msg: any) {
+    data.value = msg;
+  }
+  return {
+    data,
+    setdata
+  };
+});
+export { useUserInfoStore, dataBoardMeaasge, selectMeaasge };
