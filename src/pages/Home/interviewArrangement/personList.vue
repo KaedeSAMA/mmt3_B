@@ -107,14 +107,12 @@ const departmentListFilter = ref<Filter[]>([]);
 
 // 拼接筛选项
 const filterItemReady = () => {
-  console.log(addressIdList);
   addressIdListFilter.value = addressIdList.map((item) => {
     return {
       text: item.name,
       value: item.id + ''
     };
   });
-  console.log(addressIdListFilter.value);
   messageStatusListFilter.value = messageStatusList.map((item) => {
     return {
       text: item.name,
@@ -285,13 +283,11 @@ const setEndTime = () => {
 const select_row_arr = ref<any[]>([]);
 const handleSeclect = (val: any[]) => {
   // ... 处理 handleSeclect 逻辑 ...
-  console.log(val);
   select_row_arr.value = val;
 };
 
 const filterChange = (filters: any) => {
   // ... 处理 filterChange 逻辑 ...
-  console.log(filters);
   switch (Object.keys(filters)[0]) {
     case 'messageStatus':
       filterMessageStatusList.value = filters.messageStatus.map((n: string) =>
@@ -356,7 +352,6 @@ const shiftSearch = () => {
     clearTimeout(timer.value);
   }
   timer.value = setTimeout(async () => {
-    console.log(searchWord.value);
     const data = await filterMainData(
       {
         round: round.value,
@@ -370,8 +365,6 @@ const shiftSearch = () => {
         search: searchWord.value || null
       }
     );
-    // ...deal
-    console.log(data);
     /* update */
     mainData.value = data;
   }, 1000);
@@ -381,15 +374,7 @@ const shiftSearch = () => {
  * @description 面试轮次变化
  */
 const handleRoundChange = async () => {
-  console.log(round.value);
-  // shiftSearch();
-  // 获取全部数据
-  // const mainList = await getMainData({
-  //   page: 1,
-  //   pageNum: 10,
-  //   round: round.value
-  // });
-  // mainData.value = mainList;
+  // console.log(round.value);
   initGeneral();
 };
 /**
@@ -463,7 +448,6 @@ const checkManual = (type: boolean): boolean => {
  * @description 手动选择
  */
 const ManualGenerate = async () => {
-  console.log('手动选择');
   if (!checkManual(false)) {
     return;
   }
@@ -484,7 +468,6 @@ const ManualGenerate = async () => {
  * @description 一键选择
  */
 const automaticGenerate = async () => {
-  console.log('一键选择');
   if (!checkManual(true)) {
     return;
   }
