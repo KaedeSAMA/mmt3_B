@@ -57,9 +57,9 @@ type TGetInformMessage = {
 };
 type TGetInformMessageRes = IBaseResponce<TGetInformMessage>;
 type TGetInformProgress = {
-  notifiedNum: number,
-  allNum: number,
-  NotNotifiedNum: number
+  notifiedNum: number;
+  allNum: number;
+  NotNotifiedNum: number;
 };
 type TGetInformProgressRes = IBaseResponce<TGetInformProgress>;
 //获取表格数据
@@ -107,16 +107,16 @@ type TGetEmitResumeMessage = {
       qType: number;
       type: number;
       question: string;
-      qMaxScore: number|null;
+      qMaxScore: number | null;
       qOpts: {
         valueList: Array<any>;
-      }|null;
+      } | null;
       qHint: string;
-      aStr: string|null;
-      aInt: number|null;
+      aStr: string | null;
+      aInt: number | null;
       aSelect: {
         answerList: Array<string>;
-      }|null;
+      } | null;
     }>;
   }>;
 };

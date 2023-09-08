@@ -114,5 +114,5 @@ export type {
   TGetDateBoardMessageRes,
   TGetResumeMessageRes,
   TGetEvaluateMessageRes,
-  TGetRoundRes,
+  TGetRoundRes
 };

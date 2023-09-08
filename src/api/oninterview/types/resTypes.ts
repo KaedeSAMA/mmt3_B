@@ -48,5 +48,5 @@ export type {
   TGetPlaceRes,
   TGetprogressRes,
   TGetMessageRes,
-  TGetCodeRes,
+  TGetCodeRes
 };

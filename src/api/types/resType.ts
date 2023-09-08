@@ -100,5 +100,5 @@ export type {
   TAllAssociationMembersRes,
   TAllAssociationMembersData,
   TAssociationMemberData,
-  TAssociationMemberRes,
+  TAssociationMemberRes
 };

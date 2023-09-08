@@ -67,4 +67,4 @@ type Tchange = {
   state: number;
 };
 
-export type { Tchange};
+export type { Tchange };

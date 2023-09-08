@@ -10,32 +10,26 @@ type Ttable = {
   search: string;
 };
 //发送结果通知
-type Tsend={
-  messageSendPoList: Array<
-      {
-          interviewId: number,
-          userId: number
-      }
-  >,
-  message: string
-}
+type Tsend = {
+  messageSendPoList: Array<{
+    interviewId: number;
+    userId: number;
+  }>;
+  message: string;
+};
 
-type Tresume={
-  interview: number,
-  realName: boolean,
-  isPass: number,
-  expectDepartment: number,
-  evaluations: Array<
-      {
-          id: number,
-          aStr: string|null,
-          aInt: number|null,
-          aSelect: {
-              answerList: Array<
-                  string
-              >
-          }|null
-      }
-  >
-}
-export type { Ttable ,Tsend,Tresume};
+type Tresume = {
+  interview: number;
+  realName: boolean;
+  isPass: number;
+  expectDepartment: number;
+  evaluations: Array<{
+    id: number;
+    aStr: string | null;
+    aInt: number | null;
+    aSelect: {
+      answerList: Array<string>;
+    } | null;
+  }>;
+};
+export type { Ttable, Tsend, Tresume };

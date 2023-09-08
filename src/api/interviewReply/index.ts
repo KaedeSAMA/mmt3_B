@@ -8,8 +8,11 @@ import {
   TGetInformProgressRes,
   TGetEmitResumeMessageRes
 } from '@/api/interviewReply/types/resType';
-import { Ttable ,Tsend,Tresume} from '@/api/interviewReply/types/dataType';
-import { TGetInformProgress, TGetResumeQuestion } from '@/api/interviewReply/types/paramsType';
+import { Ttable, Tsend, Tresume } from '@/api/interviewReply/types/dataType';
+import {
+  TGetInformProgress,
+  TGetResumeQuestion
+} from '@/api/interviewReply/types/paramsType';
 //获取面试部门
 const getDepartment = async () => {
   const res = await _axios.get<TGetDepartmentRes, null>(
@@ -61,7 +64,7 @@ const getMessage = async () => {
   return res.data;
 };
 //获取进度
-const getProgress=async(status:number)=>{
+const getProgress = async (status: number) => {
   const res = await _axios.get<TGetInformProgressRes, TGetInformProgress>(
     '/local/b/interview/review/message/num',
     {
@@ -69,19 +72,19 @@ const getProgress=async(status:number)=>{
     }
   );
   return res;
-}
+};
 //一键安排
 const arrangeStu = async (interviewIdList: Array<number>) => {
-  const res = await _axios.post<any, { interviewIdList: number[]; }>(
+  const res = await _axios.post<any, { interviewIdList: number[] }>(
     '/local/b/interview/review/arrange',
     {
-    interviewIdList
+      interviewIdList
     }
   );
   if (res.code !== '00000') {
     ElMessage.error(res.message);
     return;
-  }else{
+  } else {
     ElMessage.success(res.message);
   }
 };
@@ -94,10 +97,10 @@ const sendData = async (data: Tsend) => {
   if (res.code !== '00000') {
     ElMessage.error(res.message);
     return;
-  }else{
+  } else {
     ElMessage.success(res.message);
   }
-  return res.code
+  return res.code;
 };
 
 //获取面试评价
@@ -126,7 +129,7 @@ const sendResume = async (data: Tresume) => {
   if (res.code !== '00000') {
     ElMessage.error(res.message);
     return;
-  }else{
+  } else {
     ElMessage.success(res.message);
   }
 };

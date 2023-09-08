@@ -2,6 +2,4 @@ type TGetOrganization = {
   studentId: string;
 };
 
-export type {
-  TGetOrganization,
-};
+export type { TGetOrganization };

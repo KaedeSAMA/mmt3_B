@@ -5,7 +5,4 @@ type TGetInformProgress = {
 type TGetResumeQuestion = {
   interview: number;
 };
-export type {
-  TGetInformProgress,
-  TGetResumeQuestion
-};
+export type { TGetInformProgress, TGetResumeQuestion };

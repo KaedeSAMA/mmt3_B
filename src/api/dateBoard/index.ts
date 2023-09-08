@@ -9,7 +9,11 @@ import {
   TGetRoundRes
 } from '@/api/dateBoard/types/resType';
 import { Tfilter, Tpage, Tchange } from '@/api/dateBoard/types/dataType';
-import { TGetResume, TGetEvaluate, TGetRound } from '@/api/dateBoard/types/paramsType';
+import {
+  TGetResume,
+  TGetEvaluate,
+  TGetRound
+} from '@/api/dateBoard/types/paramsType';
 // 全部数据，既有query又有body原生axios
 const getFilterData = async (page: Tpage, filterCondition: Tfilter) => {
   const res = await axios({

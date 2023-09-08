@@ -24,4 +24,4 @@ type Tchange = {
   state: number;
 };
 
-export type { Tsort, Tfilter, Tpage, Tchange};
+export type { Tsort, Tfilter, Tpage, Tchange };

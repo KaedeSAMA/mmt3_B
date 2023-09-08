@@ -9,7 +9,4 @@ type TGetMessage = {
   page: number;
   keyword: string;
 };
-export type {
-  TGetMessage,
-  TGetProgress,
-};
+export type { TGetMessage, TGetProgress };

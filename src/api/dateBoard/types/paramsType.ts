@@ -11,8 +11,4 @@ type TGetRound = {
   id: number;
 };
 
-export type {
-  TGetResume,
-  TGetEvaluate,
-  TGetRound,
-};
+export type { TGetResume, TGetEvaluate, TGetRound };
