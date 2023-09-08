@@ -372,8 +372,8 @@ const shiftSearch = () => {
     );
     // ...deal
     console.log(data);
-    /* ###### update */
-    // mainData.value = data;
+    /* update */
+    mainData.value = data;
   }, 1000);
 };
 
@@ -400,7 +400,7 @@ const initGeneral = async () => {
   const mainList = getMainData({
     page: 1,
     pageNum: 10,
-    round: 1
+    round: round.value
   });
   const mainFilter = getMainDataFilter({
     round: 1
