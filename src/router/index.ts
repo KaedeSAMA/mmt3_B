@@ -31,10 +31,33 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/Home/personalPage/personalPage.vue')
       },
       {
+        // ### 面试总看板-报名阶段
+        path: '/home/interviewBoard/regStage',
+        name: 'RegStage',
+        component: () =>
+          import('@/pages/Home/interviewBoard/regStage/regStage.vue')
+      },
+      {
+        // ### 面试总看板-面试阶段
+        path: '/home/interviewBoard/interviewStage',
+        name: 'InterviewStage',
+        component: () =>
+          import(
+            '@/pages/Home/interviewBoard/interviewStage/interviewStage.vue'
+          )
+      },
+      {
+        // ### 面试总看板-复盘阶段
+        path: '/home/interviewBoard/reviewStage',
+        name: 'ReviewStage',
+        component: () =>
+          import('@/pages/Home/interviewBoard/reviewStage/reviewStage.vue')
+      },
+      {
         path: '/home/regFormSetting',
         name: 'regFormSetting',
         component: () =>
-          import('@/pages/Home/regFormSetting/regFormSetting.vue')
+          import('@/pages/Home/SuperAdmin/regFormSetting/regFormSetting.vue')
       },
       //数据看板路由
       {
@@ -78,6 +101,13 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home/resultInform',
         name: 'resultInform',
         component: () => import('@/pages/Home/interviewReply/resultInform.vue')
+      },
+      {
+        // ### 账号管理
+        path: '/home/accountManage',
+        name: 'accountManage',
+        component: () =>
+          import('@/pages/Home/SuperAdmin/accountManage/accountManage.vue')
       }
     ]
   }

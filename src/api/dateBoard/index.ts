@@ -70,7 +70,6 @@ const changeStatus = async (id: number, round: number, state: number) => {
       state
     }
   );
-  console.log(res.message);
   if (res.message === '更改成功') {
     ElMessage({
       message: res.message,
