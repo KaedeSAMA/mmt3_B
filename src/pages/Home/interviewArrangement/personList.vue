@@ -13,7 +13,9 @@ import {
   getAddressRes,
   AddAddress,
   DeleteAddress,
-  filterMainData
+  filterMainData,
+  ArrangeManual,
+  ArrangeAutomatic
 } from '@/api/interviewArrange';
 import { ref, onMounted } from 'vue';
 
@@ -428,6 +430,77 @@ const initGeneral = async () => {
   filterItemReady();
 };
 onMounted(initGeneral);
+
+/**
+ * @description 校验手动选择
+ * @param type 是否需要结束时间 true:需要 false:不需要
+ * @returns {boolean} 是否校验通过 true:通过 false:不通过
+ */
+const checkManual = (type: boolean): boolean => {
+  if (!startTime.value) {
+    ElMessage.error('请选择面试开始时间');
+    return false;
+  }
+  if (type && !endTime.value) {
+    ElMessage.error('请选择面试结束时间');
+    return false;
+  }
+  if (!time.value) {
+    ElMessage.error('请输入每个人面试时间');
+    return false;
+  }
+  if (!addressIdListValue.value.length) {
+    ElMessage.error('请选择面试地点');
+    return false;
+  }
+  if (!select_row_arr.value.length) {
+    ElMessage.error('请选择面试人员');
+    return false;
+  }
+  return true;
+};
+/**
+ * @description 手动选择
+ */
+const ManualGenerate = async () => {
+  console.log('手动选择');
+  if (!checkManual(false)) {
+    return;
+  }
+  const res = await ArrangeManual({
+    startTime: startTime.value?.getTime() as number,
+    endTime: endTime.value?.getTime() as number,
+    time: time.value as number,
+    addressIdList: addressIdListValue.value,
+    interviewIdList: select_row_arr.value.map((item) => item.id)
+  });
+  if (res.code == '00000') {
+    // 刷新页面，数据已在后端更新...
+    initGeneral();
+    ElMessage.success('手动选择成功');
+  }
+};
+/**
+ * @description 一键选择
+ */
+const automaticGenerate = async () => {
+  console.log('一键选择');
+  if (!checkManual(true)) {
+    return;
+  }
+  const res = await ArrangeAutomatic({
+    startTime: startTime.value?.getTime() as number,
+    endTime: endTime.value?.getTime() as number,
+    time: time.value as number,
+    addressIdList: addressIdListValue.value,
+    interviewIdList: select_row_arr.value.map((item) => item.id)
+  });
+  if (res.code == '00000') {
+    // 刷新页面，数据已在后端更新
+    initGeneral();
+    ElMessage.success('一键选择成功');
+  }
+};
 </script>
 
 <template>
@@ -554,7 +627,8 @@ onMounted(initGeneral);
           </el-option>
         </el-select>
       </section>
-      <el-button type="primary">一键选择</el-button>
+      <el-button type="primary" @click="ManualGenerate">手动选择</el-button>
+      <el-button type="primary" @click="automaticGenerate">一键选择</el-button>
     </div>
     <!-- 数据表格 -->
     <el-table

@@ -4,11 +4,12 @@ import {
   GetMainDataFilterRes,
   GetAddressRes,
   MessageCheckRes,
-  MessageSendRes
+  MessageSendRes,
+  BaseRes
 } from './types/res';
 import { ElMessage } from 'element-plus';
 import { QueryMainData, QueryCurrent } from './types/query';
-import { MessageDataReq, FilterMainDataReq } from './types/req';
+import { MessageDataReq, FilterMainDataReq, ManualReq } from './types/req';
 
 /**
  * @description 获取主数据
@@ -148,6 +149,44 @@ export const getSendMsg = async (params: QueryCurrent) => {
 export const sendMsg = async (params: MessageDataReq) => {
   const data = await _axios.post<MessageSendRes, MessageDataReq>(
     '/local/b/interview/arrangement/message/send',
+    params
+  );
+  if (data.code !== '00000') {
+    ElMessage.error(data.message);
+  }
+  return data;
+};
+
+/**
+ * @description 手动安排
+ * @param {number} params.endTime 结束时间
+ * @param {number} params.startTime 开始时间
+ * @param {number} params.time 时间
+ * @param {number[]} params.interviewIdList 面试id列表
+ * @param {number[]} params.addressIdList 地点id列表
+ */
+export const ArrangeManual = async (params: ManualReq) => {
+  const data = await _axios.post<BaseRes, ManualReq>(
+    '/local/b/interview/arrangement/schedule/manual',
+    params
+  );
+  if (data.code !== '00000') {
+    ElMessage.error(data.message);
+  }
+  return data;
+};
+
+/**
+ * @description 一键安排
+ * @param {number} params.endTime 结束时间
+ * @param {number} params.startTime 开始时间
+ * @param {number} params.time 时间
+ * @param {number[]} params.interviewIdList 面试id列表
+ * @param {number[]} params.addressIdList 地点id列表
+ */
+export const ArrangeAutomatic = async (params: ManualReq) => {
+  const data = await _axios.post<BaseRes, ManualReq>(
+    '/local/b/interview/arrangement/schedule/automatic',
     params
   );
   if (data.code !== '00000') {
