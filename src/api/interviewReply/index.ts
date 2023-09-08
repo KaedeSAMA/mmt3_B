@@ -5,10 +5,11 @@ import {
   TGetPieRes,
   TGetInformMessageRes,
   TGetTableRes,
+  TGetInformProgressRes,
   TGetEmitResumeMessageRes
-} from '@/api/types/resType';
-import { Ttable } from '@/api/types/dataType';
-import { TGetInformMessage, TGetResumeQuestion } from '@/api/types/paramsType';
+} from '@/api/interviewReply/types/resType';
+import { Ttable ,Tsend,Tresume} from '@/api/interviewReply/types/dataType';
+import { TGetInformProgress, TGetResumeQuestion } from '@/api/interviewReply/types/paramsType';
 //获取面试部门
 const getDepartment = async () => {
   const res = await _axios.get<TGetDepartmentRes, null>(
@@ -53,16 +54,52 @@ const getTable = async (data: Ttable) => {
   return res.data;
 };
 //获取消息
-const getMessage = async (status: number) => {
-  const res = await _axios.get<TGetInformMessageRes, TGetInformMessage>(
-    '/local/b/interview/review/message/template',
-    {
-      status: status
-    }
+const getMessage = async () => {
+  const res = await _axios.get<TGetInformMessageRes, null>(
+    '/local/b/interview/review/message/template'
   );
-  console.log(res);
   return res.data;
 };
+//获取进度
+const getProgress=async(status:number)=>{
+  const res = await _axios.get<TGetInformProgressRes, TGetInformProgress>(
+    '/local/b/interview/review/message/num',
+    {
+      status
+    }
+  );
+  return res;
+}
+//一键安排
+const arrangeStu = async (interviewIdList: Array<number>) => {
+  const res = await _axios.post<any, { interviewIdList: number[]; }>(
+    '/local/b/interview/review/arrange',
+    {
+    interviewIdList
+    }
+  );
+  if (res.code !== '00000') {
+    ElMessage.error(res.message);
+    return;
+  }else{
+    ElMessage.success(res.message);
+  }
+};
+//发送结果
+const sendData = async (data: Tsend) => {
+  const res = await _axios.post<any, Tsend>(
+    '/local/b/interview/review/message/send',
+    data
+  );
+  if (res.code !== '00000') {
+    ElMessage.error(res.message);
+    return;
+  }else{
+    ElMessage.success(res.message);
+  }
+  return res.code
+};
+
 //获取面试评价
 const getEvaluate = async (id: number) => {
   const res = await _axios.get<TGetEmitResumeMessageRes, TGetResumeQuestion>(
@@ -77,47 +114,31 @@ const getEvaluate = async (id: number) => {
       type: 'warning'
     });
   } else {
-    console.log(res.data, 'ppp');
-    // return res.data;
-    return {
-      count: 0,
-      interviewer: 'string',
-      department: 'string',
-      interviewTables: [
-        {
-          round: 0,
-          editable: true,
-          realName: true,
-          isPass: 0,
-          expectDepartment: 0,
-          count: 0,
-          questions: [
-            {
-              id: 0,
-              order: 0,
-              qType: 0,
-              type: 0,
-              question: 'string',
-              qMaxScore: 0,
-              qOpts: {
-                valueList: [
-                  {
-                    value: 'string',
-                    childValueList: {}
-                  }
-                ]
-              },
-              qHint: 'string',
-              aStr: 'string',
-              aInt: 0,
-              aSelect: {
-                answerList: ['string']
-              }
-            }
-          ]
-        }
-      ]
-    };
+    return res.data;
   }
 };
-export { getDepartment, getPlace, getPie, getMessage, getTable };
+//提交面试评价
+const sendResume = async (data: Tresume) => {
+  const res = await _axios.put<any, Tresume>(
+    '/local/b/interview/realtime/comment',
+    data
+  );
+  if (res.code !== '00000') {
+    ElMessage.error(res.message);
+    return;
+  }else{
+    ElMessage.success(res.message);
+  }
+};
+export {
+  getDepartment,
+  getPlace,
+  getPie,
+  getMessage,
+  getTable,
+  getEvaluate,
+  getProgress,
+  arrangeStu,
+  sendData,
+  sendResume
+};
