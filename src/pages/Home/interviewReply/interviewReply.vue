@@ -69,6 +69,12 @@
         <span style="font-size: large; font-weight: 700"
           >当前面试轮次：{{ round }}面</span
         >
+        <el-button
+          type="primary"
+          @click="arrange"
+          style="float: right; margin-left: 10px"
+          >一键安排</el-button
+        >
         <el-input
           v-model="input"
           placeholder="请输入关键字"
@@ -210,7 +216,8 @@ import {
   getDepartment,
   getPlace,
   getPie,
-  getTable
+  getTable,
+  arrangeStu
 } from '@/api/interviewReply';
 const emit = defineEmits(['change']);
 onMounted(() => {});
@@ -316,11 +323,13 @@ const changeTableSort = (column: any) => {
       sort.value = null;
   }
   getTableData();
+  getSelect();
 };
 // 去简历页面按钮
 const viewResume = (row: any) => {
   const store = dataBoardMeaasge();
   store.setId(row.id);
+  store.setId2(row.id);
   emit('change', false);
 };
 // 当前页
@@ -332,6 +341,7 @@ const allNum = ref(0);
 // 改变页
 const handleCurrentChange = () => {
   getTableData();
+  getSelect();
 };
 // 饼图数据1
 const firstData = ref({
@@ -431,10 +441,12 @@ type item = {
 };
 const title = ref<Array<item>>();
 // 已选择的数据
+const checkId = ref<Array<number>>([]);
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const handleSelectionChange = (val: any) => {
-  localStorage.removeItem('select');
-  localStorage.setItem('select', JSON.stringify(val));
+  checkId.value = val.map((item: any) => {
+    return item.id;
+  });
 };
 // 选择某一条
 const check = () => {
@@ -450,7 +462,7 @@ const getTableData = async () => {
     addressId: place.value === 0 ? null : place.value,
     isSort: sort.value,
     stateList: result.value === 0 ? [] : [result.value],
-    messagestateList: messagestate.value,
+    messageStateList: messagestate.value,
     search: input.value
   });
   const res = await getTable(data.value);
@@ -504,11 +516,21 @@ function refresh() {
   getTableData();
 }
 // 勾选
-function getSelect() {
+const getSelect = async () => {
   // 从后台获取已安排的
-  const data: any = JSON.parse(localStorage.getItem('select') as string);
+  const data = ref({
+    page: currentPage.value,
+    departmentId: department.value === 0 ? null : department.value,
+    addressId: place.value === 0 ? null : place.value,
+    isSort: sort.value,
+    stateList: result.value === 0 ? [] : [result.value],
+    messageStateList: [1],
+    search: input.value
+  });
+  const res = await getTable(data.value);
+  const check = res?.tableData;
   setTimeout(() => {
-    data.forEach((item1: any) => {
+    check?.forEach((item1: any) => {
       multipleTableRef.value!.toggleRowSelection(
         tableData.value.find((item2: any) => {
           return item1.userId === item2.userId;
@@ -517,7 +539,11 @@ function getSelect() {
       );
     });
   }, 0);
-}
+};
+// 一键安排
+const arrange = () => {
+  arrangeStu(checkId.value);
+};
 </script>
 
 <style scoped lang="scss">
@@ -612,11 +638,15 @@ function getSelect() {
       justify-content: space-between;
       height: 4vh;
       line-height: 3vh;
-      margin-top: 15px;
+      margin-top: 8px;
       .botton-left {
         font-size: 14px;
         margin-left: 10px;
       }
+      // .botton-right {
+      //   width: 200px;
+      //   background-color: red;
+      // }
     }
   }
   .echarts {
