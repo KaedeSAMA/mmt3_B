@@ -13,6 +13,7 @@ type TGetEvaluate = {
 type TGetRound = {
   id: number;
 };
+
 // 实时面试界面
 //获取进度条
 type TGetProgress = {
@@ -24,11 +25,21 @@ type TGetMessage = {
   page: number;
   keyword: string;
 };
+
+//面试复盘阶段
+type TGetInformMessage = {
+  status: number;
+};
+type TGetResumeQuestion = {
+  interview: number;
+};
 export type {
   TGetOrganization,
   TGetResume,
   TGetEvaluate,
   TGetRound,
   TGetMessage,
-  TGetProgress
+  TGetProgress,
+  TGetInformMessage,
+  TGetResumeQuestion
 };
