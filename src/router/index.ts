@@ -43,7 +43,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'InterviewStage',
         component: () =>
           import(
-            '@/pages/Home/interviewBoard/interviewStage/interviewStage.vue'
+            '@/pages/Home/interviewBoard/InterviewStage/InterviewStage.vue'
           )
       },
       {
@@ -55,9 +55,9 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/home/regFormSetting',
-        name: 'regFormSetting',
+        name: 'RegFormSetting',
         component: () =>
-          import('@/pages/Home/SuperAdmin/regFormSetting/regFormSetting.vue')
+          import('@/pages/Home/SuperAdmin/regFormSetting/RegFormSetting.vue')
       },
       //数据看板路由
       {

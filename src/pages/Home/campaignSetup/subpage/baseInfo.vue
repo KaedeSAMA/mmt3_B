@@ -21,7 +21,7 @@ import { getUserBasicInfo } from '@/api/personalPage';
 // import { useUserInfoStore } from '@/store/index';
 // const userInfoStore = useUserInfoStore();
 const selectList1 = ref([
-  //Map
+  // Map
   {
     label: '校级组织',
     value: '校级组织'
