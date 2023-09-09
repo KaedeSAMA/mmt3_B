@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getSendMsg } from '@/api/interviewArrange';
+import { getSendMsg, sendMsg } from '@/api/interviewArrange';
 import { MessageCheckResData } from '@/api/interviewArrange/types/res';
 import { Document } from '@element-plus/icons-vue';
 // 已选人
@@ -58,17 +58,17 @@ const format = (percentage: any) => {
   }
 };
 
-/**
- * @description: 获取的通知内容
- *
- */
+// 获取的通知内容
 const noticeInfo = ref<MessageCheckResData>({
   messageTemple: '测试假数据',
   allNum: 10,
   notifiedNum: 6,
   NotNotifiedNum: 4
 });
-onMounted(async () => {
+/**
+ * @description: 获取通知内容
+ */
+const noticeInfoQuery = async () => {
   let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
   select_row_arr = JSON.parse(select_row_arr);
   // console.log(select_row_arr);
@@ -80,10 +80,35 @@ onMounted(async () => {
   percentage.value =
     (noticeInfo.value.notifiedNum * 100) / noticeInfo.value.allNum;
   progressStatus.value = percentage.value === 100 ? 'success' : '';
+};
+onMounted(async () => {
+  await noticeInfoQuery();
 });
 
-const putSendNotice = () => {
+/**
+ * @description: 一键发送通知
+ */
+const putSendNotice = async() => {
   console.log(11);
+  //发送通知
+  // let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
+  let select_row_arr = JSON.parse(
+    sessionStorage.getItem('select_row_arr') as string
+  ) as any[];
+  const data = {
+    message: noticeInfo.value.messageTemple,
+    messageSendPoList: select_row_arr.map((item: any) => {
+      return {
+        interviewId: item.id,
+        userId: item.userId
+      };
+    })
+  };
+  // console.log(data);
+  const res = await sendMsg(data);
+  console.log(res);
+  // 可能需要全部刷新一下
+  await noticeInfoQuery();
 };
 </script>
 
