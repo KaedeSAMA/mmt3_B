@@ -183,7 +183,6 @@
         <el-table-column
           prop="name"
           label="姓名"
-          width="140"
           align="center"
           sortable="custom"
         />
@@ -272,6 +271,7 @@ import { RefreshRight, Document } from '@element-plus/icons-vue';
 import * as XLSX from 'xlsx';
 import { getFilterData, getExportData } from '@/api/dateBoard';
 import { ElMessage } from 'element-plus';
+import { dataBoardMeaasge, useUserInfoStore } from '@/store/index';
 type selectType = {
   info: number;
   siftName: string;
@@ -317,9 +317,21 @@ const nextPlaceBar = ref<Array<selectType>>([]);
 const tableData = ref<Array<tableDataType>>([]);
 function colorCalculate(state: string) {
   switch (state) {
-    case '成功':
+    case '一面通过':
       return 'success';
-    case '失败':
+    case '二面通过':
+      return 'success';
+    case '三面通过':
+      return 'success';
+    case '四面通过':
+      return 'success';
+    case '一面失败':
+      return 'danger';
+    case '二面失败':
+      return 'danger';
+    case '三面失败':
+      return 'danger';
+    case '四面失败':
       return 'danger';
     default:
       return 'warning';
@@ -378,10 +390,16 @@ const filterCondition = ref({
   nextTimeSift: nextTime,
   nextPlaceSift: nextPlace
 });
+// 权限
+const permissionId = ref(0);
 onMounted(async () => {
+  const store = useUserInfoStore();
+  permissionId.value = store.permissionId;
   const allData = await getFilterData(page.value, filterCondition.value);
-  departmentOrderBar.value = allData?.siftBar
-    .departmentOrderBar as Array<selectType>;
+  // departmentOrderBar.value = allData?.siftBar
+  //   .departmentOrderBar as Array<selectType>;
+  // 也可以用浅拷贝
+  departmentOrderBar.value = [...allData?.siftBar.departmentOrderBar];
   organizationOrderBar.value = allData?.siftBar
     .organizationOrderBar as Array<selectType>;
   nowDepartmentBar.value = allData?.siftBar
@@ -405,20 +423,41 @@ const refresh = async () => {
   pageNum.value = res?.pageNum;
   ElMessage.success('页面已刷新');
 };
+type person = {
+  className: string;
+  departmentOrder: string;
+  id: number;
+  name: string;
+  nextPlace: string;
+  nextTime: string;
+  nowDepartment: string;
+  organizationOrder: string;
+  phone: string;
+  studentId: string;
+  volunteerStatus: string;
+};
 // 简历界面
-const viewResume = (PersonDate: object) => {
-  console.log(PersonDate);
+const viewResume = (PersonDate: person) => {
+  const store = dataBoardMeaasge();
+  store.setId(PersonDate.id);
   emit('change', false);
 };
 // 导出报名表
 const exportExcel = async () => {
-  const exportData = await getExportData(filterCondition.value);
-  const data = XLSX.utils.json_to_sheet(
-    exportData?.interviewerInfoList as Array<tableDataType>
-  );
-  const ws = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(ws, data, '报名信息');
-  XLSX.writeFile(ws, '报名信息.xlsx');
+  if (permissionId.value === 1 || permissionId.value === 2) {
+    const exportData = await getExportData(filterCondition.value);
+    const data = XLSX.utils.json_to_sheet(
+      exportData?.interviewerInfoList as Array<tableDataType>
+    );
+    const ws = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(ws, data, '报名信息');
+    XLSX.writeFile(ws, '报名信息.xlsx');
+  } else {
+    ElMessage({
+      message: '你没有相应的权限',
+      type: 'warning'
+    });
+  }
 };
 </script>
 

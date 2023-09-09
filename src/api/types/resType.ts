@@ -1,4 +1,4 @@
-import { type } from 'os';
+// import { type } from 'os';
 
 interface IBaseResponce<D> {
   readonly code: string;
@@ -66,109 +66,6 @@ type TUpdatePasswordDataRes = IBaseResponce<{
 
 // ！个人信息页面类型结束⬆️
 
-//数据看板参数返回类型
-interface ISiftBar<D> {
-  organizationOrderBar: Array<D>;
-  departmentOrderBar: Array<D>;
-  nowDepartmentBar: Array<D>;
-  nextTimeBar: Array<D>;
-  nextPlaceBar: Array<D>;
-}
-type TSiftBarItem = {
-  info: number;
-  siftName: string;
-  number: number;
-};
-type TSiftBar = ISiftBar<TSiftBarItem>;
-type TGetDateBoardMessage = {
-  siftBar: TSiftBar;
-  interviewerInfoList: Array<{
-    id: number;
-    studentId: string;
-    name: string;
-    className: string;
-    phone: string;
-    organizationOrder: string;
-    departmentOrder: string;
-    nowDepartment: string;
-    volunteerStatus: string;
-    nextTime: string;
-    nextPlace: string;
-  }>;
-  pageNow: number;
-  pageNum: number;
-};
-type TGetDateBoardMessageRes = IBaseResponce<TGetDateBoardMessage>;
-
-//简历参数返回类型
-type TQuestionListItem = {
-  order: number;
-  questionName: string;
-  answer: string;
-};
-type TGetResumeMessage = {
-  basicQuestion: {
-    name: string;
-    studentId: string;
-    phone: string;
-    gender: string;
-    email: string;
-    QQNumber: string;
-    academy: string;
-    major: string;
-    className: string;
-  };
-  departmentQuestion: {
-    departmentName: string;
-    isTransfers: boolean;
-    questionList: Array<TQuestionListItem>;
-  };
-  comprehensiveQuestion: {
-    questionList: Array<TQuestionListItem>;
-  };
-  interviewFeedbackList: Array<{
-    time: string;
-    state: string;
-  }>;
-  signIn: {
-    time: string;
-    state: string;
-  };
-  InterviewArrangementList: Array<{
-    round: 0;
-    time: string;
-    place: string;
-  }>;
-};
-type TGetResumeMessageRes = IBaseResponce<TGetResumeMessage>;
-
-// 面试评价接口返回数据
-type TResultItem = {
-  name: string;
-  opinion: string;
-};
-type TGetEvaluateMessage = {
-  status: number;
-  round: string;
-  interviewResult: Array<TResultItem>;
-  PassDepartment: string;
-  isTransfers: string;
-  passResult: Array<TResultItem>;
-  interviewGradingPo: {
-    rank: number;
-    interviewer: {
-      project: string;
-      name: Array<string>;
-    };
-    questionPoList: Array<{
-      question: string;
-      score: [number];
-    }>;
-  };
-  comprehensiveQuestionList: Array<TResultItem>;
-};
-type TGetEvaluateMessageRes = IBaseResponce<TGetEvaluateMessage>;
-
 // ！下为 账号管理 页面用到的类型⬇️
 type TAllAssociationMembersData = {
   memberInfoDataList: Array<{
@@ -200,9 +97,6 @@ export type {
   TUserBasicInfoRes,
   TSwitchOrganizationRes,
   TUpdatePasswordDataRes,
-  TGetDateBoardMessageRes,
-  TGetResumeMessageRes,
-  TGetEvaluateMessageRes,
   TAllAssociationMembersRes,
   TAllAssociationMembersData,
   TAssociationMemberData,
