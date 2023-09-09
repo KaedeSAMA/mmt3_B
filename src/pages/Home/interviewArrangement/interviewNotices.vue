@@ -75,7 +75,7 @@ const noticeInfoQuery = async () => {
   const res = await getSendMsg({
     round: 1
   });
-  console.log(res);
+  console.log('info:============', res);
   noticeInfo.value = res;
   percentage.value =
     (noticeInfo.value.notifiedNum * 100) / noticeInfo.value.allNum;
@@ -89,12 +89,17 @@ onMounted(async () => {
  * @description: 一键发送通知
  */
 const putSendNotice = async () => {
-  console.log(11);
   //发送通知
   // let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
   let select_row_arr = JSON.parse(
     sessionStorage.getItem('select_row_arr') as string
   ) as any[];
+  if (select_row_arr == null || select_row_arr.length == 0) {
+    ElMessage.error('请手动选择或一键选择要发送通知的人');
+    return;
+  }
+  console.log(11);
+  console.log(select_row_arr);
   const data = {
     message: noticeInfo.value.messageTemple,
     messageSendPoList: select_row_arr.map((item: any) => {
@@ -104,7 +109,7 @@ const putSendNotice = async () => {
       };
     })
   };
-  // console.log(data);
+  console.log(data);
   const res = await sendMsg(data);
   console.log(res);
   // 可能需要全部刷新一下
@@ -125,7 +130,7 @@ const putSendNotice = async () => {
         当前已选<span style="color: #1087fd">{{ noticeInfo?.allNum }}</span
         >人
       </div>
-      <el-button text @click="dialogTableVisible = true"> 查看 </el-button>
+      <!-- <el-button text @click="dialogTableVisible = true"> 查看 </el-button> -->
       <el-button type="primary" style="float: right" @click="putSendNotice"
         >一键发送通知</el-button
       >
