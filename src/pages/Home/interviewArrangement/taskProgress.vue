@@ -3,20 +3,20 @@
     <!-- 环形图 -->
     <div class="figure">
       <!-- 当percentage为0,时控制台会报错,加上  v-if = "percentage",就不会有错误,但页面也不会有空进度条 -->
-      <el-progress
+      <!-- <el-progress
         type="circle"
         :height="160"
         :width="160"
         :percentage="percentage"
         :format="format"
         style="box-shadow: 1px 1px 3px 1px #e5e9f2; border-radius: 50%"
-      ></el-progress>
+      ></el-progress> -->
     </div>
-    <div>已通知/总人数：{{ done }} / {{ total }}</div>
+    <!-- <div>已通知/总人数：{{ done }} / {{ total }}</div> -->
   </div>
 </template>
 
-<script>
+<!-- <script>
 export default {
   name: 'taskProgress',
   data() {
@@ -98,7 +98,7 @@ export default {
     this.$bus.$off('arrangeOrder');
   }
 };
-</script>
+</script> -->
 <style scoped>
 .dingwei {
   width: 100%;

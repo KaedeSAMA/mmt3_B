@@ -57,7 +57,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/home/regFormSetting',
         name: 'RegFormSetting',
         component: () =>
-          import('@/pages/Home/SuperAdmin/regFormSetting/RegFormSetting.vue')
+          import('@/pages/Home/SuperAdmin/regFormSetting/regFormSetting.vue')
       },
       //数据看板路由
       {
