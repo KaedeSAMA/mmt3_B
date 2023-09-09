@@ -181,8 +181,8 @@ const progress = ref([
 // 获取进度条
 const togetProgress = async () => {
   const res = await getProgress(InterviewLocation.value);
-  if (res) {
-    progress.value = res.bars as unknown as progresstype;
+  if ((res?.bars.length as number) > 0) {
+    progress.value = res?.bars as unknown as progresstype;
   }
 };
 // 当前页
@@ -206,20 +206,7 @@ type table = Array<{
   issigned: boolean;
   status: number;
 }>;
-const tableData = ref<table>([
-  {
-    id: 1,
-    cId: 1,
-    studentId: '20215245',
-    name: '李华',
-    className: '计算机一班',
-    department: '技术',
-    time: '15:00',
-    place: '1-555',
-    issigned: true,
-    status: 1
-  }
-]);
+const tableData = ref<table>();
 const formatterSign = (row: any) => {
   return row.issigned === true ? '已签到' : '未签到';
 };
@@ -255,6 +242,7 @@ const handleCurrentChange = () => {
 const goer = (row: any) => {
   const store = dataBoardMeaasge();
   store.setId(row.cId);
+  store.setId2(row.id);
   emit('change', false);
 };
 // 实时刷新

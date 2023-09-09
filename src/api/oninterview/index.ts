@@ -4,9 +4,9 @@ import {
   TGetprogressRes,
   TGetMessageRes,
   TGetCodeRes
-} from '@/api/types/resType';
+} from '@/api/oninterview/types/resTypes';
 import {} from '@/api/types/dataType';
-import { TGetProgress, TGetMessage } from '@/api/types/paramsType';
+import { TGetProgress, TGetMessage } from '@/api/oninterview/types/paramsType';
 
 const getPlace = async () => {
   const res = await _axios.get<TGetPlaceRes, null>(

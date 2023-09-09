@@ -40,8 +40,6 @@ type TUpdatePassword = {
 };
 
 // ！个人信息页面类型结束⬆️
-
-//数据看板页面
 // ！下为 账号管理 页面用到的POST类型⬇️
 type TaddAssociationMember = {
   studentId: string;
@@ -62,40 +60,11 @@ export type {
   TaddAssociationMember
 };
 
-type Tpage = {
-  page: number;
-  pageNum: number;
-};
-type Tsort = {
-  sortId: number;
-  sortBy: number;
-};
-type Tfilter = {
-  interviewRoundSift: Array<number>;
-  interviewStatusSift: Array<number>;
-  search: string;
-  sort: Tsort;
-  organizationOrderSift: Array<number>;
-  departmentOrderSift: Array<number>;
-  nowDepartmentSift: Array<number>;
-  nextTimeSift: Array<string>;
-  nextPlaceSift: Array<number>;
-};
 //面试评价界面
 type Tchange = {
   id: number;
   round: number;
   state: number;
 };
-//面试复盘界面
-// 表格接口数据
-type Ttable = {
-  page: number;
-  departmentId: number | null;
-  addressId: number | null;
-  isSort: boolean | null;
-  stateList: Array<number>;
-  messagestateList: Array<number>;
-  search: string;
-};
-export type { Tsort, Tfilter, Tpage, Tchange, Ttable };
+
+export type { Tchange };

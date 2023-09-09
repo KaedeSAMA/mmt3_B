@@ -11,6 +11,9 @@ dependencies:
   '@types/mockjs':
     specifier: ^1.0.7
     version: 1.0.7
+  '@vue/typescript':
+    specifier: ^1.8.10
+    version: 1.8.10(typescript@5.0.4)
   axios:
     specifier: ^1.3.5
     version: 1.3.5
@@ -1159,6 +1162,15 @@ packages:
       vue: 3.3.4
     dev: true
 
+  /@volar/language-core@1.10.1:
+    resolution:
+      {
+        integrity: sha512-JnsM1mIPdfGPxmoOcK1c7HYAsL6YOv0TCJ4aW3AXPZN/Jb4R77epDyMZIVudSGjWMbvv/JfUa+rQ+dGKTmgwBA==
+      }
+    dependencies:
+      '@volar/source-map': 1.10.1
+    dev: false
+
   /@volar/language-core@1.3.0-alpha.0:
     resolution:
       {
@@ -1168,6 +1180,15 @@ packages:
       '@volar/source-map': 1.3.0-alpha.0
     dev: true
 
+  /@volar/source-map@1.10.1:
+    resolution:
+      {
+        integrity: sha512-3/S6KQbqa7pGC8CxPrg69qHLpOvkiPHGJtWPkI/1AXCsktkJ6gIk/5z4hyuMp8Anvs6eS/Kvp/GZa3ut3votKA==
+      }
+    dependencies:
+      muggle-string: 0.3.1
+    dev: false
+
   /@volar/source-map@1.3.0-alpha.0:
     resolution:
       {
@@ -1176,6 +1197,15 @@ packages:
     dependencies:
       muggle-string: 0.2.2
     dev: true
+
+  /@volar/typescript@1.10.1:
+    resolution:
+      {
+        integrity: sha512-+iiO9yUSRHIYjlteT+QcdRq8b44qH19/eiUZtjNtuh6D9ailYM7DVR0zO2sEgJlvCaunw/CF9Ov2KooQBpR4VQ==
+      }
+    dependencies:
+      '@volar/language-core': 1.10.1
+    dev: false
 
   /@volar/typescript@1.3.0-alpha.0:
     resolution:
@@ -1267,6 +1297,28 @@ packages:
       }
     dev: false
 
+  /@vue/language-core@1.8.10(typescript@5.0.4):
+    resolution:
+      {
+        integrity: sha512-db8PtM4ZZr7SYNH30XpKxUYnUBYaTvcuJ4c2whKK04fuAjbtjAIZ2al5GzGEfUlesmvkpgdbiSviRXUxgD9Omw==
+      }
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@volar/language-core': 1.10.1
+      '@volar/source-map': 1.10.1
+      '@vue/compiler-dom': 3.3.4
+      '@vue/reactivity': 3.3.4
+      '@vue/shared': 3.3.4
+      minimatch: 9.0.3
+      muggle-string: 0.3.1
+      typescript: 5.0.4
+      vue-template-compiler: 2.7.14
+    dev: false
+
   /@vue/reactivity-transform@3.3.4:
     resolution:
       {
@@ -1323,6 +1375,18 @@ packages:
       {
         integrity: sha512-7OjdcV8vQ74eiz1TZLzZP4JwqM5fA94K6yntPS5Z25r9HDuGNzaGdgvwKYq6S+MxwF0TFRwe50fIR/MYnakdkQ==
       }
+
+  /@vue/typescript@1.8.10(typescript@5.0.4):
+    resolution:
+      {
+        integrity: sha512-vPSpTXMk4chYwvyTGjM891cKgnx2r6vtbdANOp2mRU31f4HYGyLrZBlGgiua7SaO2cLjUg8y91OipJe0t8OFhA==
+      }
+    dependencies:
+      '@volar/typescript': 1.10.1
+      '@vue/language-core': 1.8.10(typescript@5.0.4)
+    transitivePeerDependencies:
+      - typescript
+    dev: false
 
   /@vueuse/core@9.13.0(vue@3.3.4):
     resolution:
@@ -1607,7 +1671,6 @@ packages:
       {
         integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
       }
-    dev: true
 
   /base64-js@1.5.1:
     resolution:
@@ -1658,7 +1721,6 @@ packages:
       }
     dependencies:
       balanced-match: 1.0.2
-    dev: true
 
   /braces@3.0.2:
     resolution:
@@ -2043,7 +2105,6 @@ packages:
       {
         integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==
       }
-    dev: true
 
   /debug@2.6.9:
     resolution:
@@ -3363,7 +3424,6 @@ packages:
         integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
       }
     hasBin: true
-    dev: true
 
   /homedir-polyfill@1.0.3:
     resolution:
@@ -4128,6 +4188,16 @@ packages:
       brace-expansion: 2.0.1
     dev: true
 
+  /minimatch@9.0.3:
+    resolution:
+      {
+        integrity: sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==
+      }
+    engines: { node: '>=16 || 14 >=14.17' }
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: false
+
   /minimist@1.2.7:
     resolution:
       {
@@ -4196,6 +4266,13 @@ packages:
         integrity: sha512-YVE1mIJ4VpUMqZObFndk9CJu6DBJR/GB13p3tXuNbwD4XExaI5EOuRl6BHeIDxIqXZVxSfAC+y6U1Z/IxCfKUg==
       }
     dev: true
+
+  /muggle-string@0.3.1:
+    resolution:
+      {
+        integrity: sha512-ckmWDJjphvd/FvZawgygcUeQCxzvohjFO5RxTjj4eq8kw359gFF3E1brjfI+viLMxss5JrHTDRHZvu2/tuy0Qg==
+      }
+    dev: false
 
   /mute-stream@0.0.8:
     resolution:
@@ -5612,7 +5689,6 @@ packages:
     dependencies:
       de-indent: 1.0.2
       he: 1.2.0
-    dev: true
 
   /vue-tsc@1.2.0(typescript@5.0.4):
     resolution:
