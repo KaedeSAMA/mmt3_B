@@ -88,7 +88,7 @@ onMounted(async () => {
 /**
  * @description: 一键发送通知
  */
-const putSendNotice = async() => {
+const putSendNotice = async () => {
   console.log(11);
   //发送通知
   // let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
