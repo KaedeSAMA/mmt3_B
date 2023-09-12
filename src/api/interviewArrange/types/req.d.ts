@@ -17,14 +17,19 @@ export interface ManualReq {
 /**
  * @description 发送消息
  * @param {MessageData.messageSendPoList} 消息发送列表
- * @param {MessageData.message} 消息模板
  */
 export interface MessageDataReq {
   messageSendPoList: MessageSendPo[];
-  message: string;
 }
 
+/**
+ * @description 消息发送列表
+ * @param {string} message 消息内容
+ * @param {number} interviewId 面试id
+ * @param {number} userId 用户id
+ */
 interface MessageSendPo {
+  message: string;
   interviewId: number;
   userId: number;
 }

@@ -44,8 +44,8 @@ const handleCurrentChange = () => {
 };
 // 当前页
 const currentPage = ref(1);
-// 选择框所选内容
-const value = ref(0);
+// 是否可以发送通知
+const canPutRequest = ref(true);
 const progressStatus: any = ref('');
 const percentage = ref(0);
 const format = (percentage: any) => {
@@ -65,13 +65,26 @@ const noticeInfo = ref<MessageCheckResData>({
   notifiedNum: 6,
   NotNotifiedNum: 4
 });
+// 选中的行
+const select_row_arr = ref([]);
 /**
  * @description: 获取通知内容
  */
 const noticeInfoQuery = async () => {
-  let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
-  select_row_arr = JSON.parse(select_row_arr);
-  // console.log(select_row_arr);
+  select_row_arr.value = JSON.parse(
+    sessionStorage.getItem('select_row_arr') as string
+  );
+  // console.log(select_row_arr.value);
+
+  if (select_row_arr.value == null || select_row_arr.value.length == 0) {
+    canPutRequest.value = false;
+  } else {
+    // 有一个人不是已安排未通知messageSendStatus为2，就不可以发送
+    canPutRequest.value = select_row_arr.value.every((item: any) => {
+      return item.messageStatus == 2;
+    });
+  }
+
   const res = await getSendMsg({
     round: 1
   });
@@ -90,22 +103,18 @@ onMounted(async () => {
  */
 const putSendNotice = async () => {
   //发送通知
-  // let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
-  let select_row_arr = JSON.parse(
-    sessionStorage.getItem('select_row_arr') as string
-  ) as any[];
-  if (select_row_arr == null || select_row_arr.length == 0) {
+  if (select_row_arr.value == null || select_row_arr.value.length == 0) {
     ElMessage.error('请手动选择或一键选择要发送通知的人');
     return;
   }
-  console.log(11);
-  console.log(select_row_arr);
+
   const data = {
-    message: noticeInfo.value.messageTemple,
-    messageSendPoList: select_row_arr.map((item: any) => {
+    // message: noticeInfo.value.messageTemple,
+    messageSendPoList: select_row_arr.value.map((item: any) => {
       return {
         interviewId: item.id,
-        userId: item.userId
+        userId: item.userId,
+        message: noticeInfo.value.messageTemple
       };
     })
   };
@@ -131,7 +140,11 @@ const putSendNotice = async () => {
         >人
       </div>
       <!-- <el-button text @click="dialogTableVisible = true"> 查看 </el-button> -->
-      <el-button type="primary" style="float: right" @click="putSendNotice"
+      <el-button
+        type="primary"
+        style="float: right"
+        @click="putSendNotice"
+        :disabled="!canPutRequest"
         >一键发送通知</el-button
       >
     </div>
