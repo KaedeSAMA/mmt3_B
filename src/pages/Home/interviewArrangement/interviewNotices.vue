@@ -136,7 +136,7 @@ const putSendNotice = async () => {
     </article>
     <div class="bottom">
       <div class="checkNum">
-        当前已选<span style="color: #1087fd">{{ noticeInfo?.allNum }}</span
+        当前已选<span style="color: #1087fd">{{ select_row_arr.length }}</span
         >人
       </div>
       <!-- <el-button text @click="dialogTableVisible = true"> 查看 </el-button> -->
