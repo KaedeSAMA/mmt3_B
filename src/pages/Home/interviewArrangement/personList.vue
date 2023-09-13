@@ -229,6 +229,7 @@ const pdBtn = () => {
     'select_row_arr',
     JSON.stringify(select_row_arr.value)
   );
+  sessionStorage.setItem('round', JSON.stringify(round.value));
   router.push('/home/interviewNotice');
 };
 

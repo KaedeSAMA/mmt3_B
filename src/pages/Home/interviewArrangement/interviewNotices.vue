@@ -44,10 +44,22 @@ const handleCurrentChange = () => {
 };
 // 当前页
 const currentPage = ref(1);
+
+// 面试轮数
+const round = ref(1);
+const roundList = new Map([
+  [1, '一面'],
+  [2, '二面'],
+  [3, '三面'],
+  [4, '四面']
+]);
 // 是否可以发送通知
 const canPutRequest = ref(true);
+// 进度条提示
 const progressStatus: any = ref('');
+// 进度条百分比
 const percentage = ref(0);
+// 进度条格式化
 const format = (percentage: any) => {
   switch (percentage) {
     case 100:
@@ -71,9 +83,12 @@ const select_row_arr = ref([]);
  * @description: 获取通知内容
  */
 const noticeInfoQuery = async () => {
+  // 获取选中的行
   select_row_arr.value = JSON.parse(
     sessionStorage.getItem('select_row_arr') as string
   );
+  // 获取面试轮数
+  round.value = JSON.parse(sessionStorage.getItem('round') as string);
   // console.log(select_row_arr.value);
 
   if (select_row_arr.value == null || select_row_arr.value.length == 0) {
@@ -86,7 +101,8 @@ const noticeInfoQuery = async () => {
   }
 
   const res = await getSendMsg({
-    round: 1
+    // round: 1
+    round: round.value
   });
   console.log('info:============', res);
   noticeInfo.value = res;
@@ -111,10 +127,23 @@ const putSendNotice = async () => {
   const data = {
     // message: noticeInfo.value.messageTemple,
     messageSendPoList: select_row_arr.value.map((item: any) => {
+      const diff_message = noticeInfo.value.messageTemple.split('$$');
+      const merge_msg = Array.prototype
+        .concat([
+          diff_message[0],
+          item.name,
+          diff_message[1],
+          item.nextTime,
+          diff_message[2],
+          item.nextPlace,
+          diff_message[3]
+        ])
+        .join('');
       return {
         interviewId: item.id,
         userId: item.userId,
-        message: noticeInfo.value.messageTemple
+        // message: `${diff_message[0]}${item.name}${diff_message[1]}${item.nextTime}${diff_message[2]}${item.nextPlace}${diff_message[3]}`
+        message: merge_msg
       };
     })
   };
