@@ -106,8 +106,10 @@ const noticeInfoQuery = async () => {
   });
   console.log('info:============', res);
   noticeInfo.value = res;
-  percentage.value =
-    (noticeInfo.value.notifiedNum * 100) / noticeInfo.value.allNum;
+  percentage.value = +(
+    (noticeInfo.value.notifiedNum * 100) /
+    noticeInfo.value.allNum
+  ).toFixed(1);
   progressStatus.value = percentage.value === 100 ? 'success' : '';
 };
 onMounted(async () => {
@@ -133,10 +135,12 @@ const putSendNotice = async () => {
           diff_message[0],
           item.name,
           diff_message[1],
-          item.nextTime,
+          roundList.get(round.value),
           diff_message[2],
+          item.nextTime,
+          diff_message[3],
           item.nextPlace,
-          diff_message[3]
+          diff_message[4]
         ])
         .join('');
       return {
