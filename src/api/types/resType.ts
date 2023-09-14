@@ -1,3 +1,5 @@
+// import { type } from 'os';
+
 interface IBaseResponce<D> {
   readonly code: string;
   data?: D;
@@ -64,154 +66,29 @@ type TUpdatePasswordDataRes = IBaseResponce<{
 
 // ！个人信息页面类型结束⬆️
 
-//数据看板参数返回类型
-interface ISiftBar<D> {
-  organizationOrderBar: Array<D>;
-  departmentOrderBar: Array<D>;
-  nowDepartmentBar: Array<D>;
-  nextTimeBar: Array<D>;
-  nextPlaceBar: Array<D>;
-}
-type TSiftBarItem = {
-  info: number;
-  siftName: string;
-  number: number;
-};
-type TSiftBar = ISiftBar<TSiftBarItem>;
-type TGetDateBoardMessage = {
-  siftBar: TSiftBar;
-  interviewerInfoList: Array<{
+// ！下为 账号管理 页面用到的类型⬇️
+type TAllAssociationMembersData = {
+  memberInfoDataList: Array<{
     id: number;
     studentId: string;
     name: string;
-    className: string;
+    permission: string;
     phone: string;
-    organizationOrder: string;
-    departmentOrder: string;
-    nowDepartment: string;
-    volunteerStatus: string;
-    nextTime: string;
-    nextPlace: string;
   }>;
-  pageNow: number;
-  pageNum: number;
 };
-type TGetDateBoardMessageRes = IBaseResponce<TGetDateBoardMessage>;
+type TAllAssociationMembersRes = IBaseResponce<TAllAssociationMembersData>;
 
-//简历参数返回类型
-type TQuestionListItem = {
-  order: number;
-  questionName: string;
-  answer: string;
-};
-type TGetResumeMessage = {
-  basicQuestion: {
-    name: string;
-    studentId: string;
-    phone: string;
-    gender: string;
-    email: string;
-    QQNumber: string;
-    academy: string;
-    major: string;
-    className: string;
-  };
-  departmentQuestion: {
-    departmentName: string;
-    isTransfers: boolean;
-    questionList: Array<TQuestionListItem>;
-  };
-  comprehensiveQuestion: {
-    questionList: Array<TQuestionListItem>;
-  };
-  interviewFeedbackList: Array<{
-    time: string;
-    state: string;
-  }>;
-  signIn: {
-    time: string;
-    state: string;
-  };
-  interviewArrangementList: Array<{
-    round: 0;
-    time: string;
-    place: string;
-  }>;
-};
-type TGetResumeMessageRes = IBaseResponce<TGetResumeMessage>;
-
-// 面试评价接口返回数据
-type TResultItem = {
+type TAssociationMemberData = {
+  studentId: string;
   name: string;
-  opinion: string;
+  permission: string;
+  phone: string;
+  passwd: string;
 };
-type TGetEvaluateMessage = {
-  status: number;
-  round: string;
-  interviewResult: Array<TResultItem>;
-  passDepartment: string;
-  isTransfers: boolean;
-  passResult: Array<TResultItem>;
-  interviewGradingPo: {
-    rank: number;
-    interviewer: {
-      project: string;
-      name: Array<string>;
-    };
-    questionPoList: Array<{
-      question: string;
-      score: [number];
-    }>;
-  };
-  comprehensiveQuestionList: Array<TResultItem>;
-};
-type TGetEvaluateMessageRes = IBaseResponce<TGetEvaluateMessage>;
+type TAssociationMemberRes = IBaseResponce<TAssociationMemberData>;
 
-type TGetRound = {
-  round: number;
-};
-type TGetRoundRes = IBaseResponce<TGetRound>;
+// ！ 账号管理  页面类型结束⬆️
 
-//实时面试界面
-//获取面试地点
-type TGetPlace = {
-  count: number;
-  places: Array<{
-    id: number;
-    name: string;
-  }>;
-};
-type TGetPlaceRes = IBaseResponce<TGetPlace>;
-//获取进度条
-type TGetprogress = {
-  groupNum: number;
-  bars: Array<{
-    time: number;
-    total: number;
-    finished: number;
-  }>;
-};
-type TGetprogressRes = IBaseResponce<TGetprogress>;
-//获取面试者信息
-type TGetMessage = {
-  pages: number;
-  count: number;
-  interviewees: Array<{
-    id: number;
-    cId: number;
-    studentId: string;
-    name: string;
-    className: string;
-    department: string;
-    time: string;
-    place: string;
-    issigned: boolean;
-    status: number;
-  }>;
-};
-type TGetMessageRes = IBaseResponce<TGetMessage>;
-//获取二维码
-type TGetCodeRes = IBaseResponce<string>;
 export type {
   IBaseResponce,
   TGetOrganizationRes,
@@ -220,12 +97,8 @@ export type {
   TUserBasicInfoRes,
   TSwitchOrganizationRes,
   TUpdatePasswordDataRes,
-  TGetDateBoardMessageRes,
-  TGetResumeMessageRes,
-  TGetEvaluateMessageRes,
-  TGetRoundRes,
-  TGetPlaceRes,
-  TGetprogressRes,
-  TGetMessageRes,
-  TGetCodeRes
+  TAllAssociationMembersRes,
+  TAllAssociationMembersData,
+  TAssociationMemberData,
+  TAssociationMemberRes
 };

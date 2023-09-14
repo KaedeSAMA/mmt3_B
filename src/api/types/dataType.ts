@@ -1,4 +1,4 @@
-import { type } from 'os';
+// import { type } from 'os';
 
 type TUserLogin = {
   studentId: string;
@@ -14,9 +14,10 @@ type TRegister = {
   key: string;
 };
 
-// ！下为个人信息页面用到的类型⬇️
+// ！下为 个人信息 页面用到的类型⬇️
 
 // ？ 本部分接口命名规范：
+// ？ 本部分接口用于POST请求中Data的数据类型定义
 // ？ 第一位（I/T）表示定义时使用Interface还是Type
 // ？ 第二位（XxXxxxxXxxx）使用大驼峰表示类型命名
 
@@ -37,42 +38,33 @@ type TUpdatePassword = {
   oldPassword: string;
   newPassword: string;
 };
-// ！个人信息页面类型结束⬆️
 
-//数据看板页面
-type Tpage = {
-  page: number;
-  pageNum: number;
+// ！个人信息页面类型结束⬆️
+// ！下为 账号管理 页面用到的POST类型⬇️
+type TaddAssociationMember = {
+  studentId: string;
+  name: string;
+  permission: string;
+  phone: string;
+  passwd: string;
 };
-type Tsort = {
-  sortId: number;
-  sortBy: number;
-};
-type Tfilter = {
-  interviewRoundSift: Array<number>;
-  interviewStatusSift: Array<number>;
-  search: string;
-  sort: Tsort;
-  organizationOrderSift: Array<number>;
-  departmentOrderSift: Array<number>;
-  nowDepartmentSift: Array<number>;
-  nextTimeSift: Array<string>;
-  nextPlaceSift: Array<number>;
-};
-//面试评价界面
-type Tchange = {
-  id: number;
-  round: number;
-  state: number;
-};
+
+// ！账号管理 页面类型结束⬆️
+
 export type {
   TUserLogin,
   TRegister,
   TJoinOrganization,
   TSwitchOrganization,
   TUpdatePassword,
-  Tsort,
-  Tfilter,
-  Tpage,
-  Tchange
+  TaddAssociationMember
 };
+
+//面试评价界面
+type Tchange = {
+  id: number;
+  round: number;
+  state: number;
+};
+
+export type { Tchange };

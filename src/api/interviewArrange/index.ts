@@ -145,6 +145,10 @@ export const getSendMsg = async (params: QueryCurrent) => {
 
 /**
  * @description 发送消息
+ * @param {string} params.message 消息内容
+ * @param params.messageSendPoList 消息接受者列表
+ * @argument {number} messageSendPoList[].interviewId 面试id
+ * @argument {number} messageSendPoList[].addressId 地点id
  */
 export const sendMsg = async (params: MessageDataReq) => {
   const data = await _axios.post<MessageSendRes, MessageDataReq>(

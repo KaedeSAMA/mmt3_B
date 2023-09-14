@@ -40,11 +40,13 @@ const confirmAddAddress = async () => {
   const res = await AddAddress({
     name: newAddressToAdd.value,
     round: round.value,
-    departmentId: Number(sessionStorage.getItem('organizationId'))
+    // departmentId: Number(sessionStorage.getItem('organizationId'))
+    departmentId: 10
   });
   // 请求成功
   if (res.code == '00000') {
-    console.log(res.data.addressPoList);
+    // console.log(res.data.addressPoList);
+    Object.assign(addressPoList, res.data.addressPoList);
   }
 };
 //删除地址
@@ -56,7 +58,14 @@ const deleteAddress = async (id: number) => {
   });
   // 请求成功
   if (res.code == '00000') {
-    Object.assign(addressPoList, res.data.addressPoList);
+    addressPoList.splice(
+      addressPoList.findIndex((item) => item.id == id),
+      1
+    );
+    console.log(res.data.addressPoList);
+
+    // ## bug 用返回响应覆盖实现删除时出现响应式丢失的问题
+    // Object.assign(addressPoList, res.data.addressPoList);
   }
 };
 
@@ -130,12 +139,12 @@ const filterItemReady = () => {
  * @description 表格主数据
  */
 const mainData = ref<GetMainDataResData>({
-  allNum: 50,
+  allNum: 1,
   iaInfoPos: [
     {
-      className: 'Class A',
+      className: '默认',
       id: 1,
-      interviewStatus: '通过',
+      interviewStatus: '请求数据失败',
       messageStatus: 1,
       name: 'Alice',
       nextPlace: 'Room 101',
@@ -143,126 +152,6 @@ const mainData = ref<GetMainDataResData>({
       nowDepartment: 'Marketing',
       studentId: '123456',
       userId: 1001
-    },
-    {
-      className: 'Class B',
-      id: 2,
-      interviewStatus: '未面试',
-      messageStatus: 3,
-      name: 'Bob',
-      nextPlace: 'Room 102',
-      nextTime: '2023-09-02 11:30 AM',
-      nowDepartment: 'Engineering',
-      studentId: '789012',
-      userId: 1002
-    },
-    {
-      className: 'Class C',
-      id: 3,
-      interviewStatus: '通过',
-      messageStatus: 1,
-      name: 'Carol',
-      nextPlace: 'Room 103',
-      nextTime: '2023-09-03 2:00 PM',
-      nowDepartment: 'HR',
-      studentId: '345678',
-      userId: 1003
-    },
-    {
-      className: 'Class D',
-      id: 4,
-      interviewStatus: '未通过',
-      messageStatus: 2,
-      name: 'David',
-      nextPlace: 'Room 104',
-      nextTime: '2023-09-04 3:45 PM',
-      nowDepartment: 'Finance',
-      studentId: '567890',
-      userId: 1004
-    },
-    {
-      className: 'Class E',
-      id: 5,
-      interviewStatus: '未通过',
-      messageStatus: 1,
-      name: 'Eve',
-      nextPlace: 'Room 105',
-      nextTime: '2023-09-05 9:30 AM',
-      nowDepartment: 'Sales',
-      studentId: '678901',
-      userId: 1005
-    },
-    {
-      className: 'Class F',
-      id: 6,
-      interviewStatus: '已报名',
-      messageStatus: 3,
-      name: 'Frank',
-      nextPlace: 'Room 106',
-      nextTime: '2023-09-06 2:15 PM',
-      nowDepartment: 'IT',
-      studentId: '890123',
-      userId: 1006
-    },
-    {
-      className: 'Class G',
-      id: 7,
-      interviewStatus: '已报名',
-      messageStatus: 1,
-      name: 'Grace',
-      nextPlace: 'Room 107',
-      nextTime: '2023-09-07 11:00 AM',
-      nowDepartment: 'Operations',
-      studentId: '901234',
-      userId: 1007
-    },
-    {
-      className: 'Class H',
-      id: 8,
-      interviewStatus: '未通过',
-      messageStatus: 2,
-      name: 'Henry',
-      nextPlace: 'Room 108',
-      nextTime: '2023-09-08 4:30 PM',
-      nowDepartment: 'Research',
-      studentId: '123789',
-      userId: 1008
-    },
-    {
-      className: 'Class I',
-      id: 9,
-      interviewStatus: '已报名',
-      messageStatus: 1,
-      name: 'Isabel',
-      nextPlace: 'Room 109',
-      nextTime: '2023-09-09 1:45 PM',
-      nowDepartment: 'Design',
-      studentId: '456890',
-      userId: 1009
-    },
-    {
-      className: 'Class J',
-      id: 10,
-      interviewStatus: '通过',
-      messageStatus: 3,
-      name: 'Jack',
-      nextPlace: 'Room 110',
-      nextTime: '2023-09-10 10:30 AM',
-      nowDepartment: 'Engineering',
-      studentId: '789012',
-      userId: 1010
-    },
-    {
-      className: 'Class K',
-      id: 11,
-      interviewStatus: '未通过',
-      messageStatus: 3,
-      name: 'Katherine',
-      nextPlace: 'Room 111',
-      nextTime: '2023-09-11 9:45 AM',
-      nowDepartment: 'Design',
-      studentId: '901234',
-      userId: 1011
     }
   ],
   page: 1,
@@ -340,6 +229,7 @@ const pdBtn = () => {
     'select_row_arr',
     JSON.stringify(select_row_arr.value)
   );
+  sessionStorage.setItem('round', JSON.stringify(round.value));
   router.push('/home/interviewNotice');
 };
 
@@ -602,6 +492,7 @@ const automaticGenerate = async () => {
                   style="margin-left: 10px"
                   >确认添加</el-button
                 >
+                <el-button @click="showAddAddress = false">取消</el-button>
               </template>
               <template v-else>
                 <el-button @click="showAddAddress = true">点击添加</el-button>

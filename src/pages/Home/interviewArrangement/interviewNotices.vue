@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getSendMsg } from '@/api/interviewArrange';
+import { getSendMsg, sendMsg } from '@/api/interviewArrange';
 import { MessageCheckResData } from '@/api/interviewArrange/types/res';
 import { Document } from '@element-plus/icons-vue';
 // 已选人
@@ -44,10 +44,22 @@ const handleCurrentChange = () => {
 };
 // 当前页
 const currentPage = ref(1);
-// 选择框所选内容
-const value = ref(0);
+
+// 面试轮数
+const round = ref(1);
+const roundList = new Map([
+  [1, '一面'],
+  [2, '二面'],
+  [3, '三面'],
+  [4, '四面']
+]);
+// 是否可以发送通知
+const canPutRequest = ref(true);
+// 进度条提示
 const progressStatus: any = ref('');
+// 进度条百分比
 const percentage = ref(0);
+// 进度条格式化
 const format = (percentage: any) => {
   switch (percentage) {
     case 100:
@@ -58,32 +70,92 @@ const format = (percentage: any) => {
   }
 };
 
-/**
- * @description: 获取的通知内容
- *
- */
+// 获取的通知内容
 const noticeInfo = ref<MessageCheckResData>({
   messageTemple: '测试假数据',
   allNum: 10,
   notifiedNum: 6,
   NotNotifiedNum: 4
 });
-onMounted(async () => {
-  let select_row_arr = sessionStorage.getItem('select_row_arr') as string;
-  select_row_arr = JSON.parse(select_row_arr);
-  // console.log(select_row_arr);
+// 选中的行
+const select_row_arr = ref([]);
+/**
+ * @description: 获取通知内容
+ */
+const noticeInfoQuery = async () => {
+  // 获取选中的行
+  select_row_arr.value = JSON.parse(
+    sessionStorage.getItem('select_row_arr') as string
+  );
+  // 获取面试轮数
+  round.value = JSON.parse(sessionStorage.getItem('round') as string);
+  // console.log(select_row_arr.value);
+
+  if (select_row_arr.value == null || select_row_arr.value.length == 0) {
+    canPutRequest.value = false;
+  } else {
+    // 有一个人不是已安排未通知messageSendStatus为2，就不可以发送
+    canPutRequest.value = select_row_arr.value.every((item: any) => {
+      return item.messageStatus == 2;
+    });
+  }
+
   const res = await getSendMsg({
-    round: 1
+    // round: 1
+    round: round.value
   });
-  console.log(res);
+  console.log('info:============', res);
   noticeInfo.value = res;
-  percentage.value =
-    (noticeInfo.value.notifiedNum * 100) / noticeInfo.value.allNum;
+  percentage.value = +(
+    (noticeInfo.value.notifiedNum * 100) /
+    noticeInfo.value.allNum
+  ).toFixed(1);
   progressStatus.value = percentage.value === 100 ? 'success' : '';
+};
+onMounted(async () => {
+  await noticeInfoQuery();
 });
 
-const putSendNotice = () => {
-  console.log(11);
+/**
+ * @description: 一键发送通知
+ */
+const putSendNotice = async () => {
+  //发送通知
+  if (select_row_arr.value == null || select_row_arr.value.length == 0) {
+    ElMessage.error('请手动选择或一键选择要发送通知的人');
+    return;
+  }
+
+  const data = {
+    // message: noticeInfo.value.messageTemple,
+    messageSendPoList: select_row_arr.value.map((item: any) => {
+      const diff_message = noticeInfo.value.messageTemple.split('$$');
+      const merge_msg = Array.prototype
+        .concat([
+          diff_message[0],
+          item.name,
+          diff_message[1],
+          roundList.get(round.value),
+          diff_message[2],
+          item.nextTime,
+          diff_message[3],
+          item.nextPlace,
+          diff_message[4]
+        ])
+        .join('');
+      return {
+        interviewId: item.id,
+        userId: item.userId,
+        // message: `${diff_message[0]}${item.name}${diff_message[1]}${item.nextTime}${diff_message[2]}${item.nextPlace}${diff_message[3]}`
+        message: merge_msg
+      };
+    })
+  };
+  console.log(data);
+  const res = await sendMsg(data);
+  console.log(res);
+  // 可能需要全部刷新一下
+  await noticeInfoQuery();
 };
 </script>
 
@@ -97,11 +169,15 @@ const putSendNotice = () => {
     </article>
     <div class="bottom">
       <div class="checkNum">
-        当前已选<span style="color: #1087fd">{{ noticeInfo?.allNum }}</span
+        当前已选<span style="color: #1087fd">{{ select_row_arr.length }}</span
         >人
       </div>
-      <el-button text @click="dialogTableVisible = true"> 查看 </el-button>
-      <el-button type="primary" style="float: right" @click="putSendNotice"
+      <!-- <el-button text @click="dialogTableVisible = true"> 查看 </el-button> -->
+      <el-button
+        type="primary"
+        style="float: right"
+        @click="putSendNotice"
+        :disabled="!canPutRequest"
         >一键发送通知</el-button
       >
     </div>
