@@ -28,10 +28,12 @@
           <el-progress
             :text-inside="true"
             :stroke-width="15"
-            :percentage="Math.floor((item.finished / item.total) * 100)"
+            :percentage="Math.floor((item.finished / item.total) * 100) || 0"
             style="width: 180px"
           />
-          <span class="number">{{ item.finished }} / {{ item.total }}</span>
+          <span class="number"
+            >{{ item.finished || 0 }} / {{ item.total || 0 }}</span
+          >
         </div>
         <div class="progress-item-botton">
           <!-- 如果是100说明无数据 小于10添0 -->
@@ -241,8 +243,8 @@ const handleCurrentChange = () => {
 // 去简历界面
 const goer = (row: any) => {
   const store = dataBoardMeaasge();
-  store.setId(row.cId);
-  store.setId2(row.id);
+  store.setId2(row.cid);
+  store.setId(row.id);
   emit('change', false);
 };
 // 实时刷新
