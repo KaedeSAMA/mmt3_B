@@ -20,8 +20,8 @@ import { getUserBasicInfo } from '@/api/personalPage';
 // ### 用于存储用户登录时的社团ID
 // import { useUserInfoStore } from '@/store/index';
 // const userInfoStore = useUserInfoStore();
-const selectList1 = ref([
-  // Map
+/* readonly */
+const selectList1 = [
   {
     label: '校级组织',
     value: '校级组织'
@@ -34,9 +34,8 @@ const selectList1 = ref([
     label: '社团',
     value: '社团'
   }
-]);
-const selectList2 = ref([
-  //Map
+];
+const selectList2 = [
   {
     label: '思想政治',
     value: '思想政治'
@@ -61,7 +60,7 @@ const selectList2 = ref([
     label: '自律互助',
     value: '自律互助'
   }
-]);
+];
 /* store */
 const organizeInfo = useOrgInfo();
 

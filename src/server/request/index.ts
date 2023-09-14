@@ -37,6 +37,9 @@ class Request {
             text: '请求中...'
           });
         }
+        if (process.env.NODE_ENV === 'production') {
+          config.url = config.url?.replace('/local', '');
+        }
         return config;
       },
       (err) => {

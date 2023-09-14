@@ -40,7 +40,7 @@
         <el-menu-item index="/home/interviewArrangement">
           <template #title><span>面试安排</span></template>
         </el-menu-item>
-        <el-menu-item index="/home/a">
+        <el-menu-item index="/home/interviewNotice">
           <template #title><span>面试通知</span></template>
         </el-menu-item>
       </el-sub-menu>
