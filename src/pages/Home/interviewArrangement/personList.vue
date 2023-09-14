@@ -141,18 +141,18 @@ const filterItemReady = () => {
 const mainData = ref<GetMainDataResData>({
   allNum: 1,
   iaInfoPos: [
-    {
-      className: '默认',
-      id: 1,
-      interviewStatus: '请求数据失败',
-      messageStatus: 1,
-      name: 'Alice',
-      nextPlace: 'Room 101',
-      nextTime: '2023-09-01 10:00 AM',
-      nowDepartment: 'Marketing',
-      studentId: '123456',
-      userId: 1001
-    }
+    // {
+    //   className: '默认',
+    //   id: 1,
+    //   interviewStatus: '请求数据失败',
+    //   messageStatus: 1,
+    //   name: 'Alice',
+    //   nextPlace: 'Room 101',
+    //   nextTime: '2023-09-01 10:00 AM',
+    //   nowDepartment: 'Marketing',
+    //   studentId: '123456',
+    //   userId: 1001
+    // }
   ],
   page: 1,
   pageNum: 10
@@ -273,7 +273,7 @@ const handleRoundChange = async () => {
 const initGeneral = async () => {
   // ... 处理组件创建前的逻辑 ...
   const mainList = getMainData({
-    page: 1,
+    page: mainData.value.page || 1,
     pageNum: 10,
     round: round.value
   });
