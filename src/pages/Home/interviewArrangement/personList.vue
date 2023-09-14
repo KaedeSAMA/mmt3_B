@@ -155,8 +155,10 @@ const mainData = ref<GetMainDataResData>({
     // }
   ],
   page: 1,
-  pageNum: 10
+  pageNum: 10 // 注意: 一共多少页, 而不是页容量
 });
+// 页容量, 默认一页10条
+const newPageSize = ref<number>(10);
 
 const setStartTime = () => {
   console.log(startTime.value?.getTime());
@@ -205,7 +207,7 @@ const current_change = async (newCurrentPage: number) => {
   const res = await filterMainData(
     {
       page: newCurrentPage,
-      pageNum: 10,
+      pageNum: newPageSize.value,
       round: round.value
     },
     {
@@ -218,6 +220,14 @@ const current_change = async (newCurrentPage: number) => {
   if (res) {
     mainData.value = res;
   }
+};
+/**
+ * @description 切换每页条数
+ * @param newPageSize
+ */
+const paginationSizeChange = (val: number) => {
+  newPageSize.value = val;
+  current_change(1); // 更新页面
 };
 
 /**
@@ -245,7 +255,7 @@ const shiftSearch = () => {
     const data = await filterMainData(
       {
         round: round.value,
-        pageNum: 10,
+        pageNum: newPageSize.value,
         page: 1
       },
       {
@@ -274,7 +284,7 @@ const initGeneral = async () => {
   // ... 处理组件创建前的逻辑 ...
   const mainList = getMainData({
     page: mainData.value.page || 1,
-    pageNum: 10,
+    pageNum: newPageSize.value,
     round: round.value
   });
   const mainFilter = getMainDataFilter({
@@ -602,9 +612,11 @@ const automaticGenerate = async () => {
   <footer class="footer">
     <el-pagination
       background
-      layout="prev, pager, next"
+      layout="prev, pager, next, sizes"
       :total="mainData.allNum"
-      :page-size="10"
+      :page-size="newPageSize"
+      :page-sizes="[10, 20, 50, 100, 200, 500, 1000]"
+      @size-change="paginationSizeChange"
       :current-page="mainData.page"
       @current-change="current_change"
     >
