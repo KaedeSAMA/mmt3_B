@@ -243,7 +243,7 @@ const handleCurrentChange = () => {
 // 去简历界面
 const goer = (row: any) => {
   const store = dataBoardMeaasge();
-  store.setId2(row.cid);
+  store.setId2(row.id);
   store.setId(row.id);
   emit('change', false);
 };
